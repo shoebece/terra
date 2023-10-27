@@ -37,4 +37,4 @@ stages:
         inputs:
           command: 'forceunlock'
           workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/sharing/'
-          lockID: '7dc0cff5-d5ce-1254-a8d8-4a2e8fdfc27c'
+          lockID: '2e9bbe61-b3f5-7f8c-4bad-5942a3482f47'
