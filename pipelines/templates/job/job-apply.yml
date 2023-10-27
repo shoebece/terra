@@ -1,0 +1,52 @@
+parameters:
+- name: env
+  type: string
+- name: dependson
+  type: object
+- name: serviceconn
+  type: string
+- name: workingdir
+  type: string
+- name: backend_key
+  type: string
+
+jobs:
+  - job: job_deploy
+    ${{ if parameters.dependson }}:
+      dependsOn: '${{ parameters.dependson }}'
+    displayName: terraform apply - ${{ parameters.env }}
+    steps:
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
+      displayName: install
+      inputs:
+        terraformVersion: 'latest'
+    - task: TerraformTaskV4@4
+      displayName: init
+      env:
+        ARM_USE_MSI: $(environment.ARM_USE_MSI)
+        ARM_SUBSCRIPTION_ID: $(environment.ARM_SUBSCRIPTION_ID)
+        ARM_TENANT_ID: $(environment.ARM_TENANT_ID)
+        ARM_CLIENT_ID: $(environment.ARM_CLIENT_ID)
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: ${{ parameters.workingdir }}
+        backendServiceArm: CDP_Management
+        backendAzureRmResourceGroupName: rg-ba-terraformstate
+        backendAzureRmStorageAccountName: strgbaterraformstate
+        backendAzureRmContainerName: tfstate
+        backendAzureRmKey: ${{ parameters.backend_key }}
+    - task: TerraformTaskV4@4
+      displayName: apply
+      env:
+        ARM_USE_MSI: $(environment.ARM_USE_MSI)
+        ARM_SUBSCRIPTION_ID: $(environment.ARM_SUBSCRIPTION_ID)
+        ARM_TENANT_ID: $(environment.ARM_TENANT_ID)
+        ARM_CLIENT_ID: $(environment.ARM_CLIENT_ID)
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: ${{ parameters.workingdir }}
+        commandOptions: '-var-file="conf/"${{ parameters.env }}".conf" -compact-warnings -auto-approve'
+        #commandOptions: '-var-file="conf/"${{ parameters.env }}".conf" -auto-approve'
+        environmentServiceNameAzureRM: '${{ parameters.serviceconn }}'

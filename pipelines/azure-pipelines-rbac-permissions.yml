@@ -1,0 +1,30 @@
+trigger: none
+
+pool:
+  name: aks-infra
+
+name: $(Date:yyyyMMdd).$(Rev:r) (rbac_permissions_deployment)
+
+variables:
+  - group: environment
+  - group: backend
+  
+stages:
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_prod
+    st_env: prod
+    st_dependson:
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/rbac-permissions/resources/'
+    st_backend_key: 'prod/rbac-permissions.tfstate'
+    st_sub_project: resources_rbacpermissions
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_prod
+    st_env: prod
+    st_dependson:
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/rbac-permissions/databricks/'
+    st_backend_key: 'prod/rbac-permissions/databricks.tfstate'
+    st_sub_project: databricks_rbacpermissions

@@ -1,0 +1,93 @@
+trigger: none
+
+pool:
+  name: aks-infra
+
+name: $(Date:yyyyMMdd).$(Rev:r) (cdmz_deployment)
+
+variables:
+  - group: environment
+  - group: backend
+
+stages:
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_Management
+    st_env: prod
+    st_dependson:
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/resource-groups/'
+    st_backend_key: 'prod/cdmz/resource-groups.tfstate'
+    st_sub_project: resource_groups
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_Management
+    st_env: prod
+    st_dependson: deploy_prod_resource_groups
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/networking/'
+    st_backend_key: 'prod/cdmz/cdmz_networking.tfstate'
+    st_sub_project: networking
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_Management
+    st_env: prod
+    st_dependson: deploy_prod_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/fivetran-integration/'
+    st_backend_key: 'prod/cdmz/fivetran-integration.tfstate'
+    st_sub_project: fivetran_integration
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_Management
+    st_env: prod
+    st_dependson: deploy_prod_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/management/'
+    st_backend_key: 'prod/cdmz/management.tfstate'
+    st_sub_project: management
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_Management
+    st_env: prod
+    st_dependson: deploy_prod_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/pbi-gateway/'
+    st_backend_key: 'prod/cdmz/pbi-gateway.tfstate'
+    st_sub_project: pbi_gateway
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_Management
+    st_env: prod
+    st_dependson: deploy_prod_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/shared-shir/'
+    st_backend_key: 'prod/cdmz/shared-shir.tfstate'
+    st_sub_project: shared_shir
+
+# - template: templates/stage/stages-deploy.yml
+#   parameters:
+#     st_serviceconn: CDP_Management
+#     st_env: prod
+#     st_dependson: deploy_prod_networking
+#     st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/governance/'
+#     st_backend_key: 'prod/cdmz/governance.tfstate'
+#     st_sub_project: governance
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_Management
+    st_env: prod
+    st_dependson: deploy_prod_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/monitoring/'
+    st_backend_key: 'prod/cdmz/monitoring.tfstate'
+    st_sub_project: monitoring
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_Management
+    st_env: prod
+    st_dependson: deploy_prod_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/permissions/'
+    st_backend_key: 'prod/cdmz/permissions.tfstate'
+    st_sub_project: permissions

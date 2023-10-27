@@ -1,0 +1,7 @@
+tenant_id               = "2bd16c9b-7e21-4274-9c06-7919f7647bbb"
+subscription_id         = "f9106f9f-ca9c-4774-bd13-3ecefe2c358b"
+
+resource_group_name     = "lz_test_tf_23"
+storage_account_name    = "lztesttfsa23"
+container_name          = "tfstate"
+key                     = "dev/cdmz/networking.tfstate"
