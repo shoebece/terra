@@ -1,14 +1,5 @@
 locals {
   devops_subnet_id = "/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"
-  stacc_conts = flatten([
-      for stacc_key, stacc in var.staccs : [
-          for cont_key, cont in stacc.stconts : {
-            key     = join("-", [stacc.stacc, cont])
-            stacc   = stacc.stacc
-            cont    = cont
-          }
-      ]
-  ])
 }
 
 data "azurerm_resource_group" "resgrp" {
