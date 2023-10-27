@@ -1,0 +1,7 @@
+tenant_id               = "2bd16c9b-7e21-4274-9c06-7919f7647bbb"
+subscription_id         = "7fafdbc0-65a3-4508-a1da-2bbbdbc2299b"
+
+resource_group_name     = "rg-ba-terraformstate"
+storage_account_name    = "strgbaterraformstate"
+container_name          = "tfstate"
+key                     = "prod/cdpz/orchestration-and-ingestion.tfstate"

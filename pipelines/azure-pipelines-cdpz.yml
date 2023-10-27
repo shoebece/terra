@@ -1,0 +1,121 @@
+trigger: none
+
+pool:
+  name: aks-infra
+
+name: $(Date:yyyyMMdd).$(Rev:r) (cdpz_deployment)
+
+parameters:
+- name: env
+  displayName: Environment
+  type: string
+  values:
+  - dev
+  - uat
+  - prod
+
+variables:
+  - group: environment
+  - group: backend
+
+stages:
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson:
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/resource-groups/'
+    st_backend_key: '${{ parameters.env }}/cdpz/resource-groups.tfstate'
+    st_sub_project: resource_groups
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_resource_groups
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/networking/'
+    st_backend_key: '${{ parameters.env }}/cdpz/networking.tfstate'
+    st_sub_project: networking
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/access/'
+    st_backend_key: '${{ parameters.env }}/cdpz/access.tfstate'
+    st_sub_project: access
+    st_run: ${{ eq(parameters.env, 'prod') }}
+    
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/data-processing/'
+    st_backend_key: '${{ parameters.env }}/cdpz/data-processing.tfstate'
+    st_sub_project: data_processing
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/data-storage/'
+    st_backend_key: '${{ parameters.env }}/cdpz/data-storage.tfstate'
+    st_sub_project: data_storage
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/data-streaming/'
+    st_backend_key: '${{ parameters.env }}/cdpz/data-streaming.tfstate'
+    st_sub_project: data_streaming
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/landing/'
+    st_backend_key: '${{ parameters.env }}/cdpz/landing.tfstate'
+    st_sub_project: landing
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/orchestration-and-ingestion/'
+    st_backend_key: '${{ parameters.env }}/cdpz/orchestration-and-ingestion.tfstate'
+    st_sub_project: orchestration_and_ingestion
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/sharing/'
+    st_backend_key: '${{ parameters.env }}/cdpz/sharing.tfstate'
+    st_sub_project: sharing
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/monitoring/'
+    st_backend_key: '${{ parameters.env }}/cdpz/monitoring.tfstate'
+    st_sub_project: monitoring
+
+- template: templates/stage/stages-deploy.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/permissions/'
+    st_backend_key: '${{ parameters.env }}/cdpz/permissions.tfstate'
+    st_sub_project: permissions

@@ -1,0 +1,40 @@
+trigger: none
+
+pool:
+  name: aks-infra
+
+stages:
+  - stage: unlock
+    jobs:
+    - job: unlock
+      steps:
+      - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
+        displayName: install
+        inputs:
+          terraformVersion: 'latest'
+      - task: TerraformTaskV4@4
+        displayName: 'init'
+        env:
+          ARM_USE_MSI: true
+          ARM_SUBSCRIPTION_ID: "1691759c-bec8-41b8-a5eb-03c57476ffdb"
+          ARM_TENANT_ID: "2bd16c9b-7e21-4274-9c06-7919f7647bbb"
+          ARM_CLIENT_ID: "4bdad00a-f14e-4129-a845-c2a2f221dfbb"
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/sharing/'
+          backendServiceArm: 'CDP_Management'
+          backendAzureRmResourceGroupName: 'rg-ba-terraformstate'
+          backendAzureRmStorageAccountName: 'strgbaterraformstate'
+          backendAzureRmContainerName: 'tfstate'
+          backendAzureRmKey: 'prod/cdpz/sharing.tfstate'
+      - task: TerraformCLI@1
+        env:
+          ARM_USE_MSI: true
+          ARM_SUBSCRIPTION_ID: "1691759c-bec8-41b8-a5eb-03c57476ffdb"
+          ARM_TENANT_ID: "2bd16c9b-7e21-4274-9c06-7919f7647bbb"
+          ARM_CLIENT_ID: "4bdad00a-f14e-4129-a845-c2a2f221dfbb"
+        inputs:
+          command: 'forceunlock'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/sharing/'
+          lockID: '7dc0cff5-d5ce-1254-a8d8-4a2e8fdfc27c'
