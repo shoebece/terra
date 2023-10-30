@@ -101,6 +101,7 @@ stages:
     st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/sharing/'
     st_backend_key: '${{ parameters.env }}/cdpz/sharing.tfstate'
     st_sub_project: sharing
+    st_additional_vars: "-var admin_pass=$(environment.SHARING_SYNAPSE_PASSWORD) "
 
 - template: templates/stage/stages-plan.yml
   parameters:

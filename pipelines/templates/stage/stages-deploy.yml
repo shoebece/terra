@@ -14,6 +14,9 @@ parameters:
 - name: st_run
   type: boolean
   default: true
+- name: st_additional_vars
+  type: string
+  default: 
 
 stages:
 # - stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
@@ -40,3 +43,4 @@ stages:
       serviceconn: ${{ parameters.st_serviceconn }}
       workingdir: ${{ parameters.st_workingdir }}
       backend_key: ${{ parameters.st_backend_key }}
+      additional_vars: ${{ parameters.st_additional_vars }}

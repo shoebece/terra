@@ -50,6 +50,7 @@ jobs:
         provider: 'azurerm'
         command: 'apply'
         workingDirectory: ${{ parameters.workingdir }}
-        commandOptions: '-var-file="conf/"${{ parameters.env }}".conf" -compact-warnings -auto-approve'
+        commandOptions: '${{ parameters.additional_vars }}-var-file="conf/"${{ parameters.env }}".conf" -compact-warnings -auto-approve'
+        #commandOptions: '-var-file="conf/"${{ parameters.env }}".conf" -compact-warnings -auto-approve'
         #commandOptions: '-var-file="conf/"${{ parameters.env }}".conf" -auto-approve'
         environmentServiceNameAzureRM: '${{ parameters.serviceconn }}'
