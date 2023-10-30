@@ -21,7 +21,8 @@ parameters:
 stages:
 - stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
   displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
-  condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
+  #condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
+  condition: eq(${{ parameters.st_run }}, true)
   jobs:
   - template: ../job/job-plan.yml
     parameters:
