@@ -100,13 +100,40 @@ resource "azurerm_mssql_server" "fivetran_config_sql_srv" {
   }
 }
 
-resource "azurerm_mssql_database" "fivetran_config_sql_db" {
-  name           = "configurationdb"
-  server_id      = azurerm_mssql_server.fivetran_config_sql_srv.id
-  sku_name       = "S0"
+resource "azurerm_mssql_elasticpool" "fivetran_config_sql_pool" {
+  name                = "cdmz-fivetran-conf-db-sqlpool"
+  resource_group_name = fivetran_config_sql_srv.resource_group_name
+  location            = fivetran_config_sql_srv.location
+  server_name         = fivetran_config_sql_srv.name
+  license_type        = "LicenseIncluded"
+  max_size_gb         = 50
 
-  depends_on = [ azurerm_mssql_server.fivetran_config_sql_srv ]
+  sku {
+    name     = "StandardPool"
+    tier     = "Standard"
+    capacity = 100
+  }
+
+  per_database_settings {
+    min_capacity = 10
+    max_capacity = 20
+  }
 }
+
+resource "azurerm_mssql_database" "fivetran_config_sql_db" {
+  count     = length(var.fivetran_sql_dbs)
+  name      = var.fivetran_sql_dbs[count.index].name
+  server_id = azurerm_mssql_server.fivetran_config_sql_srv.id
+  elastic_pool_id = azurerm_mssql_elasticpool.fivetran_config_sql_pool.id
+}
+
+# resource "azurerm_mssql_database" "fivetran_config_sql_db" {
+#   name           = "configurationdb"
+#   server_id      = azurerm_mssql_server.fivetran_config_sql_srv.id
+#   sku_name       = "S0"
+
+#   depends_on = [ azurerm_mssql_server.fivetran_config_sql_srv ]
+# }
 
 data "azurerm_private_dns_zone" "pdnsz_sql" {
   name                = "privatelink.database.windows.net"
