@@ -47,7 +47,7 @@ resource "azurerm_windows_virtual_machine" "fivetran-vm" {
   size                = "Standard_D4s_v3"
   computer_name       = var.vms_fivetran[count.index].computer_name
   admin_username      = var.vms_fivetran[count.index].admin_username
-  admin_password      = var.vms_fivetran[count.index].admin_password
+  admin_password      = var.vm_admin_password
 
   #encryption_at_host_enabled = ?
 
@@ -98,7 +98,7 @@ resource "azurerm_mssql_server" "fivetran_config_sql_srv" {
   location                     = var.resource_location
   version                      = "12.0"
   administrator_login          = "dbadmin"
-  administrator_login_password = var.admin_pass
+  administrator_login_password = var.sql_admin_password
   minimum_tls_version          = "1.2"
   tags                         = var.resource_tags_common
 

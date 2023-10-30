@@ -37,13 +37,14 @@ variable "git_branch_name" {
   default = ""
 }
 
+variable "admin_password" { type = string }
+
 variable "vms" {
   type = list(object({
     vm             = string
     ip             = string
     computer_name  = string
     admin_username = string
-    admin_password = string
   }))
 }
 
@@ -53,6 +54,5 @@ variable "linuxvms" {
     ip             = string
     computer_name  = string
     admin_username = string
-    admin_password = string
   }))
 }

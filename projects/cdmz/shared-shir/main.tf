@@ -200,7 +200,7 @@ resource "azurerm_windows_virtual_machine" "shir-vm" {
   size                = "Standard_DS1_v2"
   computer_name       = var.vms[count.index].computer_name
   admin_username      = var.vms[count.index].admin_username
-  admin_password      = var.vms[count.index].admin_password
+  admin_password      = var.admin_password
 
   #encryption_at_host_enabled = ?
 
@@ -242,7 +242,7 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
   size                = "Standard_DS1_v2"
   computer_name       = var.linuxvms[count.index].computer_name
   admin_username      = var.linuxvms[count.index].admin_username
-  admin_password      = var.linuxvms[count.index].admin_password
+  admin_password      = var.admin_password
 
   #encryption_at_host_enabled = ?
 

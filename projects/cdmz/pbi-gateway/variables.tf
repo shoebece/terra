@@ -5,13 +5,14 @@ variable "resource_location" { type = string }
 variable "resource_tags_common" { type = map(string) }
 variable "resource_tags_spec" { type = map(string) }
 
+variable "admin_password" { type = string }
+
 variable "vms" {
   type = list(object({
     vm             = string
     ip             = string
     computer_name  = string
     admin_username = string
-    admin_password = string
   }))
 }
 

@@ -9,6 +9,9 @@ parameters:
   type: string
 - name: backend_key
   type: string
+- name: additional_vars
+  type: string
+  default: ""
 
 jobs:
   - job: job_deploy
