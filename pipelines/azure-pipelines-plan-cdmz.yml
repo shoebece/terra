@@ -37,7 +37,7 @@ stages:
     st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/fivetran-integration/'
     st_backend_key: 'prod/cdmz/fivetran-integration.tfstate'
     st_sub_project: fivetran_integration
-    st_additional_vars: "-var vm_admin_password=$(environment.fivetran_vm_password) -var sql_admin_password=$(environment.fivetran_sql_password) "
+    st_additional_vars: "-var vm_admin_password=$(environment.FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(environment.FIVETRAN_SQL_PASSWORD) "
 
 - template: templates/stage/stages-plan.yml
   parameters:
@@ -56,7 +56,7 @@ stages:
     st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/pbi-gateway/'
     st_backend_key: 'prod/cdmz/pbi-gateway.tfstate'
     st_sub_project: pbi_gateway
-    st_additional_vars: "-var admin_password=$(environment.pbi_gateway_vm_password) "
+    st_additional_vars: "-var admin_password=$(environment.PBI_GATEWAY_VM_PASSWORD) "
 
 - template: templates/stage/stages-plan.yml
   parameters:
@@ -66,7 +66,7 @@ stages:
     st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/shared-shir/'
     st_backend_key: 'prod/cdmz/shared-shir.tfstate'
     st_sub_project: shared_shir
-    st_additional_vars: "-var admin_password=$(environment.shir_vm_password) "
+    st_additional_vars: "-var admin_password=$(environment.SHIR_VM_PASSWORD) "
 
 # - template: templates/stage/stages-plan.yml
 #   parameters:
