@@ -104,8 +104,6 @@ resource "azurerm_synapse_managed_private_endpoint" "serving_pep" {
   target_resource_id    = data.azurerm_storage_account.serving_stacc.id
   subresource_name      = "dfs"
 
-  tags = merge( var.resource_tags_common, var.resource_tags_spec )
-
   depends_on = [ 
     azurerm_synapse_firewall_rule.syn_firewall
     ,data.azurerm_storage_account.serving_stacc
