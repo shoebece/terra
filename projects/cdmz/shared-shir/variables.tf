@@ -46,3 +46,13 @@ variable "vms" {
     admin_password = string
   }))
 }
+
+variable "linuxvms" {
+  type = list(object({
+    vm             = string
+    ip             = string
+    computer_name  = string
+    admin_username = string
+    admin_password = string
+  }))
+}

@@ -165,6 +165,25 @@ resource "azurerm_network_interface" "adf-shir-nic" {
   
 }
 
+resource "azurerm_network_interface" "ado-shir-nic" {
+  count               = length(var.linuxvms)
+  name                = join("-",[var.linuxvms[count.index].vm, "nic"])
+  resource_group_name = local.networking_resource_group_name
+  location            = var.resource_location
+
+  ip_configuration {
+    name                          = join("-",[var.linuxvms[count.index].vm, "ipc"])
+    subnet_id                     = data.azurerm_subnet.snet-management-default.id
+    private_ip_address_allocation = "Static"
+    private_ip_address            = var.linuxvms[count.index].ip
+  }
+
+  depends_on = [ 
+    data.azurerm_subnet.snet-management-default
+   ]
+  
+}
+
 resource "azurerm_windows_virtual_machine" "shir-vm" {
   count               = length(var.vms)
   name                = var.vms[count.index].vm
@@ -204,6 +223,47 @@ resource "azurerm_windows_virtual_machine" "shir-vm" {
     #join("-",["cdmz-adf-shir", var.vms[count.index].vm, "nic"])
     ]
 }
+
+resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
+  count               = length(var.linuxvms)
+  name                = var.linuxvms[count.index].vm
+  resource_group_name = data.azurerm_resource_group.shared-shir-rg.name
+  location            = var.resource_location
+  size                = "Standard_DS1_v2"
+  computer_name       = var.linuxvms[count.index].computer_name
+  admin_username      = var.linuxvms[count.index].admin_username
+  admin_password      = var.linuxvms[count.index].admin_password
+
+  #encryption_at_host_enabled = ?
+
+  network_interface_ids = [
+    azurerm_network_interface.ado-shir-nic[count.index].id
+  ]
+
+  os_disk {
+    name                  = join("-",[var.linuxvms[count.index].vm, "osdisk"])
+    caching               = "ReadWrite"
+    storage_account_type  = "Standard_LRS"
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+
+  depends_on = [ 
+    data.azurerm_resource_group.shared-shir-rg,
+    azurerm_network_interface.ado-shir-nic
+    #join("-",["cdmz-adf-shir", var.vms[count.index].vm, "nic"])
+    ]
+}
+
 
 resource "azurerm_dev_test_global_vm_shutdown_schedule" "shared-shir-vm-autoshdt" {
     count = length(var.vms)
