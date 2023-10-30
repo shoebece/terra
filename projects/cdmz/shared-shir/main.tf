@@ -269,6 +269,12 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
 
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
 
+  lifecycle {
+    ignore_changes = [
+      admin_password
+    ]
+  }
+
   depends_on = [ 
     data.azurerm_resource_group.shared-shir-rg,
     azurerm_network_interface.ado-shir-nic

@@ -68,6 +68,12 @@ resource "azurerm_windows_virtual_machine" "pbi-gateway-vm" {
 
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
 
+  lifecycle {
+    ignore_changes = [
+      admin_password
+    ]
+  }
+
   depends_on = [
     data.azurerm_resource_group.pbi-gateway-rg,
     azurerm_network_interface.pbi-gateway-nic

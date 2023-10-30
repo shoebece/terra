@@ -74,6 +74,12 @@ resource "azurerm_windows_virtual_machine" "fivetran-vm" {
 
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
 
+  lifecycle {
+    ignore_changes = [
+      admin_password
+    ]
+  }
+
   depends_on = [
     data.azurerm_resource_group.fivetran-integration-rg
     ,azurerm_network_interface.fivetran-nic
