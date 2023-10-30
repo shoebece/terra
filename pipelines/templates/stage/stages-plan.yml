@@ -1,0 +1,29 @@
+parameters:
+- name: st_dependson
+  type: object
+- name: st_env
+  type: string
+- name: st_serviceconn
+  type: string
+- name: st_workingdir
+  type: string
+- name: st_backend_key
+  type: string
+- name: st_sub_project
+  type: string
+- name: st_run
+  type: boolean
+  default: true
+
+stages:
+- stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
+  displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
+  condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
+  jobs:
+  - template: ../job/job-plan.yml
+    parameters:
+      env: ${{ parameters.st_env }}
+      dependson:
+      serviceconn: ${{ parameters.st_serviceconn }}
+      workingdir: ${{ parameters.st_workingdir }}
+      backend_key: ${{ parameters.st_backend_key }}
