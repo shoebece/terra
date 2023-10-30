@@ -92,6 +92,7 @@ resource "azurerm_mssql_server" "fivetran_config_sql_srv" {
   administrator_login          = "dbadmin"
   administrator_login_password = var.admin_pass
   minimum_tls_version          = "1.2"
+  tags                         = var.resource_tags_common
 
   azuread_administrator {
     login_username              = var.super_user_aad_group.name
