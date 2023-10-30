@@ -82,6 +82,8 @@ resource "azurerm_log_analytics_workspace" "monitoring-log" {
   sku                 = "PerGB2018"
   retention_in_days   = 30
 
+  tags = merge( var.resource_tags_common, var.resource_tags_spec )
+
   depends_on = [data.azurerm_resource_group.monitoring-rg]
 }
 

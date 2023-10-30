@@ -11,6 +11,10 @@ data "azurerm_resource_group" "shared-shir-rg" {
   name = local.resource_group_name
 }
 
+data "azurerm_resource_group" "network-rg" {
+  name = local.networking_resource_group_name
+}
+
 data "azurerm_subnet" "snet-management-default" {
   name                  = local.snet_name
   resource_group_name   = local.networking_resource_group_name
@@ -159,6 +163,8 @@ resource "azurerm_network_interface" "adf-shir-nic" {
     private_ip_address            = var.vms[count.index].ip
   }
 
+  tags = merge( data.azurerm_resource_group.network-rg.tags, var.resource_tags_spec )
+
   depends_on = [ 
     data.azurerm_subnet.snet-management-default
    ]
@@ -217,6 +223,8 @@ resource "azurerm_windows_virtual_machine" "shir-vm" {
     version   = "latest"
   }
 
+  tags = merge(var.resource_tags_common, var.resource_tags_spec)
+
   depends_on = [ 
     data.azurerm_resource_group.shared-shir-rg,
     azurerm_network_interface.adf-shir-nic
@@ -256,6 +264,8 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+
+  tags = merge(var.resource_tags_common, var.resource_tags_spec)
 
   depends_on = [ 
     data.azurerm_resource_group.shared-shir-rg,

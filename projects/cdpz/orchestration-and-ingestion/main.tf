@@ -12,15 +12,14 @@ data "azurerm_resource_group" "orchestration-and-ingestion-rg" {
 
 data "azurerm_key_vault" "orchestration-and-ingestion-kv" {
   name = local.key_vault_name
-  resource_group_name = local.resource_group_name
-  
+  resource_group_name = local.resource_group_name  
 }
 
 resource "azurerm_user_assigned_identity" "orchestration-and-ingestion-umid" {
   name                = local.resource_umid_name
   location            = var.resource_location
   resource_group_name = data.azurerm_resource_group.orchestration-and-ingestion-rg.name
-  tags                = var.resource_tags_common
+  tags                = merge( var.resource_tags_common, var.resource_tags_spec)
   
   depends_on          = [data.azurerm_resource_group.orchestration-and-ingestion-rg]
 }
@@ -29,7 +28,7 @@ resource "azurerm_data_factory" "orchestration-and-ingestion-adf" {
   name                    = local.data_factory_name
   resource_group_name     = local.resource_group_name
   location                = var.resource_location
-  tags                    = var.resource_tags_common
+  tags                    = merge( var.resource_tags_common, var.resource_tags_spec)
   public_network_enabled  = "false"
 
   identity {
