@@ -102,9 +102,9 @@ resource "azurerm_mssql_server" "fivetran_config_sql_srv" {
 
 resource "azurerm_mssql_elasticpool" "fivetran_config_sql_pool" {
   name                = "cdmz-fivetran-conf-db-sqlpool"
-  resource_group_name = fivetran_config_sql_srv.resource_group_name
-  location            = fivetran_config_sql_srv.location
-  server_name         = fivetran_config_sql_srv.name
+  resource_group_name = azurerm_mssql_server.fivetran_config_sql_srv.resource_group_name
+  location            = azurerm_mssql_server.fivetran_config_sql_srv.location
+  server_name         = azurerm_mssql_server.fivetran_config_sql_srv.name
   license_type        = "LicenseIncluded"
   max_size_gb         = 50
 
@@ -118,6 +118,8 @@ resource "azurerm_mssql_elasticpool" "fivetran_config_sql_pool" {
     min_capacity = 10
     max_capacity = 20
   }
+
+  depends_on = [azurerm_mssql_server.fivetran_config_sql_srv]
 }
 
 resource "azurerm_mssql_database" "fivetran_config_sql_db" {
@@ -125,6 +127,9 @@ resource "azurerm_mssql_database" "fivetran_config_sql_db" {
   name      = var.fivetran_sql_dbs[count.index].name
   server_id = azurerm_mssql_server.fivetran_config_sql_srv.id
   elastic_pool_id = azurerm_mssql_elasticpool.fivetran_config_sql_pool.id
+
+  depends_on = [azurerm_mssql_server.fivetran_config_sql_srv, 
+  azurerm_mssql_elasticpool.fivetran_config_sql_pool]
 }
 
 # resource "azurerm_mssql_database" "fivetran_config_sql_db" {
