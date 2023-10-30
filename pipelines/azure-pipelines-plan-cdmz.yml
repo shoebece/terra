@@ -37,7 +37,7 @@ stages:
     st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/fivetran-integration/'
     st_backend_key: 'prod/cdmz/fivetran-integration.tfstate'
     st_sub_project: fivetran_integration
-    st_additional_vars: "-var vm_admin_password=$(environment.FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(environment.fivetran_sql_password) '\""
+    st_additional_vars: "-var vm_admin_password=$(environment.FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(environment.fivetran_sql_password) "
 
 - template: templates/stage/stages-plan.yml
   parameters:
