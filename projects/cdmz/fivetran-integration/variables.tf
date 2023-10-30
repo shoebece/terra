@@ -5,6 +5,12 @@ variable "resource_location" { type = string }
 variable "resource_tags_common" { type = map(string) }
 variable "resource_tags_spec" { type = map(string) }
 
+variable "fivetran_sql_dbs" { 
+  type = list(object({
+    name = string
+  })) 
+}
+
 variable "vms_fivetran" {
   type = list(object({
     vm             = string

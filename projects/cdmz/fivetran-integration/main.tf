@@ -92,6 +92,7 @@ resource "azurerm_mssql_server" "fivetran_config_sql_srv" {
   administrator_login          = "dbadmin"
   administrator_login_password = var.admin_pass
   minimum_tls_version          = "1.2"
+  tags                         = var.resource_tags_common
 
   azuread_administrator {
     login_username              = var.super_user_aad_group.name
@@ -100,13 +101,45 @@ resource "azurerm_mssql_server" "fivetran_config_sql_srv" {
   }
 }
 
-resource "azurerm_mssql_database" "fivetran_config_sql_db" {
-  name           = "configurationdb"
-  server_id      = azurerm_mssql_server.fivetran_config_sql_srv.id
-  sku_name       = "S0"
+resource "azurerm_mssql_elasticpool" "fivetran_config_sql_pool" {
+  name                = "cdmz-fivetran-conf-db-sqlpool"
+  resource_group_name = azurerm_mssql_server.fivetran_config_sql_srv.resource_group_name
+  location            = azurerm_mssql_server.fivetran_config_sql_srv.location
+  server_name         = azurerm_mssql_server.fivetran_config_sql_srv.name
+  tags                = var.resource_tags_common
+  max_size_gb         = 50
 
-  depends_on = [ azurerm_mssql_server.fivetran_config_sql_srv ]
+  sku {
+    name     = "StandardPool"
+    tier     = "Standard"
+    capacity = 100
+  }
+
+  per_database_settings {
+    min_capacity = 10
+    max_capacity = 20
+  }
+
+  depends_on = [azurerm_mssql_server.fivetran_config_sql_srv]
 }
+
+resource "azurerm_mssql_database" "fivetran_config_sql_db" {
+  count     = length(var.fivetran_sql_dbs)
+  name      = var.fivetran_sql_dbs[count.index].name
+  server_id = azurerm_mssql_server.fivetran_config_sql_srv.id
+  elastic_pool_id = azurerm_mssql_elasticpool.fivetran_config_sql_pool.id
+
+  depends_on = [azurerm_mssql_server.fivetran_config_sql_srv, 
+  azurerm_mssql_elasticpool.fivetran_config_sql_pool]
+}
+
+# resource "azurerm_mssql_database" "fivetran_config_sql_db" {
+#   name           = "configurationdb"
+#   server_id      = azurerm_mssql_server.fivetran_config_sql_srv.id
+#   sku_name       = "S0"
+
+#   depends_on = [ azurerm_mssql_server.fivetran_config_sql_srv ]
+# }
 
 data "azurerm_private_dns_zone" "pdnsz_sql" {
   name                = "privatelink.database.windows.net"

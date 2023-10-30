@@ -167,7 +167,7 @@ resource "azurerm_network_interface" "adf-shir-nic" {
 
 resource "azurerm_windows_virtual_machine" "shir-vm" {
   count               = length(var.vms)
-  name                = [var.vms[count.index].vm]
+  name                = var.vms[count.index].vm
   resource_group_name = data.azurerm_resource_group.shared-shir-rg.name
   location            = var.resource_location
   size                = "Standard_DS1_v2"
