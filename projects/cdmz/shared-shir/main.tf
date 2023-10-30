@@ -184,6 +184,8 @@ resource "azurerm_network_interface" "ado-shir-nic" {
     private_ip_address            = var.linuxvms[count.index].ip
   }
 
+  tags = merge( data.azurerm_resource_group.network-rg.tags, var.resource_tags_spec )
+
   depends_on = [ 
     data.azurerm_subnet.snet-management-default
    ]
@@ -273,7 +275,6 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
     #join("-",["cdmz-adf-shir", var.vms[count.index].vm, "nic"])
     ]
 }
-
 
 resource "azurerm_dev_test_global_vm_shutdown_schedule" "shared-shir-vm-autoshdt" {
     count = length(var.vms)

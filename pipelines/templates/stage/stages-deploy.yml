@@ -16,27 +16,27 @@ parameters:
   default: true
 
 stages:
-# - stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
-#   displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
-#   condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
-#   jobs:
-#   - template: ../job/job-plan.yml
-#     parameters:
-#       env: ${{ parameters.st_env }}
-#       dependson:
-#       serviceconn: ${{ parameters.st_serviceconn }}
-#       workingdir: ${{ parameters.st_workingdir }}
-#       backend_key: ${{ parameters.st_backend_key }}
-- stage: deploy_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
-  displayName: "Deployment: ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
-  #dependsOn: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
-  #condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
-  condition: eq(${{ parameters.st_run }}, true)
+- stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
+  displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
+  condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
   jobs:
-  - template: ../job/job-apply.yml
+  - template: ../job/job-plan.yml
     parameters:
       env: ${{ parameters.st_env }}
       dependson:
       serviceconn: ${{ parameters.st_serviceconn }}
       workingdir: ${{ parameters.st_workingdir }}
       backend_key: ${{ parameters.st_backend_key }}
+# - stage: deploy_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
+#   displayName: "Deployment: ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
+#   #dependsOn: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
+#   #condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
+#   condition: eq(${{ parameters.st_run }}, true)
+#   jobs:
+#   - template: ../job/job-apply.yml
+#     parameters:
+#       env: ${{ parameters.st_env }}
+#       dependson:
+#       serviceconn: ${{ parameters.st_serviceconn }}
+#       workingdir: ${{ parameters.st_workingdir }}
+#       backend_key: ${{ parameters.st_backend_key }}
