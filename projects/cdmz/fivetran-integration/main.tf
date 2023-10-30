@@ -105,7 +105,7 @@ resource "azurerm_mssql_elasticpool" "fivetran_config_sql_pool" {
   resource_group_name = azurerm_mssql_server.fivetran_config_sql_srv.resource_group_name
   location            = azurerm_mssql_server.fivetran_config_sql_srv.location
   server_name         = azurerm_mssql_server.fivetran_config_sql_srv.name
-  license_type        = "LicenseIncluded"
+  tags                = var.resource_tags_common
   max_size_gb         = 50
 
   sku {
