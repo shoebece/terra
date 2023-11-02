@@ -10,6 +10,8 @@ resource "azurerm_user_assigned_identity" "umi" {
   name                = join("-", ["cdpz", var.environment, "sharing-synapse-umi"])
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
+
+  tags = merge( var.resource_tags_common, var.resource_tags_spec )
 }
 
 resource "azurerm_storage_account" "synapse_dls" {
@@ -25,6 +27,8 @@ resource "azurerm_storage_account" "synapse_dls" {
     default_action              = "Deny"
     virtual_network_subnet_ids  = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"]
   }
+
+  tags = merge( var.resource_tags_common, var.resource_tags_spec )
 }
 
 resource "azurerm_storage_data_lake_gen2_filesystem" "synapse_fs" {
@@ -53,6 +57,8 @@ resource "azurerm_synapse_workspace" "synapse" {
   #   object_id = var.aad_admin_object_id
   #   tenant_id = var.tenant_id
   # }
+
+  tags = merge( var.resource_tags_common, var.resource_tags_spec )
 
   depends_on = [
     azurerm_storage_data_lake_gen2_filesystem.synapse_fs

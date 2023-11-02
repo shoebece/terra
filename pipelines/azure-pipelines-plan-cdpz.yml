@@ -3,7 +3,7 @@ trigger: none
 pool:
   name: aks-infra
 
-name: $(Date:yyyyMMdd).$(Rev:r) (cdpz_deployment)
+name: $(Date:yyyyMMdd).$(Rev:r) (cdpz_dry_run)
 
 parameters:
 - name: env
@@ -20,7 +20,7 @@ variables:
 
 stages:
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
@@ -29,7 +29,7 @@ stages:
     st_backend_key: '${{ parameters.env }}/cdpz/resource-groups.tfstate'
     st_sub_project: resource_groups
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
@@ -38,7 +38,7 @@ stages:
     st_backend_key: '${{ parameters.env }}/cdpz/networking.tfstate'
     st_sub_project: networking
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
@@ -48,7 +48,7 @@ stages:
     st_sub_project: access
     st_run: ${{ eq(parameters.env, 'prod') }}
     
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
@@ -57,7 +57,7 @@ stages:
     st_backend_key: '${{ parameters.env }}/cdpz/data-processing.tfstate'
     st_sub_project: data_processing
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
@@ -66,7 +66,7 @@ stages:
     st_backend_key: '${{ parameters.env }}/cdpz/data-storage.tfstate'
     st_sub_project: data_storage
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
@@ -75,7 +75,7 @@ stages:
     st_backend_key: '${{ parameters.env }}/cdpz/data-streaming.tfstate'
     st_sub_project: data_streaming
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
@@ -84,7 +84,7 @@ stages:
     st_backend_key: '${{ parameters.env }}/cdpz/landing.tfstate'
     st_sub_project: landing
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
@@ -93,7 +93,7 @@ stages:
     st_backend_key: '${{ parameters.env }}/cdpz/orchestration-and-ingestion.tfstate'
     st_sub_project: orchestration_and_ingestion
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
@@ -103,7 +103,7 @@ stages:
     st_sub_project: sharing
     st_additional_vars: "-var admin_pass=$(environment.SHARING_SYNAPSE_PASSWORD) "
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
@@ -112,7 +112,7 @@ stages:
     st_backend_key: '${{ parameters.env }}/cdpz/monitoring.tfstate'
     st_sub_project: monitoring
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}

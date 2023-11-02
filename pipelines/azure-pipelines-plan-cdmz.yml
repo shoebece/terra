@@ -3,7 +3,7 @@ trigger: none
 pool:
   name: aks-infra
 
-name: $(Date:yyyyMMdd).$(Rev:r) (cdmz_deployment)
+name: $(Date:yyyyMMdd).$(Rev:r) (cdmz_dry_run)
 
 variables:
   - group: environment
@@ -11,7 +11,7 @@ variables:
 
 stages:
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_Management
     st_env: prod
@@ -20,7 +20,7 @@ stages:
     st_backend_key: 'prod/cdmz/resource-groups.tfstate'
     st_sub_project: resource_groups
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_Management
     st_env: prod
@@ -29,7 +29,7 @@ stages:
     st_backend_key: 'prod/cdmz/cdmz_networking.tfstate'
     st_sub_project: networking
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_Management
     st_env: prod
@@ -39,7 +39,7 @@ stages:
     st_sub_project: fivetran_integration
     st_additional_vars: "-var vm_admin_password=$(environment.FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(environment.FIVETRAN_SQL_PASSWORD) "
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_Management
     st_env: prod
@@ -48,7 +48,7 @@ stages:
     st_backend_key: 'prod/cdmz/management.tfstate'
     st_sub_project: management
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_Management
     st_env: prod
@@ -58,7 +58,7 @@ stages:
     st_sub_project: pbi_gateway
     st_additional_vars: "-var admin_password=$(environment.PBI_GATEWAY_VM_PASSWORD) "
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_Management
     st_env: prod
@@ -66,9 +66,9 @@ stages:
     st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/shared-shir/'
     st_backend_key: 'prod/cdmz/shared-shir.tfstate'
     st_sub_project: shared_shir
-    st_additional_vars: "-var admin_password=$(environment.SHIR_VM_PASSWORD) "    
+    st_additional_vars: "-var admin_password=$(environment.SHIR_VM_PASSWORD) "
 
-# - template: templates/stage/stages-deploy.yml
+# - template: templates/stage/stages-plan.yml
 #   parameters:
 #     st_serviceconn: CDP_Management
 #     st_env: prod
@@ -77,7 +77,7 @@ stages:
 #     st_backend_key: 'prod/cdmz/governance.tfstate'
 #     st_sub_project: governance
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_Management
     st_env: prod
@@ -86,7 +86,7 @@ stages:
     st_backend_key: 'prod/cdmz/monitoring.tfstate'
     st_sub_project: monitoring
 
-- template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_Management
     st_env: prod

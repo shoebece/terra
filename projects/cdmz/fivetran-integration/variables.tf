@@ -11,13 +11,14 @@ variable "fivetran_sql_dbs" {
   })) 
 }
 
+variable "vm_admin_password" { type = string }
+
 variable "vms_fivetran" {
   type = list(object({
     vm             = string
     ip             = string
     computer_name  = string
     admin_username = string
-    admin_password = string
   }))
 }
 
@@ -27,6 +28,6 @@ variable "super_user_aad_group"      { type = object({
 })}
 
 variable "sql_private_endpoint_ip_address"  { type = string }
-variable "admin_pass"                       { type = string }
+variable "sql_admin_password"               { type = string }
 
 

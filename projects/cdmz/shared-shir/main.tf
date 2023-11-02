@@ -11,6 +11,10 @@ data "azurerm_resource_group" "shared-shir-rg" {
   name = local.resource_group_name
 }
 
+data "azurerm_resource_group" "network-rg" {
+  name = local.networking_resource_group_name
+}
+
 data "azurerm_subnet" "snet-management-default" {
   name                  = local.snet_name
   resource_group_name   = local.networking_resource_group_name
@@ -159,6 +163,8 @@ resource "azurerm_network_interface" "adf-shir-nic" {
     private_ip_address            = var.vms[count.index].ip
   }
 
+  tags = merge( data.azurerm_resource_group.network-rg.tags, var.resource_tags_spec )
+
   depends_on = [ 
     data.azurerm_subnet.snet-management-default
    ]
@@ -178,6 +184,8 @@ resource "azurerm_network_interface" "ado-shir-nic" {
     private_ip_address            = var.linuxvms[count.index].ip
   }
 
+  tags = merge( data.azurerm_resource_group.network-rg.tags, var.resource_tags_spec )
+
   depends_on = [ 
     data.azurerm_subnet.snet-management-default
    ]
@@ -192,7 +200,7 @@ resource "azurerm_windows_virtual_machine" "shir-vm" {
   size                = "Standard_DS1_v2"
   computer_name       = var.vms[count.index].computer_name
   admin_username      = var.vms[count.index].admin_username
-  admin_password      = var.vms[count.index].admin_password
+  admin_password      = var.admin_password
 
   #encryption_at_host_enabled = ?
 
@@ -217,6 +225,14 @@ resource "azurerm_windows_virtual_machine" "shir-vm" {
     version   = "latest"
   }
 
+  tags = merge(var.resource_tags_common, var.resource_tags_spec)
+
+  lifecycle {
+    ignore_changes = [
+      admin_password
+    ]
+  }
+
   depends_on = [ 
     data.azurerm_resource_group.shared-shir-rg,
     azurerm_network_interface.adf-shir-nic
@@ -232,9 +248,8 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
   size                = "Standard_DS1_v2"
   computer_name       = var.linuxvms[count.index].computer_name
   admin_username      = var.linuxvms[count.index].admin_username
-  admin_password      = var.linuxvms[count.index].admin_password
+  admin_password      = var.admin_password
   disable_password_authentication = false
-
   #encryption_at_host_enabled = ?
 
   network_interface_ids = [
@@ -258,13 +273,20 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
     version   = "latest"
   }
 
+  tags = merge(var.resource_tags_common, var.resource_tags_spec)
+
+  lifecycle {
+    ignore_changes = [
+      admin_password
+    ]
+  }
+
   depends_on = [ 
     data.azurerm_resource_group.shared-shir-rg,
     azurerm_network_interface.ado-shir-nic
     #join("-",["cdmz-adf-shir", var.vms[count.index].vm, "nic"])
     ]
 }
-
 
 resource "azurerm_dev_test_global_vm_shutdown_schedule" "shared-shir-vm-autoshdt" {
     count = length(var.vms)

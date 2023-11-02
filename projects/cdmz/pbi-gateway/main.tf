@@ -2,6 +2,10 @@ data "azurerm_resource_group" "pbi-gateway-rg" {
   name = var.resource_group_name
 }
 
+data "azurerm_resource_group" "network-rg" {
+  name = var.networking_resource_group_name
+}
+
 data "azurerm_subnet" "snet-management-default" {
   name                  = var.snet_name
   resource_group_name   = var.networking_resource_group_name
@@ -21,6 +25,8 @@ resource "azurerm_network_interface" "pbi-gateway-nic" {
     private_ip_address            = var.vms[count.index].ip
   }
 
+  tags = merge( data.azurerm_resource_group.network-rg.tags, var.resource_tags_spec )
+
   depends_on = [
     data.azurerm_subnet.snet-management-default
   ]
@@ -35,7 +41,7 @@ resource "azurerm_windows_virtual_machine" "pbi-gateway-vm" {
   size                = "Standard_DS1_v2"
   computer_name       = var.vms[count.index].computer_name
   admin_username      = var.vms[count.index].admin_username
-  admin_password      = var.vms[count.index].admin_password
+  admin_password      = var.admin_password
 
   #encryption_at_host_enabled = ?
 
@@ -58,6 +64,14 @@ resource "azurerm_windows_virtual_machine" "pbi-gateway-vm" {
     offer     = "WindowsServer"
     sku       = "2022-datacenter-azure-edition"
     version   = "latest"
+  }
+
+  tags = merge(var.resource_tags_common, var.resource_tags_spec)
+
+  lifecycle {
+    ignore_changes = [
+      admin_password
+    ]
   }
 
   depends_on = [

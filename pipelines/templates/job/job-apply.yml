@@ -9,6 +9,9 @@ parameters:
   type: string
 - name: backend_key
   type: string
+- name: additional_vars
+  type: string
+  default: ""
 
 jobs:
   - job: job_deploy
@@ -47,6 +50,7 @@ jobs:
         provider: 'azurerm'
         command: 'apply'
         workingDirectory: ${{ parameters.workingdir }}
-        commandOptions: '-var-file="conf/"${{ parameters.env }}".conf" -compact-warnings -auto-approve'
+        commandOptions: '${{ parameters.additional_vars }}-var-file="conf/"${{ parameters.env }}".conf" -compact-warnings -auto-approve'
+        #commandOptions: '-var-file="conf/"${{ parameters.env }}".conf" -compact-warnings -auto-approve'
         #commandOptions: '-var-file="conf/"${{ parameters.env }}".conf" -auto-approve'
         environmentServiceNameAzureRM: '${{ parameters.serviceconn }}'

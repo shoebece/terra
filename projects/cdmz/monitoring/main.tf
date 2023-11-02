@@ -24,6 +24,7 @@ resource "azurerm_log_analytics_workspace" "monitoring-log" {
   sku                 = "PerGB2018"
   retention_in_days   = 30
 
+  tags = merge( var.resource_tags_common, var.resource_tags_spec ) 
   #internet_ingestion_enabled = 
   #internet_query_enabled = 
 
