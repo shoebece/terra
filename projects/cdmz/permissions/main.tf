@@ -15,6 +15,11 @@ data "azurerm_resource_group" "shir-rg" {
   name      = "cdmz-shared-shir-rg"
 }
 
+# PBI-Gateway
+data "azurerm_resource_group" "pbi-rg" {
+  name      = "cdmz-pbi-gateway-rg"
+}
+
 #CDMZ Identity
 # Management databricks connector User Managed Identity
 data "azurerm_user_assigned_identity" "man-dbw-conn-umi" {
@@ -47,6 +52,13 @@ resource "azurerm_role_assignment" "adf-to-fr-vms" {
 # Selfhosted VM permissions for ADF UMI
 resource "azurerm_role_assignment" "adf-to-shir-vms" {
   scope                = data.azurerm_resource_group.shir-rg.id
+  role_definition_name = "Virtual Machine Contributor"
+  principal_id         = data.azurerm_user_assigned_identity.adf-umi.principal_id
+}
+
+# PBI Gateway VM permissions for ADF UMI
+resource "azurerm_role_assignment" "adf-to-shir-vms" {
+  scope                = data.azurerm_resource_group.pbi-rg.id
   role_definition_name = "Virtual Machine Contributor"
   principal_id         = data.azurerm_user_assigned_identity.adf-umi.principal_id
 }
