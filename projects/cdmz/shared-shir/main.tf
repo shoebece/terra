@@ -211,7 +211,7 @@ resource "azurerm_windows_virtual_machine" "shir-vm" {
   os_disk {
     name                  = join("-",[var.vms[count.index].vm, "osdisk"])
     caching               = "ReadWrite"
-    storage_account_type  = "Premium_LRS"
+    storage_account_type  = "Standard_LRS"
   }
 
   identity {
