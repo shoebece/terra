@@ -249,7 +249,7 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
   computer_name       = var.linuxvms[count.index].computer_name
   admin_username      = var.linuxvms[count.index].admin_username
   admin_password      = var.admin_password
-
+  disable_password_authentication = false
   #encryption_at_host_enabled = ?
 
   network_interface_ids = [
