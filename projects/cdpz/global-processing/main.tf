@@ -1,6 +1,6 @@
 locals {
   networking_resource_group_name = join("-", ["cdpz", var.environment, "networking-rg"])
-  vnet_name                      = "cdpz-global-processing-access-vnet"
+  vnet_name                      = "cdpz-global-processing-vnet"
   processing_vnet_name           = join("-", ["cdpz", var.environment, "processing-vnet"])
 }
 
