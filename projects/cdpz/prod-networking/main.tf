@@ -52,13 +52,6 @@ data "azurerm_subnet" "route-table-snet" {
   ]
 }
 
-# Snet for key vault pep
-data "azurerm_subnet" "snet" {
-  name                 = "processing-default-snet"
-  resource_group_name  = data.azurerm_resource_group.resgrp.name
-  virtual_network_name = join("-", ["cdpz", var.environment, "processing-vnet"])
-}
-
 data "azurerm_route_table" "art" {
   name                          = join("-", ["cdpz", var.environment, "networking-rt"])
   resource_group_name           = data.azurerm_resource_group.resgrp.name
@@ -72,11 +65,9 @@ resource "azurerm_subnet_route_table_association" "rt-snets-ass" {
 }
 
 data "azurerm_subnet" "snet-default" {
-  resource_group_name   = data.azurerm_resource_group.resgrp.name
-  virtual_network_name  = module.proc_vnet.vnet_name
-  name                  = "processing-default-snet"
-
-  depends_on = [ module.proc_vnet ]
+  name                 = "processing-default-snet"
+  resource_group_name  = data.azurerm_resource_group.resgrp.name
+  virtual_network_name = join("-", ["cdpz", var.environment, "processing-vnet"])
 }
 
 data "azurerm_key_vault" "kv" {
