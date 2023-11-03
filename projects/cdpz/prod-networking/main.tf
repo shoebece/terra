@@ -30,7 +30,7 @@ module "proc_vnet" {
 
   vnet_name                   = "cdpz-global-processing-vnet"
   nsg_name                    = "cdpz-global-processing-nsg"
-  vnet_purpose                = "processing"
+  vnet_purpose                = "global-processing"
   vnet_address_space          = var.proc_vnet_address_space
   default_snet_address_space  = var.proc_default_snet_address_space
   private_snet_address_space  = var.proc_private_snet_address_space
