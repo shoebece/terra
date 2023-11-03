@@ -46,6 +46,16 @@ resource "azurerm_role_assignment" "super-user-vm-contr-cmdz" {
   depends_on = [ data.azurerm_subscription.cmdz_sub ]
 }
 
+# VMs 
+resource "azurerm_role_assignment" "em-vm-contr-cmdz" {
+  provider             = azurerm.cdmz
+  scope                = data.azurerm_subscription.cmdz_sub.id
+  role_definition_name = "Virtual Machine Contributor"
+  principal_id         = "3ba94197-51a7-4ee2-a2bf-6fd4badf0ded"
+
+  depends_on = [ data.azurerm_subscription.cmdz_sub ]
+}
+
 # ADF
 resource "azurerm_role_assignment" "super-user-to-dev-orch-and-ingest" {
   provider             = azurerm.dev
