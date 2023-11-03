@@ -48,7 +48,7 @@ stages:
     st_backend_key: '${{ parameters.env }}/cdpz/networking.tfstate'
     st_sub_project: networking
 
-  - template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-deploy.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
@@ -68,7 +68,7 @@ stages:
     st_sub_project: access
     st_run: ${{ eq(parameters.env, 'prod') }}
 
-  - template: templates/stage/stages-deploy.yml
+- template: templates/stage/stages-deploy.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
