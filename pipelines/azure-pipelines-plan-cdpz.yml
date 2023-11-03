@@ -29,6 +29,16 @@ stages:
     st_backend_key: '${{ parameters.env }}/cdpz/resource-groups.tfstate'
     st_sub_project: resource_groups
 
+  - template: templates/stage/stages-plan.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_resource_groups
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/prod-resource-groups/'
+    st_backend_key: '${{ parameters.env }}/cdpz/prod-resource-groups.tfstate'
+    st_sub_project: spec_resource_groups
+    st_run: ${{ eq(parameters.env, 'prod') }}
+
 - template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
@@ -38,6 +48,16 @@ stages:
     st_backend_key: '${{ parameters.env }}/cdpz/networking.tfstate'
     st_sub_project: networking
 
+  - template: templates/stage/stages-plan.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_spec_resource_groups
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/prod-networking/'
+    st_backend_key: '${{ parameters.env }}/cdpz/prod-networking.tfstate'
+    st_sub_project: spec_networking
+    st_run: ${{ eq(parameters.env, 'prod') }}
+
 - template: templates/stage/stages-plan.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
@@ -46,6 +66,16 @@ stages:
     st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/access/'
     st_backend_key: '${{ parameters.env }}/cdpz/access.tfstate'
     st_sub_project: access
+    st_run: ${{ eq(parameters.env, 'prod') }}
+
+  - template: templates/stage/stages-plan.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_spec_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/global-processing/'
+    st_backend_key: '${{ parameters.env }}/cdpz/global-processing.tfstate'
+    st_sub_project: global_processing
     st_run: ${{ eq(parameters.env, 'prod') }}
     
 - template: templates/stage/stages-plan.yml
