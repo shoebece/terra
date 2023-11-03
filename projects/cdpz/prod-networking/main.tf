@@ -52,17 +52,23 @@ data "azurerm_subnet" "route-table-snet" {
   ]
 }
 
+# Snet for key vault pep
 data "azurerm_subnet" "snet" {
   name                 = "processing-default-snet"
-  resource_group_name  = local.networking_resource_group_name
+  resource_group_name  = data.azurerm_resource_group.resgrp.name
   virtual_network_name = join("-", ["cdpz", var.environment, "processing-vnet"])
+}
+
+data "azurerm_route_table" "art" {
+  name                          = join("-", ["cdpz", var.environment, "networking-rt"])
+  resource_group_name           = data.azurerm_resource_group.resgrp.name
 }
 
 resource "azurerm_subnet_route_table_association" "rt-snets-ass" {
   count           = length(data.azurerm_subnet.route-table-snet)
 
   subnet_id       = data.azurerm_subnet.route-table-snet[count.index].id
-  route_table_id  = azurerm_route_table.art.id
+  route_table_id  = data.azurerm_route_table.art.id
 
   depends_on = [ 
     azurerm_route_table.art
