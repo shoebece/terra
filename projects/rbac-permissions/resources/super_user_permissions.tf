@@ -56,6 +56,15 @@ resource "azurerm_role_assignment" "em-vm-contr-cmdz" {
   depends_on = [ data.azurerm_subscription.cmdz_sub ]
 }
 
+resource "azurerm_role_assignment" "em-vm-blob-contr" {
+  provider             = azurerm.cdmz
+  scope                = data.azurerm_resource_group.ci-cd-rg.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = "3ba94197-51a7-4ee2-a2bf-6fd4badf0ded"
+
+  depends_on = [ data.azurerm_subscription.cmdz_sub ]
+}
+
 # ADF
 resource "azurerm_role_assignment" "super-user-to-dev-orch-and-ingest" {
   provider             = azurerm.dev

@@ -97,3 +97,9 @@ data "azurerm_synapse_workspace" "prod_synapse_ws" {
   resource_group_name = "cdpz-prod-sharing-rg"
   name                = "cdpz-prod-sharing-synapse"
 }
+
+# CI-CD
+data "azurerm_resource_group" "ci-cd-rg" {
+  provider  = azurerm.cdmz
+  name      = "cdmz-cicd-rg"
+}
