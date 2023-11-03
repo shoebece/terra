@@ -32,3 +32,5 @@ variable "key_vault_pep" { type = list(object({
   kv_code = string
   ip      = string
 })) }
+
+variable "pdnsz_names"                    {type = list(string)}
