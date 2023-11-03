@@ -57,7 +57,7 @@ resource "azurerm_role_assignment" "adf-to-shir-vms" {
 }
 
 # PBI Gateway VM permissions for ADF UMI
-resource "azurerm_role_assignment" "adf-to-shir-vms" {
+resource "azurerm_role_assignment" "adf-to-pbi-vms" {
   scope                = data.azurerm_resource_group.pbi-rg.id
   role_definition_name = "Virtual Machine Contributor"
   principal_id         = data.azurerm_user_assigned_identity.adf-umi.principal_id
