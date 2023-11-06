@@ -35,8 +35,8 @@ jobs:
         command: 'init'
         workingDirectory: ${{ parameters.workingdir }}
         backendServiceArm: CDP_Management
-        backendAzureRmResourceGroupName: rg-ba-terraformstate
-        backendAzureRmStorageAccountName: strgbaterraformstate
+        backendAzureRmResourceGroupName: cdmz-cicd-rg
+        backendAzureRmStorageAccountName: cdmztfstatefiledls
         backendAzureRmContainerName: tfstate
         backendAzureRmKey: ${{ parameters.backend_key }}
     - task: TerraformTaskV4@4
