@@ -33,21 +33,19 @@ data "azurerm_resource_group" "resgrp" {
 }
 
 resource "azurerm_user_assigned_identity" "umi" {
-  count               = (var.environment == "prod" ? 1 : 0)
   name                = join("-", ["cdpz", var.environment, "access-acdb-umi"])
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
 }
 
 resource "azurerm_databricks_access_connector" "authorization" {
-  count               = (var.environment == "prod" ? 1 : 0)
   name                = join("-", ["cdpz", var.environment, "access-acdb"])
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.umi[0].id]
+    identity_ids = [azurerm_user_assigned_identity.umi.id]
   }
 
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
@@ -69,7 +67,6 @@ data "azurerm_key_vault_key" "disks-cmk" {
 }
 
 resource "azurerm_databricks_workspace" "dbws" {
-  count               = (var.environment == "prod" ? 1 : 0)
   name                = join("-", ["cdpz", var.environment, "access-dbw"])
   location            = var.resource_location
   resource_group_name = data.azurerm_resource_group.resgrp.name
@@ -121,10 +118,9 @@ resource "azurerm_databricks_workspace" "dbws" {
 # Workspace disk encription set Service Principal access to CMK
 # --------------------------------------------------------------------------------------
 resource "azurerm_role_assignment" "des-to-kv" {
-  count                = (var.environment == "prod" ? 1 : 0)
   scope                = data.azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Crypto Service Encryption User"
-  principal_id         = azurerm_databricks_workspace.dbws[0].managed_disk_identity.0.principal_id
+  principal_id         = azurerm_databricks_workspace.dbws.managed_disk_identity.0.principal_id
 
   depends_on = [
     azurerm_databricks_workspace.dbws
@@ -139,7 +135,6 @@ data "azurerm_private_dns_zone" "pdnsz" {
 
 # Private end point cdpz-dev-access-dbw-pep
 resource "azurerm_private_endpoint" "endpoint" {
-  count               = (var.environment == "prod" ? 1 : 0)
   name                = join("-", ["cdpz", var.environment, "access-dbw-pep"])
   resource_group_name = local.networking_resource_group_name
   location            = var.resource_location
@@ -155,7 +150,7 @@ resource "azurerm_private_endpoint" "endpoint" {
 
   private_service_connection {
     name                           = join("-", ["cdpz", var.environment, "access-dbw-psc"])
-    private_connection_resource_id = azurerm_databricks_workspace.dbws[0].id
+    private_connection_resource_id = azurerm_databricks_workspace.dbws.id
     subresource_names              = ["databricks_ui_api"]
     is_manual_connection           = false
   }
