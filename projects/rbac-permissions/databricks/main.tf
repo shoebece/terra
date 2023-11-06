@@ -81,7 +81,7 @@ resource "databricks_permission_assignment" "add_super_users" {
 ## DEV
 data "databricks_cluster" "dev_interactive_cluster" {
   provider      = databricks.devdbw
-  cluster_name  = "Interactive Cluster"
+  cluster_name  = "cdp-de-team-cluster"
 }
 
 resource "databricks_permissions" "cluster_usage" {
