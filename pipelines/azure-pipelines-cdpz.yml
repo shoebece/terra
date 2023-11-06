@@ -66,7 +66,7 @@ stages:
     st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/access/'
     st_backend_key: '${{ parameters.env }}/cdpz/access.tfstate'
     st_sub_project: access
-    #st_run: ${{ eq(parameters.env, 'prod') }}
+    st_run: ${{ eq(parameters.env, 'prod') }}
 
 - template: templates/stage/stages-deploy.yml
   parameters:
