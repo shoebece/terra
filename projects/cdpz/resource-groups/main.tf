@@ -28,14 +28,16 @@ resource "azurerm_resource_group" "data-processing-rg" {
 }
 
 resource "azurerm_resource_group" "access-rg" {
+  count    = (var.environment == "prod" ? 1 : 0)
   name     = join("-", ["cdpz", var.environment, "access-rg"])
   location = var.resource_location
   tags     = var.resource_tags_common
 }
 
 resource "azurerm_key_vault" "access-kv" {
-  name                       = join("-", ["cdpz", var.environment, "access-kv"])#bez testprefixu bedzie lipa
-  resource_group_name        = azurerm_resource_group.access-rg.name
+  count                      = (var.environment == "prod" ? 1 : 0)
+  name                       = join("-", ["cdpz", var.environment, "access-kv"])
+  resource_group_name        = azurerm_resource_group.access-rg[0].name
   location                   = var.resource_location
   tenant_id                  = var.tenant_id
   sku_name                   = "standard"
@@ -50,12 +52,13 @@ resource "azurerm_key_vault" "access-kv" {
     virtual_network_subnet_ids = [local.devops_subnet_id] 
   }
 
-  depends_on = [azurerm_resource_group.orchestration-and-ingestion-rg]
+  depends_on = [azurerm_resource_group.access-rg]
 }
 
 resource "azurerm_key_vault_key" "access-disks-cmk" {
+  count        = (var.environment == "prod" ? 1 : 0)
   name         = join("-", ["cdpz", var.environment, "access-disks-cmk"])
-  key_vault_id = azurerm_key_vault.access-kv.id
+  key_vault_id = azurerm_key_vault.access-kv[0].id
   key_type     = "RSA"
   key_size     = 4096
   key_opts = [

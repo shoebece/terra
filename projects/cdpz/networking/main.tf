@@ -32,6 +32,7 @@ resource "azurerm_private_dns_zone" "dnss" {
 }
 
 module "acc_vnet" {
+  #count    = (var.environment == "prod" ? 1 : 0)
   source   = "../../../modules/network"
 
   resource_group_name = data.azurerm_resource_group.resgrp.name
@@ -204,6 +205,7 @@ resource "azurerm_virtual_network_peering" "hub_peer" {
 }
 
 resource "azurerm_virtual_network_peering" "hub_peer_access" {
+  #count    = (var.environment == "prod" ? 1 : 0)
   name = join("-", ["peer-hub-to-cdp", var.environment, "access"])
   resource_group_name = data.azurerm_resource_group.resgrp.name
   virtual_network_name = module.acc_vnet.vnet_name
