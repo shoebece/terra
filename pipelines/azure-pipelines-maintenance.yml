@@ -22,12 +22,12 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/resource-groups/'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/networking/'
           backendServiceArm: 'CDP_Management'
           backendAzureRmResourceGroupName: 'rg-ba-terraformstate'
           backendAzureRmStorageAccountName: 'strgbaterraformstate'
           backendAzureRmContainerName: 'tfstate'
-          backendAzureRmKey: 'uat/cdpz/resource-groups.tfstate'
+          backendAzureRmKey: 'uat/cdpz/networking.tfstate'
       - task: TerraformCLI@1
         env:
           ARM_USE_MSI: true
@@ -36,5 +36,5 @@ stages:
           ARM_CLIENT_ID: "4bdad00a-f14e-4129-a845-c2a2f221dfbb"
         inputs:
           command: 'forceunlock'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/resource-groups/'
-          lockID: '830e1ea6-4588-1aaf-79c7-025b11578de4'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/networking/'
+          lockID: '02fde1bb-f44a-af18-59aa-693457d78b7d'
