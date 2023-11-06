@@ -73,7 +73,7 @@ data "databricks_group" "super_users" {
 resource "databricks_permission_assignment" "add_super_users" {
   provider      = databricks.devdbw
   principal_id  = data.databricks_group.super_users.id
-  permissions   = ["USER"]
+  permissions   = ["ADMIN"]
 }
 
 ## ----------------------------------------------------------
