@@ -23,3 +23,8 @@ variable "super_user_aad_group" { type = object({
   name = string
   id = string
 })}
+
+variable "management_spn" { type = object({
+  name = string
+  id = string
+})}
