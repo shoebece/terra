@@ -278,7 +278,7 @@ resource "databricks_grants" "dev_catalogs" {
   for_each = { for i, cat in var.catalog_config: cat.name => cat}
   provider  = databricks.devdbw
 
-  catalog   = join("-", [each.value.type, "dev", each.value.name])
+  catalog   = join("_", [each.value.type, "dev", each.value.name])
   grant {
     principal  = data.databricks_group.data_engg.display_name
     privileges = ["USE_CATALOG", "SELECT"]
@@ -304,7 +304,7 @@ resource "databricks_grants" "dev_catalogs" {
 resource "databricks_grants" "dev_bi-engg-catalog" {
   provider  = databricks.devdbw
   
-  catalog = "cdp-dev-silver"
+  catalog = "cdp_dev_silver"
   
   grant {
     principal  = data.databricks_group.data_engg.display_name
@@ -339,7 +339,7 @@ resource "databricks_grants" "uat_catalogs" {
   for_each = { for i, cat in var.catalog_config: cat.name => cat}
   provider  = databricks.devdbw
 
-  catalog   = join("-", [each.value.type, "uat", each.value.name])
+  catalog   = join("_", [each.value.type, "uat", each.value.name])
   grant {
     principal  = data.databricks_group.data_engg.display_name
     privileges = ["USE_CATALOG", "SELECT"]
@@ -365,7 +365,7 @@ resource "databricks_grants" "uat_catalogs" {
 resource "databricks_grants" "uat_bi-engg-catalog" {
   provider  = databricks.devdbw
   
-  catalog = "cdp-uat-silver"
+  catalog = "cdp_uat_silver"
   grant {
     principal  = data.databricks_group.data_engg.display_name
     privileges = ["USE_CATALOG", "SELECT"]
@@ -399,7 +399,7 @@ resource "databricks_grants" "prod_catalogs" {
   for_each = { for i, cat in var.catalog_config: cat.name => cat}
   provider  = databricks.devdbw
 
-  catalog   = join("-", [each.value.type, "prod", each.value.name])
+  catalog   = join("_", [each.value.type, "prod", each.value.name])
 
   grant {
     principal  = data.databricks_group.super_users.display_name
