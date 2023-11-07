@@ -41,7 +41,7 @@ resource "azurerm_role_assignment" "mngmnt-spn-to-dev" {
   provider             = azurerm.dev
   scope                = data.azurerm_subscription.dev_cdpz_sub.id
   role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = var.management_spn.name
+  principal_id         = var.management_spn.id
 
   depends_on = [ data.azurerm_subscription.dev_cdpz_sub ]
 }
@@ -50,7 +50,7 @@ resource "azurerm_role_assignment" "mngmnt-spn-to-uat" {
   provider             = azurerm.uat
   scope                = data.azurerm_subscription.uat_cdpz_sub.id
   role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = var.management_spn.name
+  principal_id         = var.management_spn.id
 
   depends_on = [ data.azurerm_subscription.uat_cdpz_sub ]
 }
@@ -59,7 +59,7 @@ resource "azurerm_role_assignment" "mngmnt-spn-to-prod" {
   provider             = azurerm.prod
   scope                = data.azurerm_subscription.prod_cdpz_sub.id
   role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = var.management_spn.name
+  principal_id         = var.management_spn.id
 
   depends_on = [data.azurerm_subscription.prod_cdpz_sub ]
 }
