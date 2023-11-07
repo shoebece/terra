@@ -34,7 +34,7 @@ jobs:
         provider: 'azurerm'
         command: 'init'
         workingDirectory: ${{ parameters.workingdir }}
-        backendServiceArm: 'CDP_Management'
+        backendServiceArm: CDP_Management
         backendAzureRmResourceGroupName: cdmz-cicd-rg
         backendAzureRmStorageAccountName: cdmztfstatefiledls
         backendAzureRmContainerName: tfstate
