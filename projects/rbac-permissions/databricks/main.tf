@@ -291,7 +291,7 @@ resource "databricks_grants" "dev_catalogs" {
 
   grant {
     principal  = data.databricks_group.super_users.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
+    privileges = ["ALL_PRIVILEGES"]
   }
 
   depends_on = [
@@ -318,7 +318,7 @@ resource "databricks_grants" "dev_bi-engg-catalog" {
 
   grant {
     principal  = data.databricks_group.super_users.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
+    privileges = ["ALL_PRIVILEGES"]
   }
 
   grant {
@@ -352,7 +352,7 @@ resource "databricks_grants" "uat_catalogs" {
 
   grant {
     principal  = data.databricks_group.super_users.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
+    privileges = ["ALL_PRIVILEGES"]
   }
 
   depends_on = [
@@ -378,7 +378,7 @@ resource "databricks_grants" "uat_bi-engg-catalog" {
 
   grant {
     principal  = data.databricks_group.super_users.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
+    privileges = ["ALL_PRIVILEGES"]
   }
 
   grant {
@@ -403,7 +403,7 @@ resource "databricks_grants" "prod_catalogs" {
 
   grant {
     principal  = data.databricks_group.super_users.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
+    privileges = ["ALL_PRIVILEGES"]
   }
 
   depends_on = [
