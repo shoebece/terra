@@ -21,6 +21,18 @@ data "azurerm_subscription" "prod_cdpz_sub" {
 
 #---------------------------
 # DEV
+# Data storage
+data "azurerm_resource_group" "dev-storage-rg" {
+  provider  = azurerm.dev
+  name      = "cdpz-dev-data-storage-rg"
+}
+
+# Landing
+data "azurerm_resource_group" "dev-landing-rg" {
+  provider  = azurerm.dev
+  name      = "cdpz-dev-landing-rg"
+}
+
 # Data processing
 data "azurerm_resource_group" "dev-processing-rg" {
   provider  = azurerm.dev
@@ -47,6 +59,18 @@ data "azurerm_synapse_workspace" "dev_synapse_ws" {
 }
 
 # UAT
+# Data storage
+data "azurerm_resource_group" "uat-storage-rg" {
+  provider  = azurerm.uat
+  name      = "cdpz-uat-data-storage-rg"
+}
+
+# Landing
+data "azurerm_resource_group" "uat-landing-rg" {
+  provider  = azurerm.uat
+  name      = "cdpz-uat-landing-rg"
+}
+
 # Data processing
 data "azurerm_resource_group" "uat-processing-rg" {
   provider  = azurerm.uat
@@ -73,6 +97,18 @@ data "azurerm_synapse_workspace" "uat_synapse_ws" {
 }
 
 # PROD
+# Data storage
+data "azurerm_resource_group" "prod-storage-rg" {
+  provider  = azurerm.prod
+  name      = "cdpz-prod-data-storage-rg"
+}
+
+# Landing
+data "azurerm_resource_group" "prod-landing-rg" {
+  provider  = azurerm.prod
+  name      = "cdpz-prod-landing-rg"
+}
+
 # Data processing
 data "azurerm_resource_group" "prod-processing-rg" {
   provider  = azurerm.prod

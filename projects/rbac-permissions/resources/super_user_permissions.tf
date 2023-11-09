@@ -121,6 +121,63 @@ resource "azurerm_role_assignment" "super-user-to-prod-orch-and-ingest" {
   depends_on = [ data.azurerm_resource_group.prod-orch-and-ingest-rg ]
 }
 
+# Storages
+# Data Storage
+resource "azurerm_role_assignment" "super-user-to-dev-data-storage" {
+  provider             = azurerm.dev
+  scope                = data.azurerm_resource_group.dev-storage-rg.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = var.super_user_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.dev-storage-rg ]
+}
+
+resource "azurerm_role_assignment" "super-user-to-uat-data-storage" {
+  provider             = azurerm.uat
+  scope                = data.azurerm_resource_group.uat-storage-rg.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = var.super_user_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.uat-storage-rg ]
+}
+
+resource "azurerm_role_assignment" "super-user-to-prod-data-storage" {
+  provider             = azurerm.prod
+  scope                = data.azurerm_resource_group.prod-storage-rg.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = var.super_user_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.prod-storage-rg ]
+}
+
+# Landing
+resource "azurerm_role_assignment" "super-user-to-dev-landing" {
+  provider             = azurerm.dev
+  scope                = data.azurerm_resource_group.dev-landing-rg.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = var.super_user_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.dev-landing-rg ]
+}
+
+resource "azurerm_role_assignment" "super-user-to-uat-landing" {
+  provider             = azurerm.uat
+  scope                = data.azurerm_resource_group.uat-landing-rg.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = var.super_user_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.uat-landing-rg ]
+}
+
+resource "azurerm_role_assignment" "super-user-to-prod-landing" {
+  provider             = azurerm.prod
+  scope                = data.azurerm_resource_group.prod-landing-rg.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = var.super_user_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.prod-landing-rg ]
+}
+
 ## Key vault for ochestration
 resource "azurerm_role_assignment" "super-user-to-cmdz-kv" {
   provider             = azurerm.cdmz
