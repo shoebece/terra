@@ -28,3 +28,8 @@ variable "management_spn" { type = object({
   name = string
   id = string
 })}
+
+variable old_subscription_spn { type = object({
+  name = string
+  id = string
+})}
