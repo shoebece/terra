@@ -90,7 +90,7 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "fivetran-autoshdt" {
     count = length(var.vms_fivetran)
     virtual_machine_id = azurerm_windows_virtual_machine.fivetran-vm[count.index].id
     location = var.resource_location
-    enabled = true
+    enabled = false
     daily_recurrence_time = "1000"
     timezone = "Central Europe Standard Time"
     notification_settings {
