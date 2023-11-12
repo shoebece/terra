@@ -11,7 +11,7 @@ variables:
 
 stages:
 
-- template: templates/stage/stages-plan.yml
+- template: templates/stage/stages-deploy.yml
   parameters:
     st_serviceconn: CDP_Management
     st_env: prod
@@ -20,4 +20,3 @@ stages:
     st_backend_key: 'prod/cdmz/fivetran-integration.tfstate'
     st_sub_project: fivetran_integration
     st_additional_vars: "-var vm_admin_password=$(environment.FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(environment.FIVETRAN_SQL_PASSWORD) "
-
