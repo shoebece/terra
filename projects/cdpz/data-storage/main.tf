@@ -4,7 +4,7 @@ locals {
 
 # To be deleted after migration to new infra
 locals {
-  old_prod_dbx_subnet_id = "/subscriptions/3c44ba2d-eba5-4d51-adb8-8614bf03bd29/resourceGroups/Rg-BADatabricks-Prod/providers/Microsoft.Network/virtualNetworks/vnet-badatabricks-prod"
+  old_prod_dbx_subnet_id = "/subscriptions/3c44ba2d-eba5-4d51-adb8-8614bf03bd29/resourceGroups/Rg-BADatabricks-Prod/providers/Microsoft.Network/virtualNetworks/vnet-badatabricks-prod/subnets/DBR_Private"
 }
 
 data "azurerm_resource_group" "resgrp" {
