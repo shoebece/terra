@@ -50,23 +50,23 @@ resource "azurerm_synapse_role_assignment" "elitmind-to-dev-synapse" {
 }
 
 # On UAT env
-resource "azurerm_role_assignment" "data-eng-to-uat-processing" {
-  provider             = azurerm.uat
-  scope                = data.azurerm_resource_group.uat-processing-rg.id
-  role_definition_name = "Reader"
-  principal_id         = var.data_engg_aad_group.id
+# resource "azurerm_role_assignment" "data-eng-to-uat-processing" {
+#   provider             = azurerm.uat
+#   scope                = data.azurerm_resource_group.uat-processing-rg.id
+#   role_definition_name = "Reader"
+#   principal_id         = var.data_engg_aad_group.id
 
-  depends_on = [ data.azurerm_resource_group.uat-processing-rg ]
-}
+#   depends_on = [ data.azurerm_resource_group.uat-processing-rg ]
+# }
 
-resource "azurerm_role_assignment" "data-eng-to-uat-sharing" {
-  provider             = azurerm.uat
-  scope                = data.azurerm_resource_group.uat-sharing.id
-  role_definition_name = "Reader"
-  principal_id         = var.data_engg_aad_group.id
+# resource "azurerm_role_assignment" "data-eng-to-uat-sharing" {
+#   provider             = azurerm.uat
+#   scope                = data.azurerm_resource_group.uat-sharing.id
+#   role_definition_name = "Reader"
+#   principal_id         = var.data_engg_aad_group.id
 
-  depends_on = [ data.azurerm_resource_group.uat-sharing ]
-}
+#   depends_on = [ data.azurerm_resource_group.uat-sharing ]
+# }
 
 resource "azurerm_role_assignment" "data-eng-to-uat-orch-and-ingest" {
   provider             = azurerm.uat
