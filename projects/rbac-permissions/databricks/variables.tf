@@ -39,4 +39,7 @@ variable "catalog_config" {
     }))
 }
 
+variable "catalog_reader_permission" {type = list(string)}
+variable "catalog_writer_permission" {type = list(string)}
+
 variable "etl_notebook_path"        { type = string }

@@ -190,11 +190,23 @@ resource "databricks_grants" "prod_data_ext_loc" {
   external_location = join("-", [each.value.type , "prod", each.value.stacc, each.value.cont, "ext-loc"])
   
   grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
     principal  = data.databricks_group.super_users.display_name
     privileges = ["CREATE_EXTERNAL_TABLE", "READ_FILES", "WRITE_FILES"]
   }
 
   depends_on = [
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
     data.databricks_group.super_users
   ]
 }
@@ -261,12 +273,24 @@ resource "databricks_grants" "prod_landing_ext_loc" {
   provider  = databricks.devdbw
   
   external_location = join("-", ["cdp-prod-landing", each.value.stacc, each.value.cont, "ext-loc"])
-    grant {
+  grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
     principal  = data.databricks_group.super_users.display_name
     privileges = ["CREATE_EXTERNAL_TABLE", "READ_FILES", "WRITE_FILES"]
   }
 
   depends_on = [
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
     data.databricks_group.super_users
   ]
 }
@@ -274,24 +298,29 @@ resource "databricks_grants" "prod_landing_ext_loc" {
 ## ----------------------------------------------------------
 ## Catalogs
 ## DEV
-resource "databricks_grants" "dev_catalogs" {
+resource "databricks_grants" "dev_dev_catalogs" {
   for_each = { for i, cat in var.catalog_config: cat.name => cat}
   provider  = databricks.devdbw
 
   catalog   = join("_", [each.value.type, "dev", each.value.name])
   grant {
     principal  = data.databricks_group.data_engg.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
+    privileges = var.catalog_writer_permission
   }
 
   grant {
     principal  = data.databricks_group.support_engg.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
+    privileges = var.catalog_writer_permission
   }
 
   grant {
     principal  = data.databricks_group.super_users.display_name
-    privileges = ["ALL_PRIVILEGES"]
+    privileges = var.catalog_writer_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.ba_bi_eng.display_name
+    privileges = var.catalog_reader_permission
   }
 
   depends_on = [
@@ -301,115 +330,179 @@ resource "databricks_grants" "dev_catalogs" {
   ]
 }
 
-resource "databricks_grants" "dev_bi-engg-catalog" {
-  provider  = databricks.devdbw
-  
-  catalog = "cdp_dev_silver"
-  
-  grant {
-    principal  = data.databricks_group.data_engg.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
-  }
-
-  grant {
-    principal  = data.databricks_group.support_engg.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
-  }
-
-  grant {
-    principal  = data.databricks_group.super_users.display_name
-    privileges = ["ALL_PRIVILEGES"]
-  }
-
-  grant {
-    principal  = data.databricks_group.ba_bi_eng.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
-  }
-
-  depends_on = [
-    data.databricks_group.data_engg,
-    data.databricks_group.support_engg,
-    data.databricks_group.super_users,
-    data.databricks_group.ba_bi_eng
-  ]
-}
-
-## UAT
-resource "databricks_grants" "uat_catalogs" {
+resource "databricks_grants" "dev_uat_catalogs" {
   for_each = { for i, cat in var.catalog_config: cat.name => cat}
   provider  = databricks.devdbw
 
   catalog   = join("_", [each.value.type, "uat", each.value.name])
   grant {
     principal  = data.databricks_group.data_engg.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
+    privileges = var.catalog_reader_permission
   }
 
   grant {
     principal  = data.databricks_group.support_engg.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
+    privileges = var.catalog_reader_permission
   }
 
   grant {
     principal  = data.databricks_group.super_users.display_name
-    privileges = ["ALL_PRIVILEGES"]
-  }
-
-  depends_on = [
-    data.databricks_group.data_engg,
-    data.databricks_group.support_engg,
-    data.databricks_group.super_users
-  ]
-}
-
-resource "databricks_grants" "uat_bi-engg-catalog" {
-  provider  = databricks.devdbw
-  
-  catalog = "cdp_uat_silver"
-  grant {
-    principal  = data.databricks_group.data_engg.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
-  }
-
-  grant {
-    principal  = data.databricks_group.support_engg.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
-  }
-
-  grant {
-    principal  = data.databricks_group.super_users.display_name
-    privileges = ["ALL_PRIVILEGES"]
+    privileges = var.catalog_writer_permission
   }
 
   grant {
     principal  = data.databricks_group.ba_bi_eng.display_name
-    privileges = ["USE_CATALOG", "SELECT"]
+    privileges = var.catalog_reader_permission
   }
 
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
-    data.databricks_group.super_users,
-    data.databricks_group.ba_bi_eng
+    data.databricks_group.super_users
   ]
 }
 
-## PROD
-resource "databricks_grants" "prod_catalogs" {
+resource "databricks_grants" "dev_prod_catalogs" {
   for_each = { for i, cat in var.catalog_config: cat.name => cat}
   provider  = databricks.devdbw
 
   catalog   = join("_", [each.value.type, "prod", each.value.name])
+  grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
 
   grant {
     principal  = data.databricks_group.super_users.display_name
-    privileges = ["ALL_PRIVILEGES"]
+    privileges = var.catalog_writer_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.ba_bi_eng.display_name
+    privileges = var.catalog_reader_permission
   }
 
   depends_on = [
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
     data.databricks_group.super_users
   ]
 }
+
+# resource "databricks_grants" "dev_bi-engg-catalog" {
+#   provider  = databricks.devdbw
+  
+#   catalog = "cdp_dev_silver"
+  
+#   grant {
+#     principal  = data.databricks_group.data_engg.display_name
+#     privileges = ["USE_CATALOG", "SELECT"]
+#   }
+
+#   grant {
+#     principal  = data.databricks_group.support_engg.display_name
+#     privileges = ["USE_CATALOG", "SELECT"]
+#   }
+
+#   grant {
+#     principal  = data.databricks_group.super_users.display_name
+#     privileges = ["ALL_PRIVILEGES"]
+#   }
+
+#   grant {
+#     principal  = data.databricks_group.ba_bi_eng.display_name
+#     privileges = ["USE_CATALOG", "SELECT"]
+#   }
+
+#   depends_on = [
+#     data.databricks_group.data_engg,
+#     data.databricks_group.support_engg,
+#     data.databricks_group.super_users,
+#     data.databricks_group.ba_bi_eng
+#   ]
+# }
+
+# ## UAT
+# resource "databricks_grants" "uat_catalogs" {
+#   for_each = { for i, cat in var.catalog_config: cat.name => cat}
+#   provider  = databricks.devdbw
+
+#   catalog   = join("_", [each.value.type, "uat", each.value.name])
+#   grant {
+#     principal  = data.databricks_group.data_engg.display_name
+#     privileges = ["USE_CATALOG", "SELECT"]
+#   }
+
+#   grant {
+#     principal  = data.databricks_group.support_engg.display_name
+#     privileges = ["USE_CATALOG", "SELECT"]
+#   }
+
+#   grant {
+#     principal  = data.databricks_group.super_users.display_name
+#     privileges = ["ALL_PRIVILEGES"]
+#   }
+
+#   depends_on = [
+#     data.databricks_group.data_engg,
+#     data.databricks_group.support_engg,
+#     data.databricks_group.super_users
+#   ]
+# }
+
+# resource "databricks_grants" "uat_bi-engg-catalog" {
+#   provider  = databricks.devdbw
+  
+#   catalog = "cdp_uat_silver"
+#   grant {
+#     principal  = data.databricks_group.data_engg.display_name
+#     privileges = ["USE_CATALOG", "SELECT"]
+#   }
+
+#   grant {
+#     principal  = data.databricks_group.support_engg.display_name
+#     privileges = ["USE_CATALOG", "SELECT"]
+#   }
+
+#   grant {
+#     principal  = data.databricks_group.super_users.display_name
+#     privileges = ["ALL_PRIVILEGES"]
+#   }
+
+#   grant {
+#     principal  = data.databricks_group.ba_bi_eng.display_name
+#     privileges = ["USE_CATALOG", "SELECT"]
+#   }
+
+#   depends_on = [
+#     data.databricks_group.data_engg,
+#     data.databricks_group.support_engg,
+#     data.databricks_group.super_users,
+#     data.databricks_group.ba_bi_eng
+#   ]
+# }
+
+# ## PROD
+# resource "databricks_grants" "prod_catalogs" {
+#   for_each = { for i, cat in var.catalog_config: cat.name => cat}
+#   provider  = databricks.devdbw
+
+#   catalog   = join("_", [each.value.type, "prod", each.value.name])
+
+#   grant {
+#     principal  = data.databricks_group.super_users.display_name
+#     privileges = ["ALL_PRIVILEGES"]
+#   }
+
+#   depends_on = [
+#     data.databricks_group.super_users
+#   ]
+# }
 
 # resource "databricks_permissions" "notebook_usage" {
 #   notebook_path = var.etl_notebook_path
