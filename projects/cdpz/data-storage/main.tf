@@ -2,13 +2,6 @@ locals {
   devops_subnet_id = "/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"
 }
 
-# To be deleted after migration to new infra
-locals {
-  old_prod_dbx_subnet_id = ["/subscriptions/3c44ba2d-eba5-4d51-adb8-8614bf03bd29/resourceGroups/Rg-BADatabricks-Prod/providers/Microsoft.Network/virtualNetworks/vnet-badatabricks-prod/subnets/DBR_Private",
-    "/subscriptions/3c44ba2d-eba5-4d51-adb8-8614bf03bd29/resourceGroups/Rg-BADatabricks-Prod/providers/Microsoft.Network/virtualNetworks/vnet-badatabricks-prod/subnets/DBR_Public",
-    "/subscriptions/3c44ba2d-eba5-4d51-adb8-8614bf03bd29/resourceGroups/Rg-BADatabricks-Prod/providers/Microsoft.Network/virtualNetworks/vnet-badatabricks-prod/subnets/snet_privatelink"]
-}
-
 data "azurerm_resource_group" "resgrp" {
   name      = join("-", ["cdpz", var.environment, "data-storage-rg"])
 }
@@ -96,7 +89,7 @@ resource "azurerm_storage_account" "data_staccs" {
 
   network_rules {
     default_action              = "Deny"
-    virtual_network_subnet_ids  = concat([for s in concat(data.azurerm_subnet.snet-srvend, data.azurerm_subnet.cdmz-snet-srvend, data.azurerm_subnet.additional-snet-srvend) : s.id ], [local.devops_subnet_id], local.old_prod_dbx_subnet_id)
+    virtual_network_subnet_ids  = concat([for s in concat(data.azurerm_subnet.snet-srvend, data.azurerm_subnet.cdmz-snet-srvend, data.azurerm_subnet.additional-snet-srvend) : s.id ], [local.devops_subnet_id], var.oldsub_service_endpoint_snets)
   }
   
   tags = merge(

@@ -24,6 +24,8 @@ variable additional_service_endpoint_snets {type = list(object({
     snet = string
 }))}
 
+variable oldsub_service_endpoint_snets {type = list(string)}
+
 variable service_endpoint_snets {type = list(object({
     rgname = string
     vnet = string
