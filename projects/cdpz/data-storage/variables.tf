@@ -1,6 +1,7 @@
 variable "tenant_id" { type = string }
 variable "subscription_id" { type = string }
 variable "cdmz_subscription_id" { type = string }
+variable "dev_subscription_id" { type = string }
 variable "environment" { type = string }
 
 variable "resource_location" { type = string }
@@ -16,6 +17,12 @@ variable "staccs" {
         }))
     }))
 }
+
+variable additional_service_endpoint_snets {type = list(object({
+    rgname = string
+    vnet = string
+    snet = string
+}))}
 
 variable service_endpoint_snets {type = list(object({
     rgname = string

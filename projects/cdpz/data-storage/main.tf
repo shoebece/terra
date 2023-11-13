@@ -55,6 +55,16 @@ data azurerm_subnet cdmz-snet-srvend {
     name                 = var.cdmz_service_endpoint_snets[count.index].snet
 }
 
+data azurerm_subnet additional-snet-srvend {
+    # If public access is enabled snets will be whitelisted
+    count                = length(var.additional_service_endpoint_snets) * (var.public_access_enabled ? 1 : 0)
+    provider             = azurerm.dev
+
+    resource_group_name  = var.additional_service_endpoint_snets[count.index].rgname
+    virtual_network_name = var.additional_service_endpoint_snets[count.index].vnet
+    name                 = var.additional_service_endpoint_snets[count.index].snet
+}
+
 resource "azurerm_storage_account" "data_staccs" {
   count                     = length(var.staccs)
   
@@ -79,7 +89,7 @@ resource "azurerm_storage_account" "data_staccs" {
 
   network_rules {
     default_action              = "Deny"
-    virtual_network_subnet_ids  = concat([for s in concat(data.azurerm_subnet.snet-srvend, data.azurerm_subnet.cdmz-snet-srvend) : s.id ], [local.devops_subnet_id])
+    virtual_network_subnet_ids  = concat([for s in concat(data.azurerm_subnet.snet-srvend, data.azurerm_subnet.cdmz-snet-srvend, data.azurerm_subnet.additional-snet-srvend) : s.id ], [local.devops_subnet_id])
   }
   
   tags = merge(
