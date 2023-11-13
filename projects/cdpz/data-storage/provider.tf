@@ -37,3 +37,19 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias           = "dev"
+
+  tenant_id       = var.tenant_id
+  subscription_id = var.dev_subscription_id
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}
