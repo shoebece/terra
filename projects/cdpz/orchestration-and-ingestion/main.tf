@@ -32,7 +32,7 @@ resource "azurerm_data_factory" "orchestration-and-ingestion-adf" {
   public_network_enabled  = "false"
 
   identity {
-    type         = "UserAssigned"
+    type         = "SystemAssigned, UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.orchestration-and-ingestion-umid.id]
   }
 
@@ -123,7 +123,7 @@ data "azurerm_data_factory" "cdmz-shared-shir-adf" {
 resource "azurerm_role_assignment" "linked-to-shared-adf" {
   scope                = data.azurerm_data_factory.cdmz-shared-shir-adf.id
   role_definition_name = "Contributor"
-  principal_id         = azurerm_user_assigned_identity.orchestration-and-ingestion-umid.principal_id
+  principal_id         = azurerm_data_factory.orchestration-and-ingestion-adf.identity[0].principal_id
 }
 
 resource "azurerm_data_factory_integration_runtime_self_hosted" "shir" {
