@@ -20,3 +20,17 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias           = "cdmz"
+  tenant_id       = var.tenant_id
+  subscription_id = var.cdmz_subscription_id
+
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}

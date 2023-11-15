@@ -1,5 +1,6 @@
 variable "tenant_id" { type = string }
 variable "subscription_id" { type = string }
+variable "cdmz_subscription_id" { type = string }
 variable "environment" { type = string }
 variable "resource_location" { type = string }
 variable "resource_tags_common" { type = map(string) }
@@ -44,3 +45,5 @@ variable "git_branch_name" {
   type    = string
   default = ""
 }
+
+variable "shared_shir_id" { type = string }
