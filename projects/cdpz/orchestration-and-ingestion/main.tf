@@ -119,20 +119,20 @@ data "azurerm_data_factory" "cdmz-shared-shir-adf" {
   name                = "cdmz-shared-shir-adf"
 }
 
-# # Linked ADF UMI is Contributor on Shared ADF
-# resource "azurerm_role_assignment" "linked-to-shared-adf" {
-#   scope                = data.azurerm_data_factory.cdmz-shared-shir-adf.id
-#   role_definition_name = "Contributor"
-#   principal_id         = azurerm_data_factory.orchestration-and-ingestion-adf.identity[0].principal_id
-# }
+# Linked ADF UMI is Contributor on Shared ADF
+resource "azurerm_role_assignment" "linked-to-shared-adf" {
+  scope                = data.azurerm_data_factory.cdmz-shared-shir-adf.id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_data_factory.orchestration-and-ingestion-adf.identity[0].principal_id
+}
 
-# resource "azurerm_data_factory_integration_runtime_self_hosted" "shir" {
-#   name            = "ir-cdp-sefhosted"
-#   data_factory_id = azurerm_data_factory.orchestration-and-ingestion-adf.id
+resource "azurerm_data_factory_integration_runtime_self_hosted" "shir" {
+  name            = "ir-cdp-sefhosted"
+  data_factory_id = azurerm_data_factory.orchestration-and-ingestion-adf.id
 
-#   rbac_authorization {
-#     resource_id = var.shared_shir_id
-#   }
+  rbac_authorization {
+    resource_id = var.shared_shir_id
+  }
 
-#   depends_on = [ azurerm_role_assignment.linked-to-shared-adf ]
-# }
+  depends_on = [ azurerm_role_assignment.linked-to-shared-adf ]
+}
