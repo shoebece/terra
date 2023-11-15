@@ -124,6 +124,8 @@ resource "azurerm_role_assignment" "linked-to-shared-adf" {
   scope                = data.azurerm_data_factory.cdmz-shared-shir-adf.id
   role_definition_name = "Contributor"
   principal_id         = azurerm_data_factory.orchestration-and-ingestion-adf.identity[0].principal_id
+
+  depends_on = [ azurerm_data_factory.orchestration-and-ingestion-adf ]
 }
 
 resource "azurerm_data_factory_integration_runtime_self_hosted" "shir" {
