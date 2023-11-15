@@ -119,10 +119,10 @@ data "azurerm_resource_group" "cdmz-shared-shir-rg" {
   name     = "cdmz-shared-shir-rg"
 }
 
-# ADF UMI is Data Factory Contributor on Orchestration and igestion RG
-resource "azurerm_role_assignment" "adf-data-factory_contr" {
+# Linked ADF UMI is Contributor on Shared ADF
+resource "azurerm_role_assignment" "linked-to-shared-adf" {
   scope                = data.azurerm_resource_group.cdmz-shared-shir-rg.id
-  role_definition_name = "Data Factory Contributor"
+  role_definition_name = "Contributor"
   principal_id         = azurerm_user_assigned_identity.orchestration-and-ingestion-umid.principal_id
 }
 
@@ -134,5 +134,5 @@ resource "azurerm_data_factory_integration_runtime_self_hosted" "shir" {
     resource_id = var.shared_shir_id
   }
 
-  depends_on = [ azurerm_role_assignment.adf-data-factory_contr ]
+  depends_on = [ azurerm_role_assignment.linked-to-shared-adf ]
 }
