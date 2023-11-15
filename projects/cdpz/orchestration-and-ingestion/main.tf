@@ -133,4 +133,6 @@ resource "azurerm_data_factory_integration_runtime_self_hosted" "shir" {
   rbac_authorization {
     resource_id = var.shared_shir_id
   }
+
+  depends_on = [ azurerm_role_assignment.adf-data-factory_contr ]
 }
