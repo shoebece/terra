@@ -113,15 +113,15 @@ resource "azurerm_private_endpoint" "endpoint_adf" {
   ]
 }
 
-
-data "azurerm_resource_group" "cdmz-shared-shir-rg" {
-  provider = azurerm.cdmz
-  name     = "cdmz-shared-shir-rg"
+data "azurerm_data_factory" "cdmz-shared-shir-adf" {
+  provider            = azurerm.cdmz
+  resource_group_name = "cdmz-shared-shir-rg"
+  name                = "cdmz-shared-shir-adf"
 }
 
 # Linked ADF UMI is Contributor on Shared ADF
 resource "azurerm_role_assignment" "linked-to-shared-adf" {
-  scope                = data.azurerm_resource_group.cdmz-shared-shir-rg.id
+  scope                = data.azurerm_data_factory.cdmz-shared-shir-adf.id
   role_definition_name = "Contributor"
   principal_id         = azurerm_user_assigned_identity.orchestration-and-ingestion-umid.principal_id
 }
