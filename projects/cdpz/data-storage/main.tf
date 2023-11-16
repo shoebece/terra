@@ -2,15 +2,15 @@ locals {
   devops_subnet_id = "/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"
 }
 
-data "azurerm_resource_group" "resgrp" {
-  name      = join("-", ["cdpz", var.environment, "data-storage-rg"])
-}
+# data "azurerm_resource_group" "resgrp" {
+#   name      = join("-", ["cdpz", var.environment, "data-storage-rg"])
+# }
 
-resource "azurerm_management_lock" "delete-lock" {
-  name       = "resource-group-deletion-lock"
-  scope      = data.azurerm_resource_group.resgrp.id
-  lock_level = "CanNotDelete"
-}
+# resource "azurerm_management_lock" "delete-lock" {
+#   name       = "resource-group-deletion-lock"
+#   scope      = data.azurerm_resource_group.resgrp.id
+#   lock_level = "CanNotDelete"
+# }
 
 data "azurerm_key_vault" "kv" {
   name                  = var.sandbox_prefix == "" ? join("-", ["cdpz", var.environment, "data-kv"]) : join("-", ["cdpz", var.environment, var.sandbox_prefix, "data-kv"])
