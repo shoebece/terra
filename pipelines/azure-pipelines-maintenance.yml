@@ -24,8 +24,8 @@ stages:
           command: 'init'
           workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/networking/'
           backendServiceArm: 'CDP_Management'
-          backendAzureRmResourceGroupName: 'rg-ba-terraformstate'
-          backendAzureRmStorageAccountName: 'strgbaterraformstate'
+          backendAzureRmResourceGroupName: 'cdmz-cicd-rg'
+          backendAzureRmStorageAccountName: 'cdmztfstatefiledls'
           backendAzureRmContainerName: 'tfstate'
           backendAzureRmKey: 'uat/cdpz/networking.tfstate'
       - task: TerraformCLI@1
