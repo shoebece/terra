@@ -37,4 +37,4 @@ stages:
         inputs:
           command: 'forceunlock'
           workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/networking/'
-          lockID: '02fde1bb-f44a-af18-59aa-693457d78b7d'
+          lockID: '37037f47-0d1e-74c4-fe18-0bd5d884983e'
