@@ -102,12 +102,12 @@ resource "databricks_permission_assignment" "add_contract_logistics_bu" {
 
 # contract_logistics_eur
 data "databricks_group" "contract_logistics_eur_bu" {
-  provider      = databricks.devdbw
+  provider      = databricks.globaldbw
   display_name  = var.contract_logistics_eur_bu.name
 }
 
 resource "databricks_permission_assignment" "add_contract_logistics_eur_bu" {
-  provider      = databricks.devdbw
+  provider      = databricks.globaldbw
   principal_id  = data.databricks_group.contract_logistics_eur_bu.id
   permissions   = ["USER"]
 
