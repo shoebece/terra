@@ -18,6 +18,16 @@ locals {
         }
     ]
   ])
+  logistics_ext_loc_falttend = flatten([
+    for stacc in var.logistics_ext_loc : [
+        for cont in stacc.stconts : {
+          key     = join("-", [stacc.name, cont])
+          stacc   = stacc.name
+          type    = stacc.type
+          cont    = cont
+        }
+    ]
+  ])
 }
 
 #---------------------------------------------
@@ -76,6 +86,34 @@ resource "databricks_permission_assignment" "add_super_users" {
   permissions   = ["ADMIN"]
 }
 
+# contract_logistics
+data "databricks_group" "contract_logistics_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.contract_logistics_bu.name
+}
+
+resource "databricks_permission_assignment" "add_contract_logistics_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.contract_logistics_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.contract_logistics_bu ]
+}
+
+# contract_logistics_eur
+data "databricks_group" "contract_logistics_eur_bu" {
+  provider      = databricks.devdbw
+  display_name  = var.contract_logistics_eur_bu.name
+}
+
+resource "databricks_permission_assignment" "add_contract_logistics_eur_bu" {
+  provider      = databricks.devdbw
+  principal_id  = data.databricks_group.contract_logistics_eur_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.contract_logistics_eur_bu ]
+}
+
 ## ----------------------------------------------------------
 ## Cluster
 ## DEV
@@ -123,6 +161,35 @@ resource "databricks_permissions" "cluster_usage" {
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users
+  ]
+}
+
+## ----------------------------------------------------------
+## Cluster
+## Global
+data "databricks_cluster" "global_sync_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-sync-team-cluster"
+}
+
+resource "databricks_permissions" "global_cluster_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_sync_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.contract_logistics_bu.display_name
+    permission_level = "CAN_ATTACH_TO"
+  }
+
+  access_control {
+    group_name       = data.databricks_group.contract_logistics_eur_bu.display_name
+    permission_level = "CAN_ATTACH_TO"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_sync_cluster,
+    data.databricks_group.contract_logistics_bu,
+    data.databricks_group.contract_logistics_eur_bu
   ]
 }
 
@@ -292,6 +359,72 @@ resource "databricks_grants" "prod_landing_ext_loc" {
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users
+  ]
+}
+
+## ----------------------------------------------------------
+## Logistics external locations
+## DEV
+resource "databricks_grants" "dev_logistics_ext_loc" {
+  for_each = { for i, ext_loc in local.logistics_ext_loc_falttend: ext_loc.key => ext_loc }
+  provider  = databricks.globaldbw
+  
+  external_location = join("-", [each.value.type , "dev", each.value.stacc, each.value.cont, "ext-loc"])
+  grant {
+    principal  = data.databricks_group.contract_logistics_bu.display_name
+    privileges = ["WRITE_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = ["WRITE_FILES"]
+  }
+
+  depends_on = [
+    data.databricks_group.contract_logistics_bu,
+    data.databricks_group.contract_logistics_eur_bu
+  ]
+}
+
+resource "databricks_grants" "uat_logistics_ext_loc" {
+  for_each = { for i, ext_loc in local.logistics_ext_loc_falttend: ext_loc.key => ext_loc }
+  provider  = databricks.globaldbw
+  
+  external_location = join("-", [each.value.type , "uat", each.value.stacc, each.value.cont, "ext-loc"])
+  grant {
+    principal  = data.databricks_group.contract_logistics_bu.display_name
+    privileges = ["WRITE_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = ["WRITE_FILES"]
+  }
+
+  depends_on = [
+    data.databricks_group.contract_logistics_bu,
+    data.databricks_group.contract_logistics_eur_bu
+  ]
+}
+
+resource "databricks_grants" "prod_logistics_ext_loc" {
+  for_each = { for i, ext_loc in local.logistics_ext_loc_falttend: ext_loc.key => ext_loc }
+  provider  = databricks.globaldbw
+  
+  external_location = join("-", [each.value.type , "prod", each.value.stacc, each.value.cont, "ext-loc"])
+  grant {
+    principal  = data.databricks_group.contract_logistics_bu.display_name
+    privileges = ["WRITE_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = ["WRITE_FILES"]
+  }
+
+  depends_on = [
+    data.databricks_group.contract_logistics_bu,
+    data.databricks_group.contract_logistics_eur_bu
   ]
 }
 
