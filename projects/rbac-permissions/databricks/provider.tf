@@ -118,7 +118,7 @@ provider "databricks" {
 data "azurerm_databricks_workspace" "global_dbw" {
   provider            = azurerm.prod
   name                = "cdpz-global-processing-dbw"
-  resource_group_name = "cdpz-global-data-processing-rg"
+  resource_group_name = "cdpz-global-processing-rg"
 }
 
 provider "databricks" {
