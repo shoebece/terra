@@ -11,7 +11,7 @@ variables:
 
 stages:
 
-- template: templates/stage/stages-plan.yml
+- template: templates/stage/stages-deploy.yml
   parameters:
     st_serviceconn: CDP_Management
     st_env: prod
