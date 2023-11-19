@@ -81,7 +81,55 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "PowerBI"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    }
+    },
+    {
+      name                    = "Route_Algiers_Fivetran_1"
+      address_prefix          = "192.168.10.106/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_batangas_Fivetran_con"
+      address_prefix          = "10.2.0.51/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_Dakar_Fivetran_1"
+      address_prefix          = "10.52.6.99/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_Dakar_Fivetran_2"
+      address_prefix          = "10.52.6.62/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_Jeddah_FiveTran"
+      address_prefix          = "192.168.203.0/24"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_Posorja_Fivetran"
+      address_prefix          = "10.24.1.61/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_UAE_SEC_DLP_ME_VA"
+      address_prefix          = "10.254.7.0/24"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.firewall_ip_address
+    },
+    {
+      name                    = "Route_SEC_CheckPoint_EDR"
+      address_prefix          = "10.254.4.4/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.firewall_ip_address
+    },
   ]
 
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
