@@ -24,6 +24,7 @@ variable "route_table_snets" { type = list(object({
 })) }
 
 variable "firewall_ip_address"           { type = string }
+variable "vpn_firewall_ip_address"       { type = string }
 variable "kv_ip_address"                 { type = string }
 variable "synapse_plhub_ip_address"      { type = string }
 
