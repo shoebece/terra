@@ -19,6 +19,7 @@ variable "vms_fivetran" {
     ip             = string
     computer_name  = string
     admin_username = string
+    size           = string
   }))
 }
 
