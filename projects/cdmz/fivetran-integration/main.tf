@@ -44,7 +44,7 @@ resource "azurerm_windows_virtual_machine" "fivetran-vm" {
   name                = join("-", ["cdmz", var.vms_fivetran[count.index].vm])
   resource_group_name = data.azurerm_resource_group.fivetran-integration-rg.name
   location            = var.resource_location
-  size                = var.size
+  size                = var.vms_fivetran[count.index].size
   computer_name       = var.vms_fivetran[count.index].computer_name
   admin_username      = var.vms_fivetran[count.index].admin_username
   admin_password      = var.vm_admin_password
