@@ -113,6 +113,13 @@ resource "azurerm_route_table" "art" {
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
     },
     {
+      name                    = "Route_Berbera_Fivetran"
+      address_prefix          = "10.10.100.225/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+
+    {
       name                    = "Route_Posorja_Fivetran"
       address_prefix          = "10.24.1.61/32"
       next_hop_type           = "VirtualAppliance"
