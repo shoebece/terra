@@ -2,6 +2,12 @@ locals {
   devops_subnet_id = "/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"
 }
 
+locals {
+  global_pro_default_id = "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-global-processing-vnet/subnets/global-processing-default-snet"
+  global_pro_private_id = "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-global-processing-vnet/subnets/global-processing-dbw-private-snet"
+  global_pro_public_id = "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-global-processing-vnet/subnets/global-processing-dbw-public-snet"
+}
+
 data "azurerm_resource_group" "resgrp" {
   name      = join("-", ["cdpz", var.environment, "data-storage-rg"])
 }
@@ -89,7 +95,7 @@ resource "azurerm_storage_account" "data_staccs" {
 
   network_rules {
     default_action              = "Deny"
-    virtual_network_subnet_ids  = concat([for s in concat(data.azurerm_subnet.snet-srvend, data.azurerm_subnet.cdmz-snet-srvend, data.azurerm_subnet.additional-snet-srvend) : s.id ], [local.devops_subnet_id], var.oldsub_service_endpoint_snets)
+    virtual_network_subnet_ids  = concat([for s in concat(data.azurerm_subnet.snet-srvend, data.azurerm_subnet.cdmz-snet-srvend, data.azurerm_subnet.additional-snet-srvend) : s.id ], [local.devops_subnet_id], var.oldsub_service_endpoint_snets,[local.global_pro_default_id],[local.global_pro_private_id],[local.global_pro_public_id])
   }
   
   tags = merge(
