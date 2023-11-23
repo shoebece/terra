@@ -1,6 +1,6 @@
 locals {
-  networking_resource_group_name = "rg-ila-dl-prod"
-  vnet_name                      = "vnet-ila-dl-prod"
+  networking_resource_group_name = join("-", ["cdpz", var.environment, "networking-rg"])
+  vnet_name                      = join("-", ["cdpz", var.environment, "processing-vnet"])
 }
 
 data "azurerm_virtual_network" "vnet" {
@@ -9,35 +9,35 @@ data "azurerm_virtual_network" "vnet" {
 }
 
 data "azurerm_subnet" "snet-dbricks-public" {
-  name                 = "snet-ila-dbw-public-snet"
+  name                 = "processing-dbw-public-snet"
   resource_group_name  = local.networking_resource_group_name
   virtual_network_name = local.vnet_name
 }
 
 data "azurerm_subnet" "snet-dbricks-private" {
-  name                 = "snet-ila-dbw-private-snet"
+  name                 = "processing-dbw-private-snet"
   resource_group_name  = local.networking_resource_group_name
   virtual_network_name = local.vnet_name
 }
 
 data "azurerm_subnet" "snet-default" {
-  name                 = "snet-ila-default"
+  name                 = "processing-default-snet"
   resource_group_name  = local.networking_resource_group_name
   virtual_network_name = local.vnet_name
 }
 
 data "azurerm_resource_group" "resgrp" {
-  name                 = "rg-ila-dl-prod"
+  name                 = join("-", ["cdpz", var.environment, "data-processing-rg"])
 }
 
 resource "azurerm_user_assigned_identity" "umi" {
-  name                = "ila-prod-processing-acdb-umi"
+  name                = join("-", ["cdpz", var.environment, "processing-acdb-umi"])
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
 }
 
 resource "azurerm_databricks_access_connector" "authorization" {
-  name                = "ila-prod-processing-acdb"
+  name                = join("-", ["cdpz", var.environment, "processing-acdb"])
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
 
@@ -54,21 +54,22 @@ resource "azurerm_databricks_access_connector" "authorization" {
 }
 
 data "azurerm_key_vault" "kv" {
-  name                       = "kv-ila-dl-prod1"
-  resource_group_name        = local.networking_resource_group_name
+  name                       = var.sandbox_prefix == "" ? join("-", ["cdpz", var.environment, "proc-kv"]) : join("-", ["cdpz", var.environment, var.sandbox_prefix, "proc-kv"])
+  resource_group_name        = data.azurerm_resource_group.resgrp.name
 }
 
 data "azurerm_key_vault_key" "disks_cmk" {
-  name                      = "data-dls-cmk-prod"
+  name                      = join("-", ["cdpz", var.environment, "data-processing-disks-cmk"])
   key_vault_id              = data.azurerm_key_vault.kv.id
 }
 
 resource "azurerm_databricks_workspace" "dbws" {
-  name                = "dbw-ila-dl-prod"
+  name                = join("-", ["cdpz", var.environment, "processing-dbw"])
   location            = var.resource_location
   resource_group_name = data.azurerm_resource_group.resgrp.name
 
-  managed_resource_group_name                         = "mg-rg-ila-dl-prod"
+  managed_resource_group_name                         = join("-", ["cdpz", var.environment, "data-processing-databricks-mrg"])
+
   customer_managed_key_enabled                        = false
   infrastructure_encryption_enabled                   = true
   managed_disk_cmk_rotation_to_latest_version_enabled = true
@@ -80,7 +81,7 @@ resource "azurerm_databricks_workspace" "dbws" {
   network_security_group_rules_required = "NoAzureDatabricksRules"
 
   custom_parameters {
-    storage_account_name     = "ilaadbwdbfsdls"
+    storage_account_name     = join("", [var.sandbox_prefix, "cdpz", var.environment, "adbwdbfsdls"])
     storage_account_sku_name = "Standard_LRS"
 
     no_public_ip       = true
@@ -129,15 +130,15 @@ data "azurerm_private_dns_zone" "pdnsz" {
   resource_group_name = local.networking_resource_group_name
 }
 
-# Private end point ila-dev-processing-dbw-pep
+# Private end point cdpz-dev-processing-dbw-pep
 resource "azurerm_private_endpoint" "endpoint" {
-  name                            = "ila-prod-processing-dbw-pep"
+  name                            = join("-", ["cdpz", var.environment, "processing-dbw-pep"]) 
   resource_group_name             = local.networking_resource_group_name
   location                        = var.resource_location
 
   subnet_id                       = data.azurerm_subnet.snet-default.id
 
-  custom_network_interface_name   = "ila-prod-processing-dbw-nic"
+  custom_network_interface_name   = join("-", ["cdpz", var.environment, "processing-dbw-nic"])
 
   private_dns_zone_group {
     name = "add_to_azure_private_dns"
@@ -145,14 +146,14 @@ resource "azurerm_private_endpoint" "endpoint" {
   }
 
   private_service_connection {
-      name                            = "ila-prod-processing-dbw-psc"
+      name                            = join("-", ["cdpz", var.environment, "processing-dbw-psc"])
       private_connection_resource_id  = azurerm_databricks_workspace.dbws.id
       subresource_names               = ["databricks_ui_api"]
       is_manual_connection            = false
       }
 
   ip_configuration {
-      name                =   "ila-prod-processing-dbw-ipc"
+      name                =   join("-", ["cdpz", var.environment, "processing-dbw-ipc"])
       private_ip_address  =   var.private_endpoint_ip_address
       subresource_name    =   "databricks_ui_api"
       member_name         =   "databricks_ui_api"
