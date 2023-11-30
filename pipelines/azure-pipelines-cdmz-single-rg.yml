@@ -1,0 +1,21 @@
+trigger: none
+
+pool:
+  name: aks-infra
+
+name: $(Date:yyyyMMdd).$(Rev:r) (cdmz_dry_run)
+
+variables:
+  - group: environment
+  - group: backend
+
+stages:
+- template: templates/stage/stages-plan.yml
+  parameters:
+    st_serviceconn: CDP_Management
+    st_env: prod
+    st_dependson: deploy_prod_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/shared-shir/'
+    st_backend_key: 'prod/cdmz/shared-shir.tfstate'
+    st_sub_project: shared_shir
+    st_additional_vars: "-var admin_password=$(environment.SHIR_VM_PASSWORD) "

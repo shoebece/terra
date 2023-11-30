@@ -1,4 +1,4 @@
-locals {# to trzeva przeniesc do var
+locals {
   resource_group_name             = "cdmz-shared-shir-rg"
   data_factory_name               = "cdmz-shared-shir-adf"
   resource_umid_name              = "cdmz-shared-shir-adf-id"
@@ -151,16 +151,16 @@ resource "azurerm_private_endpoint" "endpoint_portal" {
 }
 
 resource "azurerm_network_interface" "adf-shir-nic" {
-  count               = length(var.vms)
-  name                = join("-",[var.vms[count.index].vm, "nic"])
+  for_each            = { for i, vm in var.vms: vm.vm => vm }
+  name                = join("-", [each.value.vm, "nic"])
   resource_group_name = local.networking_resource_group_name
   location            = var.resource_location
 
   ip_configuration {
-    name                          = join("-",[var.vms[count.index].vm, "ipc"])
+    name                          = join("-", [each.value.vm, "ipc"])
     subnet_id                     = data.azurerm_subnet.snet-management-default.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = var.vms[count.index].ip
+    private_ip_address            = each.value.ip
   }
 
   tags = merge( data.azurerm_resource_group.network-rg.tags, var.resource_tags_spec )
@@ -172,16 +172,16 @@ resource "azurerm_network_interface" "adf-shir-nic" {
 }
 
 resource "azurerm_network_interface" "ado-shir-nic" {
-  count               = length(var.linuxvms)
-  name                = join("-",[var.linuxvms[count.index].vm, "nic"])
+  for_each            = { for i, vm in var.linuxvms: vm.vm => vm }
+  name                = join("-", [each.value.vm, "nic"])
   resource_group_name = local.networking_resource_group_name
   location            = var.resource_location
 
   ip_configuration {
-    name                          = join("-",[var.linuxvms[count.index].vm, "ipc"])
+    name                          = join("-", [each.value.vm, "ipc"])
     subnet_id                     = data.azurerm_subnet.snet-management-default.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = var.linuxvms[count.index].ip
+    private_ip_address            = each.value.ip
   }
 
   tags = merge( data.azurerm_resource_group.network-rg.tags, var.resource_tags_spec )
@@ -193,23 +193,23 @@ resource "azurerm_network_interface" "ado-shir-nic" {
 }
 
 resource "azurerm_windows_virtual_machine" "shir-vm" {
-  count               = length(var.vms)
-  name                = var.vms[count.index].vm
+  for_each            = { for i, vm in var.vms: vm.vm => vm }
+  name                = each.value.vm
   resource_group_name = data.azurerm_resource_group.shared-shir-rg.name
   location            = var.resource_location
   size                = "Standard_DS1_v2"
-  computer_name       = var.vms[count.index].computer_name
-  admin_username      = var.vms[count.index].admin_username
+  computer_name       = each.value.computer_name
+  admin_username      = each.value.admin_username
   admin_password      = var.admin_password
 
   #encryption_at_host_enabled = ?
 
   network_interface_ids = [
-    azurerm_network_interface.adf-shir-nic[count.index].id
-    ]
+    azurerm_network_interface.adf-shir-nic[each.value.vm].id
+  ]
 
   os_disk {
-    name                  = join("-",[var.vms[count.index].vm, "osdisk"])
+    name                  = join("-", [each.value.vm, "osdisk"])
     caching               = "ReadWrite"
     storage_account_type  = "Premium_LRS"
   }
@@ -241,23 +241,23 @@ resource "azurerm_windows_virtual_machine" "shir-vm" {
 }
 
 resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
-  count               = length(var.linuxvms)
-  name                = var.linuxvms[count.index].vm
+  for_each            = { for i, vm in var.linuxvms: vm.vm => vm }
+  name                = each.value.vm
   resource_group_name = data.azurerm_resource_group.shared-shir-rg.name
   location            = var.resource_location
   size                = "Standard_DS1_v2"
-  computer_name       = var.linuxvms[count.index].computer_name
-  admin_username      = var.linuxvms[count.index].admin_username
+  computer_name       = each.value.computer_name
+  admin_username      = each.value.admin_username
   admin_password      = var.admin_password
   disable_password_authentication = false
   #encryption_at_host_enabled = ?
 
   network_interface_ids = [
-    azurerm_network_interface.ado-shir-nic[count.index].id
+    azurerm_network_interface.ado-shir-nic[each.value.vm].id
   ]
 
   os_disk {
-    name                  = join("-",[var.linuxvms[count.index].vm, "osdisk"])
+    name                  = join("-", [each.value.vm, "osdisk"])
     caching               = "ReadWrite"
     storage_account_type  = "Standard_LRS"
   }
@@ -289,12 +289,12 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
 }
 
 resource "azurerm_dev_test_global_vm_shutdown_schedule" "shared-shir-vm-autoshdt" {
-    count = length(var.vms)
-    virtual_machine_id = azurerm_windows_virtual_machine.shir-vm[count.index].id
-    location = var.resource_location
-    enabled = true
+    for_each              = { for i, vm in var.vms: vm.vm => vm }
+    virtual_machine_id    = azurerm_windows_virtual_machine.shir-vm[each.value.vm].id
+    location              = var.resource_location
+    enabled               = true
     daily_recurrence_time = "1000"
-    timezone = "Central Europe Standard Time"
+    timezone              = "Central Europe Standard Time"
     notification_settings {
       enabled = false
     }  
