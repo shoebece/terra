@@ -140,7 +140,6 @@ resource "azurerm_mssql_elasticpool" "fivetran_config_sql_pool" {
 
 resource "azurerm_mssql_database" "fivetran_config_sql_db" {
   for_each  = { for sql in var.fivetran_sql_dbs: sql.name => sql }
-  count     = length(var.fivetran_sql_dbs)
   name      = each.value.name
   server_id = azurerm_mssql_server.fivetran_config_sql_srv.id
   elastic_pool_id = azurerm_mssql_elasticpool.fivetran_config_sql_pool.id
