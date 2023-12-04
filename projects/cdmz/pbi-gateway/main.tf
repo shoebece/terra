@@ -13,16 +13,16 @@ data "azurerm_subnet" "snet-management-default" {
 }
 
 resource "azurerm_network_interface" "pbi-gateway-nic" {
-  count               = length(var.vms)
-  name                = join("-", ["cdmz-pbi-gateway", var.vms[count.index].vm, "nic"])
+  for_each            = { for vm in var.vms: vm.vm => vm }
+  name                = join("-", ["cdmz-pbi-gateway", each.value.vm, "nic"])
   resource_group_name = var.networking_resource_group_name
   location            = var.resource_location
 
   ip_configuration {
-    name                          = join("-", ["cdmz-pbi-gateway", var.vms[count.index].vm, "ipc"])
+    name                          = join("-", ["cdmz-pbi-gateway", each.value.vm, "ipc"])
     subnet_id                     = data.azurerm_subnet.snet-management-default.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = var.vms[count.index].ip
+    private_ip_address            = each.value.ip
   }
 
   tags = merge( data.azurerm_resource_group.network-rg.tags, var.resource_tags_spec )
@@ -34,23 +34,23 @@ resource "azurerm_network_interface" "pbi-gateway-nic" {
 }
 
 resource "azurerm_windows_virtual_machine" "pbi-gateway-vm" {
-  count               = length(var.vms)
-  name                = join("-", ["cdmz-pbi-gateway", var.vms[count.index].vm])
+  for_each            = { for vm in var.vms: vm.vm => vm }
+  name                = join("-", ["cdmz-pbi-gateway", each.value.vm])
   resource_group_name = data.azurerm_resource_group.pbi-gateway-rg.name
   location            = var.resource_location
   size                = "Standard_DS1_v2"
-  computer_name       = var.vms[count.index].computer_name
-  admin_username      = var.vms[count.index].admin_username
+  computer_name       = each.value.computer_name
+  admin_username      = each.value.admin_username
   admin_password      = var.admin_password
 
   #encryption_at_host_enabled = ?
 
   network_interface_ids = [
-    azurerm_network_interface.pbi-gateway-nic[count.index].id
+    azurerm_network_interface.pbi-gateway-nic[each.value.vm].id
   ]
 
   os_disk {
-    name                 = join("-", ["cdmz-pbi-gateway", var.vms[count.index].vm, "osdisk"])
+    name                 = join("-", ["cdmz-pbi-gateway", each.value.vm, "osdisk"])
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
   }
@@ -81,8 +81,8 @@ resource "azurerm_windows_virtual_machine" "pbi-gateway-vm" {
 }
 
 resource "azurerm_dev_test_global_vm_shutdown_schedule" "pbi-vm-autoshdt" {
-    count = length(var.vms)
-    virtual_machine_id = azurerm_windows_virtual_machine.pbi-gateway-vm[count.index].id
+    for_each = { for vm in var.vms: vm.vm => vm }
+    virtual_machine_id = azurerm_windows_virtual_machine.pbi-gateway-vm[each.value.vm].id
     location = var.resource_location
     enabled = true
     daily_recurrence_time = "1200"
