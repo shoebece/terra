@@ -1,0 +1,29 @@
+trigger: none
+
+pool:
+  name: aks-infra
+
+name: $(Date:yyyyMMdd).$(Rev:r) (cdpz_dry_run)
+
+parameters:
+- name: env
+  displayName: Environment
+  type: string
+  values:
+  - dev
+  - uat
+  - prod
+
+variables:
+  - group: environment
+  - group: backend
+
+stages:
+- template: templates/stage/stages-plan.yml
+  parameters:
+    st_serviceconn: CDP_${{ parameters.env }}
+    st_env: ${{ parameters.env }}
+    st_dependson: deploy_${{ parameters.env }}_networking
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/data-storage/'
+    st_backend_key: '${{ parameters.env }}/cdpz/data-storage.tfstate'
+    st_sub_project: data_storage
