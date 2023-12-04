@@ -20,16 +20,16 @@ data "azurerm_subnet" "snet-management-default" {
 }
 
 resource "azurerm_network_interface" "fivetran-nic" {
-  count               = length(var.vms_fivetran)
-  name                = join("-", ["cdmz", var.vms_fivetran[count.index].vm, "nic"])
+  for_each            = { for vm in var.vms_fivetran: vm.vm => vm }
+  name                = join("-", ["cdmz", each.value.vm, "nic"])
   resource_group_name = local.networking_resource_group_name
   location            = var.resource_location
 
   ip_configuration {
-    name                          = join("-", ["cdmz", var.vms_fivetran[count.index].vm, "ipc"])
+    name                          = join("-", ["cdmz", each.value.vm, "ipc"])
     subnet_id                     = data.azurerm_subnet.snet-management-default.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = var.vms_fivetran[count.index].ip
+    private_ip_address            = each.value.ip
   }
 
   tags = merge( data.azurerm_resource_group.network-rg.tags, var.resource_tags_spec )
@@ -40,25 +40,26 @@ resource "azurerm_network_interface" "fivetran-nic" {
 }
 
 resource "azurerm_windows_virtual_machine" "fivetran-vm" {
-  count               = length(var.vms_fivetran)
-  name                = join("-", ["cdmz", var.vms_fivetran[count.index].vm])
+  for_each            = { for vm in var.vms_fivetran: vm.vm => vm }
+  name                = join("-", ["cdmz", each.value.vm])
   resource_group_name = data.azurerm_resource_group.fivetran-integration-rg.name
   location            = var.resource_location
-  size                = var.vms_fivetran[count.index].size
-  computer_name       = var.vms_fivetran[count.index].computer_name
-  admin_username      = var.vms_fivetran[count.index].admin_username
+  size                = each.value.size
+  computer_name       = each.value.computer_name
+  admin_username      = each.value.admin_username
   admin_password      = var.vm_admin_password
 
   #encryption_at_host_enabled = ?
 
   network_interface_ids = [
-    azurerm_network_interface.fivetran-nic[count.index].id
+    azurerm_network_interface.fivetran-nic[each.value.vm].id
   ]
 
   os_disk {
-    name                 = join("-", ["cdmz", var.vms_fivetran[count.index].vm, "osdisk"])
+    name                 = join("-", ["cdmz", each.value.vm, "osdisk"])
     caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
+    storage_account_type = each.value.disk_sku
+    disk_size_gb         = each.value.disk_size_gb
   }
 
   identity {
@@ -87,8 +88,8 @@ resource "azurerm_windows_virtual_machine" "fivetran-vm" {
 }
 
 resource "azurerm_dev_test_global_vm_shutdown_schedule" "fivetran-autoshdt" {
-    count = length(var.vms_fivetran)
-    virtual_machine_id = azurerm_windows_virtual_machine.fivetran-vm[count.index].id
+    for_each = { for vm in var.vms_fivetran: vm.vm => vm }
+    virtual_machine_id = azurerm_windows_virtual_machine.fivetran-vm[each.value.vm].id
     location = var.resource_location
     enabled = false
     daily_recurrence_time = "1000"
@@ -138,8 +139,9 @@ resource "azurerm_mssql_elasticpool" "fivetran_config_sql_pool" {
 }
 
 resource "azurerm_mssql_database" "fivetran_config_sql_db" {
+  for_each  = { for sql in var.fivetran_sql_dbs: sql.name => sql }
   count     = length(var.fivetran_sql_dbs)
-  name      = var.fivetran_sql_dbs[count.index].name
+  name      = each.value.name
   server_id = azurerm_mssql_server.fivetran_config_sql_srv.id
   elastic_pool_id = azurerm_mssql_elasticpool.fivetran_config_sql_pool.id
 

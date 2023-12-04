@@ -15,11 +15,13 @@ variable "vm_admin_password" { type = string }
 
 variable "vms_fivetran" {
   type = list(object({
-    vm             = string
-    ip             = string
-    computer_name  = string
-    admin_username = string
-    size           = string
+    vm              = string
+    ip              = string
+    computer_name   = string
+    admin_username  = string
+    size            = string
+    disk_sku        = string
+    disk_size_gb    = number
   }))
 }
 
