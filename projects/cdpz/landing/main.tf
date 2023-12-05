@@ -170,7 +170,7 @@ resource "azurerm_private_endpoint" "endpoint" {
 
     depends_on = [
       azurerm_storage_account.landing_staccs,
-      data.azurerm_private_dns_zone.pdnsz_dls
+      data.azurerm_private_dns_zone.pdnszs
     ]
 }
 
