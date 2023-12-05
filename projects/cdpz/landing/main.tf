@@ -130,7 +130,7 @@ data "azurerm_private_dns_zone" "pdnszs" {
 }
 
 resource "azurerm_private_endpoint" "endpoint" {
-    for_each                        = { for pep in var.stacc_peps: pep.key => pep }
+    for_each                        = { for pep in local.stacc_peps: pep.key => pep }
     name                            = join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep_code, "pep"])  
     resource_group_name             = local.networking_resource_group_name
     location                        = var.resource_location
