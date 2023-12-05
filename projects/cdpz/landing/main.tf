@@ -12,7 +12,7 @@ locals {
   stacc_peps = flatten([
     for stacc in var.staccs : [
         for pep in stacc.pep : {
-          key       = join("-", [stacc.stacc, pep, "pep"])
+          key       = join("-", [stacc.stacc, pep.code, "pep"])
           stacc     = stacc.stacc
           pep_code  = pep.code
           pep_ip    = pep.ip
