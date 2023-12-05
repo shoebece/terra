@@ -24,6 +24,6 @@ stages:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
     st_dependson: deploy_${{ parameters.env }}_networking
-    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/data-storage/'
-    st_backend_key: '${{ parameters.env }}/cdpz/data-storage.tfstate'
-    st_sub_project: data_storage
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/landing/'
+    st_backend_key: '${{ parameters.env }}/cdpz/landing.tfstate'
+    st_sub_project: landing

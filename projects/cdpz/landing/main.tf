@@ -9,6 +9,16 @@ locals {
         }
     ]
   ])
+  stacc_peps = flatten([
+    for stacc in var.staccs : [
+        for pep in stacc.pep : {
+          key       = join("-", [stacc.stacc, pep, "pep"])
+          stacc     = stacc.stacc
+          pep_code  = pep.code
+          pep_ip    = pep.ip
+        }
+    ]
+  ])
 }
 
 data "azurerm_resource_group" "resgrp" {
@@ -44,9 +54,8 @@ resource "azurerm_role_assignment" "umi_to_kv" {
 }
 
 resource "azurerm_storage_account" "landing_staccs" {
-  count                     = length(var.staccs)
-  
-  name                      = join("", [var.sandbox_prefix, "cdpz", var.environment, var.staccs[count.index].stacc, "dls"])
+  for_each                  = { for stacc in var.staccs: stacc.stacc => stacc }
+  name                      = join("", [var.sandbox_prefix, "cdpz", var.environment, each.value.stacc, "dls"])
   resource_group_name       = data.azurerm_resource_group.resgrp.name
   location                  = var.resource_location
   account_tier              = "Standard"
@@ -84,7 +93,7 @@ resource "azurerm_storage_account" "landing_staccs" {
 }
 
 resource "azurerm_storage_container" "cont" {
-  for_each              = { for i, stacc_cont in local.stacc_conts: stacc_cont.key => stacc_cont }
+  for_each              = { for stacc_cont in local.stacc_conts: stacc_cont.key => stacc_cont }
   name                  = each.value.cont
   storage_account_name  = join("", [var.sandbox_prefix, "cdpz", var.environment, each.value.stacc, "dls"])
   container_access_type = "private"
@@ -94,9 +103,8 @@ resource "azurerm_storage_container" "cont" {
 
 
 resource "azurerm_storage_account_customer_managed_key" "stacc_cmk" {
-  count                     = length(var.staccs)
-
-  storage_account_id        = azurerm_storage_account.landing_staccs[count.index].id
+  for_each                  = { for stacc in var.staccs: stacc.stacc => stacc }
+  storage_account_id        = azurerm_storage_account.landing_staccs[each.value.stacc].id
   key_vault_id              = data.azurerm_key_vault.kv.id
   key_name                  = data.azurerm_key_vault_key.cmk.name
   user_assigned_identity_id = azurerm_user_assigned_identity.umi.id
@@ -115,39 +123,39 @@ data "azurerm_subnet" "snet" {
   virtual_network_name = join("-", ["cdpz", var.environment, "processing-vnet"])
 }
 
-data "azurerm_private_dns_zone" "pdnsz_dls" {
-  name                = "privatelink.dfs.core.windows.net"
+data "azurerm_private_dns_zone" "pdnszs" {
+  for_each            = toset( [ "dfs", "blob" ] )
+  name                = join(".", [ "privatelink", each.key, "core.windows.net" ])
   resource_group_name = local.networking_resource_group_name
 }
 
-resource "azurerm_private_endpoint" "endpoint_dls" {
-    count                           = length(var.staccs)
-
-    name                            = join("-", ["cdpz", var.environment, var.staccs[count.index].stacc, "dls", var.staccs[count.index].pep[0].code, "pep"])  
+resource "azurerm_private_endpoint" "endpoint" {
+    for_each                        = { for pep in var.stacc_peps: pep.key => pep }
+    name                            = join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep_code, "pep"])  
     resource_group_name             = local.networking_resource_group_name
     location                        = var.resource_location
 
     subnet_id                       = data.azurerm_subnet.snet.id
 
-    custom_network_interface_name   = join("-", ["cdpz", var.environment, var.staccs[count.index].stacc, "dls", var.staccs[count.index].pep[0].code, "nic"])  
+    custom_network_interface_name   = join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep_code, "nic"])  
 
     private_dns_zone_group {
       name = "add_to_azure_private_dns"
-      private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_dls.id ]
+      private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnszs[each.value.pep_code].id ]
     }
 
     private_service_connection {
-        name                            = join("-", ["cdpz", var.environment, var.staccs[count.index].stacc, "dls", var.staccs[count.index].pep[0].code, "psc"])
-        private_connection_resource_id  = azurerm_storage_account.landing_staccs[count.index].id
-        subresource_names               = [var.staccs[count.index].pep[0].code]
+        name                            = join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep_code, "psc"])
+        private_connection_resource_id  = azurerm_storage_account.landing_staccs[each.value.stacc].id
+        subresource_names               = [each.value.pep_code]
         is_manual_connection            = false
         }
 
     ip_configuration {
-        name                =   join("-", ["cdpz", var.environment, var.staccs[count.index].stacc, "dls", var.staccs[count.index].pep[0].code, "ipc"])
-        private_ip_address  =   var.staccs[count.index].pep[0].ip
-        subresource_name    =   var.staccs[count.index].pep[0].code
-        member_name         =   var.staccs[count.index].pep[0].code
+        name                =   join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep_code, "ipc"])
+        private_ip_address  =   each.value.pep_ip
+        subresource_name    =   each.value.pep_code
+        member_name         =   each.value.pep_code
     }
 
     tags    = merge(
@@ -166,53 +174,102 @@ resource "azurerm_private_endpoint" "endpoint_dls" {
     ]
 }
 
-data "azurerm_private_dns_zone" "pdnsz_blob" {
-  name                = "privatelink.blob.core.windows.net"
-  resource_group_name = local.networking_resource_group_name
-}
+# data "azurerm_private_dns_zone" "pdnsz_dls" {
+#   name                = "privatelink.dfs.core.windows.net"
+#   resource_group_name = local.networking_resource_group_name
+# }
 
-resource "azurerm_private_endpoint" "endpoint_blob" {
-    count                           = length(var.staccs)
+# resource "azurerm_private_endpoint" "endpoint_dls" {
+#     for_each                        = { for stacc in var.staccs: stacc.stacc => stacc }
+#     name                            = join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep[0].code, "pep"])  
+#     resource_group_name             = local.networking_resource_group_name
+#     location                        = var.resource_location
 
-    name                            = join("-", ["cdpz", var.environment, var.staccs[count.index].stacc, "dls", var.staccs[count.index].pep[1].code, "pep"])  
-    resource_group_name             = join("-", ["cdpz", var.environment, "networking-rg"])
-    location                        = var.resource_location
+#     subnet_id                       = data.azurerm_subnet.snet.id
 
-    subnet_id                       = data.azurerm_subnet.snet.id
+#     custom_network_interface_name   = join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep[0].code, "nic"])  
 
-    custom_network_interface_name   = join("-", ["cdpz", var.environment, var.staccs[count.index].stacc, "dls", var.staccs[count.index].pep[1].code, "nic"])  
+#     private_dns_zone_group {
+#       name = "add_to_azure_private_dns"
+#       private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_dls.id ]
+#     }
 
-    private_dns_zone_group {
-      name = "add_to_azure_private_dns"
-      private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_blob.id ]
-    }
+#     private_service_connection {
+#         name                            = join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep[0].code, "psc"])
+#         private_connection_resource_id  = azurerm_storage_account.landing_staccs[each.value.stacc].id
+#         subresource_names               = [each.value.pep[0].code]
+#         is_manual_connection            = false
+#         }
 
-    private_service_connection {
-        name                            = join("-", ["cdpz", var.environment, var.staccs[count.index].stacc, "dls", var.staccs[count.index].pep[1].code, "psc"])
-        private_connection_resource_id  = azurerm_storage_account.landing_staccs[count.index].id
-        subresource_names               = [var.staccs[count.index].pep[1].code]
-        is_manual_connection            = false
-        }
+#     ip_configuration {
+#         name                =   join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep[0].code, "ipc"])
+#         private_ip_address  =   each.value.pep[0].ip
+#         subresource_name    =   each.value.pep[0].code
+#         member_name         =   each.value.pep[0].code
+#     }
 
-    ip_configuration {
-        name                =   join("-", ["cdpz", var.environment, var.staccs[count.index].stacc, "dls", var.staccs[count.index].pep[1].code, "ipc"])
-        private_ip_address  =   var.staccs[count.index].pep[1].ip
-        subresource_name    =   var.staccs[count.index].pep[1].code
-        member_name         =   var.staccs[count.index].pep[1].code
-    }
+#     tags    = merge(
+#       var.resource_tags_spec
+#     )
 
-    tags    = merge(
-      var.resource_tags_spec
-    )
+#     lifecycle {
+#         ignore_changes  = [
+#             subnet_id
+#         ]
+#     }
 
-    lifecycle {
-        ignore_changes  = [
-            subnet_id
-        ]
-    }
+#     depends_on = [
+#       azurerm_storage_account.landing_staccs,
+#       data.azurerm_private_dns_zone.pdnsz_dls
+#     ]
+# }
 
-    depends_on = [
-      azurerm_storage_account.landing_staccs,
-      data.azurerm_private_dns_zone.pdnsz_blob
-    ]
-}
+# data "azurerm_private_dns_zone" "pdnsz_blob" {
+#   name                = "privatelink.blob.core.windows.net"
+#   resource_group_name = local.networking_resource_group_name
+# }
+
+# resource "azurerm_private_endpoint" "endpoint_blob" {
+#     for_each                        = { for stacc in var.staccs: stacc.stacc => stacc }
+#     name                            = join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep[1].code, "pep"])  
+#     resource_group_name             = join("-", ["cdpz", var.environment, "networking-rg"])
+#     location                        = var.resource_location
+
+#     subnet_id                       = data.azurerm_subnet.snet.id
+
+#     custom_network_interface_name   = join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep[1].code, "nic"])  
+
+#     private_dns_zone_group {
+#       name = "add_to_azure_private_dns"
+#       private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_blob.id ]
+#     }
+
+#     private_service_connection {
+#         name                            = join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep[1].code, "psc"])
+#         private_connection_resource_id  = azurerm_storage_account.landing_staccs[each.value.stacc].id
+#         subresource_names               = [each.value.pep[1].code]
+#         is_manual_connection            = false
+#         }
+
+#     ip_configuration {
+#         name                =   join("-", ["cdpz", var.environment, each.value.stacc, "dls", each.value.pep[1].code, "ipc"])
+#         private_ip_address  =   each.value.pep[1].ip
+#         subresource_name    =   each.value.pep[1].code
+#         member_name         =   each.value.pep[1].code
+#     }
+
+#     tags    = merge(
+#       var.resource_tags_spec
+#     )
+
+#     lifecycle {
+#         ignore_changes  = [
+#             subnet_id
+#         ]
+#     }
+
+#     depends_on = [
+#       azurerm_storage_account.landing_staccs,
+#       data.azurerm_private_dns_zone.pdnsz_blob
+#     ]
+# }
