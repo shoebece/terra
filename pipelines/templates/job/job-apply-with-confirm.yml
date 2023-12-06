@@ -18,6 +18,8 @@ jobs:
     ${{ if parameters.dependson }}:
       dependsOn: '${{ parameters.dependson }}'
     displayName: terraform plan - ${{ parameters.env }}
+    variables:
+    - group: environment
     strategy:
       runOnce:
         deploy:

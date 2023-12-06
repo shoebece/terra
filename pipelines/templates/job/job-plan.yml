@@ -18,6 +18,8 @@ jobs:
     ${{ if parameters.dependson }}:
       dependsOn: '${{ parameters.dependson }}'
     displayName: terraform plan - ${{ parameters.env }}
+    variables:
+    - group: environment
     steps:
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
       displayName: install
