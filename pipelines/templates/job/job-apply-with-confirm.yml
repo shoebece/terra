@@ -14,7 +14,8 @@ parameters:
   default: ""
 
 jobs:
-  - job: job_deploy
+  - deployment: job_deploy
+    environment: CentralDataPlatform-${{ parameters.env }}
     ${{ if parameters.dependson }}:
       dependsOn: '${{ parameters.dependson }}'
     displayName: terraform plan - ${{ parameters.env }}
