@@ -14,16 +14,34 @@ parameters:
   - uat
   - prod
 
+- name: project
+  displayName: Project
+  type: string
+  values:
+  - resource-groups
+  - prod-resource-groups.tfstate
+  - networking
+  - prod-networking
+  - access
+  - global-processing
+  - data-processing
+  - data-storage
+  - data-streaming
+  - landing
+  - orchestration-and-ingestion
+  - sharing
+  - monitoring
+  - permissions
+
 variables:
   - group: environment
-  - group: backend
 
 stages:
-- template: templates/stage/stages-plan.yml
+- template: templates/stage/stages-plan-and-deploy.yml
   parameters:
     st_serviceconn: CDP_${{ parameters.env }}
     st_env: ${{ parameters.env }}
     st_dependson: deploy_${{ parameters.env }}_networking
-    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/landing/'
-    st_backend_key: '${{ parameters.env }}/cdpz/landing.tfstate'
-    st_sub_project: landing
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/${{ parameters.project }}/'
+    st_backend_key: '${{ parameters.env }}/cdpz/${{ parameters.project }}.tfstate'
+    st_sub_project: ${{ replace( parameters.project, '-', '_' ) }}
