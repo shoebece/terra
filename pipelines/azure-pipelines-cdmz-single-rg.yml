@@ -21,7 +21,7 @@ parameters:
   - permissions
 
 variables:
-  - group: environment
+  #- group: environment
   - ${{ if eq( parameters.project, 'pbi-gateway' ) }}:
     - name: additional_vars
       value: "-var admin_password=$(environment.PBI_GATEWAY_VM_PASSWORD) "
