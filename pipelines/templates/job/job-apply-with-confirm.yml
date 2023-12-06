@@ -14,7 +14,7 @@ parameters:
   default: ""
 
 jobs:
-  - deployment: job_plan
+  - job: job_plan
     ${{ if parameters.dependson }}:
       dependsOn: '${{ parameters.dependson }}'
     displayName: terraform plan - ${{ parameters.env }}
