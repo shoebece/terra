@@ -27,33 +27,17 @@ stages:
     variables:
     - group: environment
     - name: additional_vars
-      ${{ if true }}:
+      ${{ if eq(parameters.st_sub_project, 'pbi_gateway') }}:
         value: "-var admin_password=$(PBI_GATEWAY_VM_PASSWORD) "
+      ${{ if eq( parameters.st_sub_project, 'shared_shir' ) }}:
+        value: "-var admin_password=$(SHIR_VM_PASSWORD) "
+      ${{ if eq( parameters.st_sub_project, 'fivetran_integration' ) }}:
+        value: "-var vm_admin_password=$(FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(FIVETRAN_SQL_PASSWORD) "
       ${{ else }}:
-        value: "conditions are wrong"
-    # #- ${{ if eq(parameters.st_sub_project, 'pbi_gateway') }}:
-    # - ${{ if true }}:
-    #   - name: additional_vars
-    #     value: "-var admin_password=$(PBI_GATEWAY_VM_PASSWORD) "
-    # # - ${{ if eq( parameters.st_sub_project, 'shared-shir' ) }}:
-    # #   - name: additional_vars
-    # #     value: "-var admin_password=$(SHIR_VM_PASSWORD) "
-    # # - ${{ if eq( parameters.st_sub_project, 'fivetran-integration' ) }}:
-    # #   - name: additional_vars
-    # #     value: "-var vm_admin_password=$(FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(FIVETRAN_SQL_PASSWORD) "
-    #   ${{ else }}:
-    #   - name: additional_vars
-    #     value: "conditions are wrong"
-    - name: test44
-      value: "Stefan"
+        value: ""
     steps:
-    - script: |
-       echo '##vso[task.setvariable variable=test_var]"-var admin_password=$(PBI_GATEWAY_VM_PASSWORD) "' 
     - script: |    
        echo "test -> $(additional_vars)"
-       echo "test_var -> $(test_var)"
-       echo "test2 -> $(test)"
-       echo "test44 -> $(test44)"
        echo "param -> ${{ parameters.st_sub_project }}"
 # - stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
 #   displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
