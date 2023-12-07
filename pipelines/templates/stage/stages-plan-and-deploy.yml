@@ -29,9 +29,9 @@ stages:
     - name: additional_vars
       ${{ if eq(parameters.st_sub_project, 'pbi_gateway') }}:
         value: "-var admin_password=$(PBI_GATEWAY_VM_PASSWORD) "
-      ${{ if eq( parameters.st_sub_project, 'shared_shir' ) }}:
+      ${{ elseif eq( parameters.st_sub_project, 'shared_shir' ) }}:
         value: "-var admin_password=$(SHIR_VM_PASSWORD) "
-      ${{ if eq( parameters.st_sub_project, 'fivetran_integration' ) }}:
+      ${{ elseif eq( parameters.st_sub_project, 'fivetran_integration' ) }}:
         value: "-var vm_admin_password=$(FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(FIVETRAN_SQL_PASSWORD) "
       ${{ else }}:
         value: ""
