@@ -40,7 +40,8 @@ stages:
         value: ""
     steps:
     - script: |    
-       echo "test -> $( additional_vars )" 
+       echo "test -> $(additional_vars)"
+       echo "test2 -> $(test)" 
 # - stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
 #   displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
 #   condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
