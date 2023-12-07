@@ -14,9 +14,24 @@ parameters:
 - name: st_run
   type: boolean
   default: true
-- name: st_additional_vars
-  type: string
-  default: 
+# - name: st_additional_vars
+#   type: string
+#   default: 
+
+variables:
+  - group: environment
+  - ${{ if eq( parameters.project, 'pbi-gateway' ) }}:
+    - name: additional_vars
+      value: "-var admin_password=$(PBI_GATEWAY_VM_PASSWORD) "
+  - ${{ if eq( parameters.project, 'shared-shir' ) }}:
+    - name: additional_vars
+      value: "-var admin_password=$(SHIR_VM_PASSWORD) "
+  - ${{ if eq( parameters.project, 'fivetran-integration' ) }}:
+    - name: additional_vars
+      value: "-var vm_admin_password=$(FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(FIVETRAN_SQL_PASSWORD) "
+  - ${{ else }}:
+    - name: additional_vars
+      value: ""
 
 stages:
 - stage: tmp
@@ -24,7 +39,7 @@ stages:
   - job: tmp
     steps:
     - script: |    
-       echo "test -> ${{ parameters.st_additional_vars }}" 
+       echo "test -> $( additional_vars )" 
 # - stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
 #   displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
 #   condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
