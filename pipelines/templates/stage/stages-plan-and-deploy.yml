@@ -26,7 +26,7 @@ stages:
   - job: tmp
     variables:
     - group: environment
-    - ${{ if eq( parameters.st_sub_project, 'pbi_gateway' ) }}:
+    - ${{ if eq(parameters.st_sub_project, "pbi_gateway") }}:
       - name: additional_vars
         value: "-var admin_password=$(PBI_GATEWAY_VM_PASSWORD) "
     - ${{ if eq( parameters.st_sub_project, 'shared-shir' ) }}:
