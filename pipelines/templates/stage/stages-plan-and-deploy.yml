@@ -48,6 +48,7 @@ stages:
        echo "test_var -> $(test_var)"
        echo "test2 -> $(test)"
        echo "test44 -> $(test44)"
+       echo "param -> ${{ parameters.st_sub_project }}"
 # - stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
 #   displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
 #   condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
