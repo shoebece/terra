@@ -26,16 +26,17 @@ stages:
   - job: tmp
     variables:
     - group: environment
-      ${{ if eq(parameters.st_sub_project, 'pbi_gateway') }}:
+    #- ${{ if eq(parameters.st_sub_project, 'pbi_gateway') }}:
+    - ${{ if true }}:
       - name: additional_vars
         value: "-var admin_password=$(PBI_GATEWAY_VM_PASSWORD) "
-      # ${{ if eq( parameters.st_sub_project, 'shared-shir' ) }}:
-      # - name: additional_vars
-      #   value: "-var admin_password=$(SHIR_VM_PASSWORD) "
-      # ${{ if eq( parameters.st_sub_project, 'fivetran-integration' ) }}:
-      # - name: additional_vars
-      #   value: "-var vm_admin_password=$(FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(FIVETRAN_SQL_PASSWORD) "
-      ${{ else }}:
+    - ${{ if eq( parameters.st_sub_project, 'shared-shir' ) }}:
+      - name: additional_vars
+        value: "-var admin_password=$(SHIR_VM_PASSWORD) "
+    - ${{ if eq( parameters.st_sub_project, 'fivetran-integration' ) }}:
+      - name: additional_vars
+        value: "-var vm_admin_password=$(FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(FIVETRAN_SQL_PASSWORD) "
+    - ${{ else }}:
       - name: additional_vars
         value: "conditions are wrong"
     - name: test44
