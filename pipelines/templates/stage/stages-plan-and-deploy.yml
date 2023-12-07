@@ -30,6 +30,7 @@ stages:
       serviceconn: ${{ parameters.st_serviceconn }}
       workingdir: ${{ parameters.st_workingdir }}
       backend_key: ${{ parameters.st_backend_key }}
+      additional_vars: ${{ parameters.st_additional_vars }}
 - stage: deploy_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
   displayName: "Deployment: ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
   condition: eq(${{ parameters.st_run }}, true)
