@@ -35,6 +35,11 @@ parameters:
 
 variables:
   - group: environment
+  - name: var_run
+    ${{ if containsValue(['prod-resource-groups', 'prod-networking', 'access', 'global-processing'], parameters.project) }}:
+      value: false
+    ${{ else }}:
+      value: true
 
 stages:
 - template: templates/stage/stages-plan-and-deploy.yml
@@ -45,3 +50,4 @@ stages:
     st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdpz/${{ parameters.project }}/'
     st_backend_key: '${{ parameters.env }}/cdpz/${{ parameters.project }}.tfstate'
     st_sub_project: ${{ replace( parameters.project, '-', '_' ) }}
+    st_run: ${{ variables.var_run }}
