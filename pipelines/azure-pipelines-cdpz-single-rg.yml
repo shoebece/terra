@@ -19,7 +19,7 @@ parameters:
   type: string
   values:
   - resource-groups
-  - prod-resource-groups.tfstate
+  - prod-resource-groups
   - networking
   - prod-networking
   - access
