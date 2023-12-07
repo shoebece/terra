@@ -41,4 +41,4 @@ stages:
     st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/${{ parameters.project }}/'
     st_backend_key: 'prod/cdmz/${{ parameters.project }}.tfstate'
     st_sub_project: ${{ replace( parameters.project, '-', '_' ) }}
-    st_additional_vars: $( additional_vars )
+    st_additional_vars: ${{ variables.additional_vars }}
