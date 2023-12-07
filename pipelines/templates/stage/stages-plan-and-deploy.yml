@@ -24,7 +24,11 @@ stages:
   - job: tmp
     steps:
     - script: |    
-       echo "${{ parameters.st_additional_vars }}" 
+       echo "tmp"
+    - script: |    
+       echo ${{ parameters.st_additional_vars }}
+    - script: |    
+       echo "test -> ${{ parameters.st_additional_vars }}" 
 # - stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
 #   displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
 #   condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
