@@ -19,35 +19,35 @@ parameters:
   default: 
 
 stages:
-- stage: tmp
+# - stage: tmp
+#   jobs:
+#   - job: tmp
+#     steps:
+#     - script: |    
+#        echo "run -> ${{ parameters.st_run }}"
+#        echo "env -> ${{ parameters.st_env }}"
+#        echo "proj -> ${{ parameters.st_sub_project }}"
+- stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
+  displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
+  condition: eq(${{ parameters.st_run }}, true)
   jobs:
-  - job: tmp
-    steps:
-    - script: |    
-       echo "run -> ${{ parameters.st_run }}"
-       echo "env -> ${{ parameters.st_env }}"
-       echo "proj -> ${{ parameters.st_sub_project }}"
-# - stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
-#   displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
-#   condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
-#   jobs:
-#   - template: ../job/job-plan.yml
-#     parameters:
-#       env: ${{ parameters.st_env }}
-#       dependson:
-#       serviceconn: ${{ parameters.st_serviceconn }}
-#       workingdir: ${{ parameters.st_workingdir }}
-#       backend_key: ${{ parameters.st_backend_key }}
-#       additional_vars: ${{ parameters.st_additional_vars }}
-# - stage: deploy_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
-#   displayName: "Deployment: ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
-#   condition: eq(${{ parameters.st_run }}, true)
-#   jobs:
-#   - template: ../job/job-apply-with-confirm.yml
-#     parameters:
-#       env: ${{ parameters.st_env }}
-#       dependson:
-#       serviceconn: ${{ parameters.st_serviceconn }}
-#       workingdir: ${{ parameters.st_workingdir }}
-#       backend_key: ${{ parameters.st_backend_key }}
-#       additional_vars: ${{ parameters.st_additional_vars }}
+  - template: ../job/job-plan.yml
+    parameters:
+      env: ${{ parameters.st_env }}
+      dependson:
+      serviceconn: ${{ parameters.st_serviceconn }}
+      workingdir: ${{ parameters.st_workingdir }}
+      backend_key: ${{ parameters.st_backend_key }}
+      additional_vars: ${{ parameters.st_additional_vars }}
+- stage: deploy_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
+  displayName: "Deployment: ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
+  condition: and(succeeded(), eq(${{ parameters.st_run }}, true))
+  jobs:
+  - template: ../job/job-apply-with-confirm.yml
+    parameters:
+      env: ${{ parameters.st_env }}
+      dependson:
+      serviceconn: ${{ parameters.st_serviceconn }}
+      workingdir: ${{ parameters.st_workingdir }}
+      backend_key: ${{ parameters.st_backend_key }}
+      additional_vars: ${{ parameters.st_additional_vars }}
