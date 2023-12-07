@@ -14,11 +14,9 @@ parameters:
 - name: st_run
   type: boolean
   default: true
-# - name: st_additional_vars
-#   type: string
-#   default: 
-
-
+- name: st_additional_vars
+  type: string
+  default: 
 
 stages:
 - stage: tmp
@@ -37,7 +35,7 @@ stages:
         value: ""
     steps:
     - script: |    
-       echo "test -> $(additional_vars)"
+       echo "test -> ${{ parameters.st_additional_vars }}"
        echo "param -> ${{ parameters.st_sub_project }}"
 # - stage: plan_${{ parameters.st_env }}_${{ parameters.st_sub_project }}
 #   displayName: "Dry-Run (Plan): ${{ parameters.st_env }} ${{ parameters.st_sub_project }}"
