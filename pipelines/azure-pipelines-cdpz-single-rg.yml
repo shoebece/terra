@@ -36,7 +36,7 @@ parameters:
 variables:
   - group: environment
   - name: var_run
-    ${{ if containsValue(['prod-resource-groups', 'prod-networking', 'access', 'global-processing'], parameters.project) }}:
+    ${{ if in( parameters.project, 'prod-resource-groups', 'prod-networking', 'access', 'global-processing' ) }}:
       value: false
     ${{ else }}:
       value: true
