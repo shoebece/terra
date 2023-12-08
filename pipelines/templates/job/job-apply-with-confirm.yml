@@ -18,7 +18,7 @@ jobs:
     environment: CentralDataPlatform-${{ parameters.env }}
     ${{ if parameters.dependson }}:
       dependsOn: '${{ parameters.dependson }}'
-    displayName: terraform plan - ${{ parameters.env }}
+    displayName: terraform apply - ${{ parameters.env }}
     variables:
     - group: environment
     strategy:

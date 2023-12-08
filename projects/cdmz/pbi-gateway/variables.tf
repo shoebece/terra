@@ -13,6 +13,9 @@ variable "vms" {
     ip             = string
     computer_name  = string
     admin_username = string
+    size           = string
+    disk_sku       = string
+    disk_size_gb   = number
   }))
 }
 

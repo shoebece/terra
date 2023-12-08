@@ -74,7 +74,7 @@ resource "azurerm_storage_account" "landing_staccs" {
 
   network_rules {
     default_action              = "Deny"
-    virtual_network_subnet_ids  = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"]
+    virtual_network_subnet_ids  = concat(var.common_service_endpoint_snets, each.value.specyfic_service_endpoint_snets)
   }
   
   tags = merge(
