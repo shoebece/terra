@@ -1,0 +1,62 @@
+parameters:
+- name: env
+  type: string
+- name: dependson
+  type: object
+- name: serviceconn
+  type: string
+- name: workingdir
+  type: string
+- name: backend_key
+  type: string
+- name: additional_vars
+  type: string
+  default: ""
+
+jobs:
+  - deployment: job_deploy
+    environment: CentralDataPlatform-${{ parameters.env }}
+    ${{ if parameters.dependson }}:
+      dependsOn: '${{ parameters.dependson }}'
+    displayName: terraform plan - ${{ parameters.env }}
+    variables:
+    - group: environment
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+
+            - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
+              displayName: install
+              inputs:
+                terraformVersion: 'latest'
+            - task: TerraformTaskV4@4
+              displayName: init
+              env:
+                ARM_USE_MSI: $(environment.ARM_USE_MSI)
+                ARM_SUBSCRIPTION_ID: $(environment.ARM_SUBSCRIPTION_ID)
+                ARM_TENANT_ID: $(environment.ARM_TENANT_ID)
+                ARM_CLIENT_ID: $(environment.ARM_CLIENT_ID)
+              inputs:
+                provider: 'azurerm'
+                command: 'init'
+                workingDirectory: ${{ parameters.workingdir }}
+                backendServiceArm: CDP_Management
+                backendAzureRmResourceGroupName: cdmz-cicd-rg
+                backendAzureRmStorageAccountName: cdmztfstatefiledls
+                backendAzureRmContainerName: tfstate
+                backendAzureRmKey: ${{ parameters.backend_key }}
+            - task: TerraformTaskV4@4
+              displayName: plan
+              env:
+                ARM_USE_MSI: $(environment.ARM_USE_MSI)
+                ARM_SUBSCRIPTION_ID: $(environment.ARM_SUBSCRIPTION_ID)
+                ARM_TENANT_ID: $(environment.ARM_TENANT_ID)
+                ARM_CLIENT_ID: $(environment.ARM_CLIENT_ID)
+              inputs:
+                provider: 'azurerm'
+                command: 'plan'
+                environmentServiceNameAzureRM: ${{ parameters.serviceconn }}
+                workingDirectory: ${{ parameters.workingdir }}
+                commandOptions: '${{ parameters.additional_vars }}-var-file="conf/"${{ parameters.env }}".conf" -compact-warnings'

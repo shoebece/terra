@@ -18,6 +18,8 @@ jobs:
     ${{ if parameters.dependson }}:
       dependsOn: '${{ parameters.dependson }}'
     displayName: terraform plan - ${{ parameters.env }}
+    variables:
+    - group: environment
     steps:
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
       displayName: install
@@ -26,10 +28,10 @@ jobs:
     - task: TerraformTaskV4@4
       displayName: init
       env:
-        ARM_USE_MSI: $(environment.ARM_USE_MSI)
-        ARM_SUBSCRIPTION_ID: $(environment.ARM_SUBSCRIPTION_ID)
-        ARM_TENANT_ID: $(environment.ARM_TENANT_ID)
-        ARM_CLIENT_ID: $(environment.ARM_CLIENT_ID)
+        ARM_USE_MSI: $(environment2.ARM_USE_MSI)
+        ARM_SUBSCRIPTION_ID: $(environment2.ARM_SUBSCRIPTION_ID)
+        ARM_TENANT_ID: $(environment2.ARM_TENANT_ID)
+        ARM_CLIENT_ID: $(environment2.ARM_CLIENT_ID)
       inputs:
         provider: 'azurerm'
         command: 'init'
@@ -42,10 +44,10 @@ jobs:
     - task: TerraformTaskV4@4
       displayName: plan
       env:
-        ARM_USE_MSI: $(environment.ARM_USE_MSI)
-        ARM_SUBSCRIPTION_ID: $(environment.ARM_SUBSCRIPTION_ID)
-        ARM_TENANT_ID: $(environment.ARM_TENANT_ID)
-        ARM_CLIENT_ID: $(environment.ARM_CLIENT_ID)
+        ARM_USE_MSI: $(environment2.ARM_USE_MSI)
+        ARM_SUBSCRIPTION_ID: $(environment2.ARM_SUBSCRIPTION_ID)
+        ARM_TENANT_ID: $(environment2.ARM_TENANT_ID)
+        ARM_CLIENT_ID: $(environment2.ARM_CLIENT_ID)
       inputs:
         provider: 'azurerm'
         command: 'plan'

@@ -3,19 +3,42 @@ trigger: none
 pool:
   name: aks-infra
 
-name: $(Date:yyyyMMdd).$(Rev:r) (cdmz_dry_run)
+name: $(Date:yyyyMMdd).$(Rev:r) (cdmz_deploy)
+
+parameters:
+- name: project
+  displayName: Project
+  type: string
+  values:
+  - resource-groups
+  - networking
+  - fivetran-integration
+  - management
+  - pbi-gateway
+  - shared-shir
+  - governance
+  - monitoring
+  - permissions
 
 variables:
   - group: environment
-  - group: backend
+  - name: additional_vars
+    ${{ if eq(parameters.project, 'pbi-gateway') }}:
+      value: "-var admin_password=$(PBI_GATEWAY_VM_PASSWORD) "
+    ${{ elseif eq( parameters.project, 'shared-shir' ) }}:
+      value: "-var admin_password=$(SHIR_VM_PASSWORD) "
+    ${{ elseif eq( parameters.project, 'fivetran-integration' ) }}:
+      value: "-var vm_admin_password=$(FIVETRAN_VM_PASSWORD) -var sql_admin_password=$(FIVETRAN_SQL_PASSWORD) "
+    ${{ else }}:
+      value: ""
 
 stages:
-- template: templates/stage/stages-plan.yml
+- template: templates/stage/stages-plan-and-deploy.yml
   parameters:
     st_serviceconn: CDP_Management
     st_env: prod
     st_dependson: deploy_prod_networking
-    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/pbi-gateway/'
-    st_backend_key: 'prod/cdmz/pbi-gateway.tfstate'
-    st_sub_project: pbi_gateway
-    st_additional_vars: "-var admin_password=$(environment.PBI_GATEWAY_VM_PASSWORD) "
+    st_workingdir: '$(System.DefaultWorkingDirectory)/projects/cdmz/${{ parameters.project }}/'
+    st_backend_key: 'prod/cdmz/${{ parameters.project }}.tfstate'
+    st_sub_project: ${{ replace( parameters.project, '-', '_' ) }}
+    st_additional_vars: ${{ variables.additional_vars }}
