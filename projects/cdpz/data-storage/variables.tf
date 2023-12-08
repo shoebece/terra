@@ -21,24 +21,6 @@ variable "staccs" {
 
 variable common_service_endpoint_snets {type = list(string)}
 
-variable additional_service_endpoint_snets {type = list(object({
-    rgname = string
-    vnet = string
-    snet = string
-}))}
-
-variable service_endpoint_snets {type = list(object({
-    rgname = string
-    vnet = string
-    snet = string
-}))}
-
-variable cdmz_service_endpoint_snets {type = list(object({
-    rgname = string
-    vnet = string
-    snet = string
-}))}
-
 variable "sandbox_prefix" {
     type = string 
     default = ""
