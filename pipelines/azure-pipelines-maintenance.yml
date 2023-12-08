@@ -27,7 +27,7 @@ stages:
           backendAzureRmResourceGroupName: 'cdmz-cicd-rg'
           backendAzureRmStorageAccountName: 'cdmztfstatefiledls'
           backendAzureRmContainerName: 'tfstate'
-          backendAzureRmKey: 'dev/cdpz/data-storage.tfstate'
+          backendAzureRmKey: 'uat/cdpz/data-storage.tfstate'
       - task: TerraformCLI@1
         env:
           ARM_USE_MSI: true
@@ -37,4 +37,4 @@ stages:
         inputs:
           command: 'forceunlock'
           workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/data-storage/'
-          lockID: '37037f47-0d1e-74c4-fe18-0bd5d884983e'
+          lockID: '4ef2c986-c2f7-3f8e-fe59-504c8f087db2'
