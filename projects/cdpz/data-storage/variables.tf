@@ -15,16 +15,17 @@ variable "staccs" {
             code = string
             ip   = string
         }))
+        specyfic_service_endpoint_snets = list(string)
     }))
 }
+
+variable common_service_endpoint_snets {type = list(string)}
 
 variable additional_service_endpoint_snets {type = list(object({
     rgname = string
     vnet = string
     snet = string
 }))}
-
-variable oldsub_service_endpoint_snets {type = list(string)}
 
 variable service_endpoint_snets {type = list(object({
     rgname = string

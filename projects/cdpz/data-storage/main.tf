@@ -1,13 +1,3 @@
-locals {
-  devops_subnet_id = "/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"
-}
-
-locals {
-  global_pro_default_id = "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-global-processing-vnet/subnets/global-processing-default-snet"
-  global_pro_private_id = "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-global-processing-vnet/subnets/global-processing-dbw-private-snet"
-  global_pro_public_id = "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-global-processing-vnet/subnets/global-processing-dbw-public-snet"
-}
-
 data "azurerm_resource_group" "resgrp" {
   name      = join("-", ["cdpz", var.environment, "data-storage-rg"])
 }
@@ -40,37 +30,6 @@ resource "azurerm_role_assignment" "umi_to_kv" {
   principal_id         = azurerm_user_assigned_identity.umi.principal_id
 }
 
-# Whitelisted networks - to be uncommented if public endpoint will be enable
-# --------------------------------------------------------------------------
-data azurerm_subnet snet-srvend {
-    # If public access is enabled snets will be whitelisted
-    count                = length(var.service_endpoint_snets) * (var.public_access_enabled ? 1 : 0)
-
-    resource_group_name  = var.service_endpoint_snets[count.index].rgname
-    virtual_network_name = var.service_endpoint_snets[count.index].vnet
-    name                 = var.service_endpoint_snets[count.index].snet
-}
-
-data azurerm_subnet cdmz-snet-srvend {
-    # If public access is enabled snets will be whitelisted
-    count                = length(var.cdmz_service_endpoint_snets) * (var.public_access_enabled ? 1 : 0)
-    provider             = azurerm.cdmz
-
-    resource_group_name  = var.cdmz_service_endpoint_snets[count.index].rgname
-    virtual_network_name = var.cdmz_service_endpoint_snets[count.index].vnet
-    name                 = var.cdmz_service_endpoint_snets[count.index].snet
-}
-
-data azurerm_subnet additional-snet-srvend {
-    # If public access is enabled snets will be whitelisted
-    count                = length(var.additional_service_endpoint_snets) * (var.public_access_enabled ? 1 : 0)
-    provider             = azurerm.dev
-
-    resource_group_name  = var.additional_service_endpoint_snets[count.index].rgname
-    virtual_network_name = var.additional_service_endpoint_snets[count.index].vnet
-    name                 = var.additional_service_endpoint_snets[count.index].snet
-}
-
 resource "azurerm_storage_account" "data_staccs" {
   for_each                  = { for stacc in var.staccs: stacc.stacc => stacc }
   name                      = join("", ["cdpz", var.environment, each.value.stacc, "dls"])
@@ -94,7 +53,7 @@ resource "azurerm_storage_account" "data_staccs" {
 
   network_rules {
     default_action              = "Deny"
-    virtual_network_subnet_ids  = concat([for s in concat(data.azurerm_subnet.snet-srvend, data.azurerm_subnet.cdmz-snet-srvend, data.azurerm_subnet.additional-snet-srvend) : s.id ], [local.devops_subnet_id], var.oldsub_service_endpoint_snets,[local.global_pro_default_id],[local.global_pro_private_id],[local.global_pro_public_id])
+    virtual_network_subnet_ids  = concat(var.common_service_endpoint_snets, each.value.specyfic_service_endpoint_snets)
   }
   
   tags = merge(
