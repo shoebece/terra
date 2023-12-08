@@ -197,7 +197,7 @@ resource "azurerm_windows_virtual_machine" "shir-vm" {
   name                = each.value.vm
   resource_group_name = data.azurerm_resource_group.shared-shir-rg.name
   location            = var.resource_location
-  size                = "Standard_DS1_v2"
+  size                = each.value.size
   computer_name       = each.value.computer_name
   admin_username      = each.value.admin_username
   admin_password      = var.admin_password
@@ -211,7 +211,8 @@ resource "azurerm_windows_virtual_machine" "shir-vm" {
   os_disk {
     name                  = join("-", [each.value.vm, "osdisk"])
     caching               = "ReadWrite"
-    storage_account_type  = "Premium_LRS"
+    storage_account_type  = each.value.disk_sku
+    disk_size_gb          = each.value.disk_size_gb
   }
 
   identity {
@@ -245,7 +246,7 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
   name                = each.value.vm
   resource_group_name = data.azurerm_resource_group.shared-shir-rg.name
   location            = var.resource_location
-  size                = "Standard_DS1_v2"
+  size                = each.value.size
   computer_name       = each.value.computer_name
   admin_username      = each.value.admin_username
   admin_password      = var.admin_password
@@ -259,7 +260,8 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
   os_disk {
     name                  = join("-", [each.value.vm, "osdisk"])
     caching               = "ReadWrite"
-    storage_account_type  = "Standard_LRS"
+    storage_account_type  = each.value.disk_sku
+    disk_size_gb          = each.value.disk_size_gb
   }
 
   identity {

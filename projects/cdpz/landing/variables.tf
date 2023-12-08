@@ -14,8 +14,11 @@ variable "staccs" {
             ip   = string
         }))
         stconts = list(string)
+        specyfic_service_endpoint_snets = list(string)
     }))
 }
+
+variable common_service_endpoint_snets {type = list(string)}
 
 variable "sandbox_prefix" {
     type = string

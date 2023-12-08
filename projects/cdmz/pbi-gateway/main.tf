@@ -38,7 +38,7 @@ resource "azurerm_windows_virtual_machine" "pbi-gateway-vm" {
   name                = join("-", ["cdmz-pbi-gateway", each.value.vm])
   resource_group_name = data.azurerm_resource_group.pbi-gateway-rg.name
   location            = var.resource_location
-  size                = "Standard_DS1_v2"
+  size                = each.value.size
   computer_name       = each.value.computer_name
   admin_username      = each.value.admin_username
   admin_password      = var.admin_password
@@ -52,7 +52,8 @@ resource "azurerm_windows_virtual_machine" "pbi-gateway-vm" {
   os_disk {
     name                 = join("-", ["cdmz-pbi-gateway", each.value.vm, "osdisk"])
     caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
+    storage_account_type = each.value.disk_sku
+    disk_size_gb         = each.value.disk_size_gb
   }
 
   identity {
