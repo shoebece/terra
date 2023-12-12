@@ -18,8 +18,18 @@ locals {
         }
     ]
   ])
-  logistics_ext_loc_falttend = flatten([
-    for stacc in var.logistics_ext_loc : [
+  logistics_amr_ext_loc_falttend = flatten([
+    for stacc in var.logistics_amr_ext_loc : [
+        for cont in stacc.stconts : {
+          key     = join("-", [stacc.name, cont])
+          stacc   = stacc.name
+          type    = stacc.type
+          cont    = cont
+        }
+    ]
+  ])
+  logistics_eur_ext_loc_falttend = flatten([
+    for stacc in var.logistics_eur_ext_loc : [
         for cont in stacc.stconts : {
           key     = join("-", [stacc.name, cont])
           stacc   = stacc.name
@@ -417,10 +427,10 @@ resource "databricks_grants" "prod_landing_ext_loc" {
 }
 
 ## ----------------------------------------------------------
-## Logistics external locations
+## Logistics AMR external locations
 ## DEV
-resource "databricks_grants" "dev_logistics_ext_loc" {
-  for_each = { for i, ext_loc in local.logistics_ext_loc_falttend: ext_loc.key => ext_loc }
+resource "databricks_grants" "dev_logistics_amr_ext_loc" {
+  for_each = { for i, ext_loc in local.logistics_amr_ext_loc_falttend: ext_loc.key => ext_loc }
   provider  = databricks.globaldbw
   
   external_location = join("-", [each.value.type , "dev", each.value.stacc, each.value.cont, "ext-loc"])
@@ -429,19 +439,13 @@ resource "databricks_grants" "dev_logistics_ext_loc" {
     privileges = ["WRITE_FILES"]
   }
 
-  grant {
-    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
-    privileges = ["WRITE_FILES"]
-  }
-
   depends_on = [
-    data.databricks_group.contract_logistics_amr_bu,
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_amr_bu
   ]
 }
 
-resource "databricks_grants" "uat_logistics_ext_loc" {
-  for_each = { for i, ext_loc in local.logistics_ext_loc_falttend: ext_loc.key => ext_loc }
+resource "databricks_grants" "uat_logistics_amr_ext_loc" {
+  for_each = { for i, ext_loc in local.logistics_amr_ext_loc_falttend: ext_loc.key => ext_loc }
   provider  = databricks.globaldbw
   
   external_location = join("-", [each.value.type , "uat", each.value.stacc, each.value.cont, "ext-loc"])
@@ -450,19 +454,13 @@ resource "databricks_grants" "uat_logistics_ext_loc" {
     privileges = ["WRITE_FILES"]
   }
 
-  grant {
-    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
-    privileges = ["WRITE_FILES"]
-  }
-
   depends_on = [
-    data.databricks_group.contract_logistics_amr_bu,
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_amr_bu
   ]
 }
 
-resource "databricks_grants" "prod_logistics_ext_loc" {
-  for_each = { for i, ext_loc in local.logistics_ext_loc_falttend: ext_loc.key => ext_loc }
+resource "databricks_grants" "prod_logistics_amr_ext_loc" {
+  for_each = { for i, ext_loc in local.logistics_amr_ext_loc_falttend: ext_loc.key => ext_loc }
   provider  = databricks.globaldbw
   
   external_location = join("-", [each.value.type , "prod", each.value.stacc, each.value.cont, "ext-loc"])
@@ -471,13 +469,55 @@ resource "databricks_grants" "prod_logistics_ext_loc" {
     privileges = ["WRITE_FILES"]
   }
 
+  depends_on = [
+    data.databricks_group.contract_logistics_amr_bu
+  ]
+}
+
+## ----------------------------------------------------------
+## Logistics EUR external locations
+## DEV
+resource "databricks_grants" "dev_logistics_eur_ext_loc" {
+  for_each = { for i, ext_loc in local.logistics_eur_ext_loc_falttend: ext_loc.key => ext_loc }
+  provider  = databricks.globaldbw
+  
+  external_location = join("-", [each.value.type , "dev", each.value.stacc, each.value.cont, "ext-loc"])
   grant {
     principal  = data.databricks_group.contract_logistics_eur_bu.display_name
     privileges = ["WRITE_FILES"]
   }
 
   depends_on = [
-    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.contract_logistics_eur_bu
+  ]
+}
+
+resource "databricks_grants" "uat_logistics_eur_ext_loc" {
+  for_each = { for i, ext_loc in local.logistics_eur_ext_loc_falttend: ext_loc.key => ext_loc }
+  provider  = databricks.globaldbw
+  
+  external_location = join("-", [each.value.type , "uat", each.value.stacc, each.value.cont, "ext-loc"])
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = ["WRITE_FILES"]
+  }
+
+  depends_on = [
+    data.databricks_group.contract_logistics_eur_bu
+  ]
+}
+
+resource "databricks_grants" "prod_logistics_eur_ext_loc" {
+  for_each = { for i, ext_loc in local.logistics_eur_ext_loc_falttend: ext_loc.key => ext_loc }
+  provider  = databricks.globaldbw
+  
+  external_location = join("-", [each.value.type , "prod", each.value.stacc, each.value.cont, "ext-loc"])
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = ["WRITE_FILES"]
+  }
+
+  depends_on = [
     data.databricks_group.contract_logistics_eur_bu
   ]
 }

@@ -49,7 +49,15 @@ variable "catalog_config" {
     }))
 }
 
-variable "logistics_ext_loc" {
+variable "logistics_amr_ext_loc" {
+    type = list(object({
+        name    = string
+        type    = string
+        stconts = list(string)
+    }))
+}
+
+variable "logistics_eur_ext_loc" {
     type = list(object({
         name    = string
         type    = string
