@@ -42,19 +42,19 @@ variable "landing_ext_loc" {
 }
 
 variable "catalog_config" {
-    type = list(object({
+    type = object({
         name    = string
         type    = string
         stconts = list(string)
-    }))
+    })
 }
 
 variable "logistics_amr_ext_loc" {
-    type = list(object({
+    type = object({
         name    = string
         type    = string
         stconts = list(string)
-    }))
+    })
 }
 
 variable "logistics_eur_ext_loc" {
