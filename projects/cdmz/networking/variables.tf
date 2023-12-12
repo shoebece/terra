@@ -27,6 +27,7 @@ variable "firewall_ip_address"           { type = string }
 variable "vpn_firewall_ip_address"       { type = string }
 variable "kv_ip_address"                 { type = string }
 variable "synapse_plhub_ip_address"      { type = string }
+variable "EUR_Int_firewall_ip_address"      { type = string }
 
 variable "sandbox_prefix" {
     type = string 
