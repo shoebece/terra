@@ -86,18 +86,18 @@ resource "databricks_permission_assignment" "add_super_users" {
   permissions   = ["ADMIN"]
 }
 
-# contract_logistics
-data "databricks_group" "contract_logistics_bu" {
+# contract_logistics_amr
+data "databricks_group" "contract_logistics_amr_bu" {
   provider      = databricks.globaldbw
-  display_name  = var.contract_logistics_bu.name
+  display_name  = var.contract_logistics_amr_bu.name
 }
 
-resource "databricks_permission_assignment" "add_contract_logistics_bu" {
+resource "databricks_permission_assignment" "add_contract_logistics_amr_bu" {
   provider      = databricks.globaldbw
-  principal_id  = data.databricks_group.contract_logistics_bu.id
+  principal_id  = data.databricks_group.contract_logistics_amr_bu.id
   permissions   = ["USER"]
 
-  depends_on = [ data.databricks_group.contract_logistics_bu ]
+  depends_on = [ data.databricks_group.contract_logistics_amr_bu ]
 }
 
 # contract_logistics_eur
@@ -167,19 +167,14 @@ resource "databricks_permissions" "cluster_usage" {
 ## ----------------------------------------------------------
 ## Cluster
 ## Global
-data "databricks_cluster" "global_sync_cluster" {
+data "databricks_cluster" "global_synceur_cluster" {
   provider      = databricks.globaldbw
-  cluster_name  = "cdp-sync-team-cluster"
+  cluster_name  = "cdp-synceur-team-cluster"
 }
 
-resource "databricks_permissions" "global_cluster_usage" {
+resource "databricks_permissions" "global_clustereur_usage" {
   provider          = databricks.globaldbw
-  cluster_id        = data.databricks_cluster.global_sync_cluster.id
-
-  access_control {
-    group_name       = data.databricks_group.contract_logistics_bu.display_name
-    permission_level = "CAN_ATTACH_TO"
-  }
+  cluster_id        = data.databricks_cluster.global_synceur_cluster.id
 
   access_control {
     group_name       = data.databricks_group.contract_logistics_eur_bu.display_name
@@ -187,9 +182,28 @@ resource "databricks_permissions" "global_cluster_usage" {
   }
 
   depends_on = [ 
-    data.databricks_cluster.global_sync_cluster,
-    data.databricks_group.contract_logistics_bu,
+    data.databricks_cluster.global_synceur_cluster,
     data.databricks_group.contract_logistics_eur_bu
+  ]
+}
+
+data "databricks_cluster" "global_syncamr_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-syncamr-team-cluster"
+}
+
+resource "databricks_permissions" "global_clusteramr_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_syncamr_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.contract_logistics_amr_bu.display_name
+    permission_level = "CAN_ATTACH_TO"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_syncamr_cluster,
+    data.databricks_group.contract_logistics_amr_bu
   ]
 }
 

@@ -24,7 +24,7 @@ variable "super_user_aad_group" { type = object({
   id = string
 })}
 
-variable "contract_logistics_bu" { type = object({
+variable "contract_logistics_amr_bu" { type = object({
   name = string
   id = string
 })}
