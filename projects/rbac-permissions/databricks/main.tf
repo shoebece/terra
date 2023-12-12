@@ -656,7 +656,8 @@ resource "databricks_grants" "dev_logisticsamr_catalogs" {
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
-    data.databricks_group.ba_bi_eng
+    data.databricks_group.ba_bi_eng,
+    databricks_grants.dev_dev_catalogs
   ]
 }
 
@@ -693,7 +694,8 @@ resource "databricks_grants" "uat_logisticsamr_catalogs" {
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
-    data.databricks_group.ba_bi_eng
+    data.databricks_group.ba_bi_eng,
+    databricks_grants.dev_uat_catalogs
   ]
 }
 
@@ -730,7 +732,8 @@ resource "databricks_grants" "prod_logisticsamr_catalogs" {
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
-    data.databricks_group.ba_bi_eng
+    data.databricks_group.ba_bi_eng,
+    databricks_grants.dev_prod_catalogs
   ]
 }
 
@@ -770,7 +773,8 @@ resource "databricks_grants" "dev_logisticseur_catalogs" {
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
-    data.databricks_group.ba_bi_eng
+    data.databricks_group.ba_bi_eng,
+    databricks_grants.dev_dev_catalogs
   ]
 }
 
@@ -807,7 +811,8 @@ resource "databricks_grants" "uat_logisticseur_catalogs" {
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
-    data.databricks_group.ba_bi_eng
+    data.databricks_group.ba_bi_eng,
+    databricks_grants.dev_uat_catalogs
   ]
 }
 
@@ -844,7 +849,8 @@ resource "databricks_grants" "prod_logisticseur_catalogs" {
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
-    data.databricks_group.ba_bi_eng
+    data.databricks_group.ba_bi_eng,
+    databricks_grants.dev_prod_catalogs
   ]
 }
 
