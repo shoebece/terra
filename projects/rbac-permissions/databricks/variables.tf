@@ -58,11 +58,11 @@ variable "logistics_amr_ext_loc" {
 }
 
 variable "logistics_eur_ext_loc" {
-    type = list(object({
+    type = object({
         name    = string
         type    = string
         stconts = list(string)
-    }))
+    })
 }
 
 variable "catalog_reader_permission" {type = list(string)}

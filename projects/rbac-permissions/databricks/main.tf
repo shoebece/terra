@@ -622,7 +622,7 @@ resource "databricks_grants" "dev_prod_catalogs" {
 ## DEV
 resource "databricks_grants" "dev_logisticsamr_catalogs" {
   provider  = databricks.globaldbw
-  catalog   = join("_", [var.contract_logistics_amr_bu.type, "dev", var.contract_logistics_amr_bu.name])
+  catalog   = join("_", [var.logistics_amr_ext_loc.type, "dev", var.logistics_amr_ext_loc.name])
   grant {
     principal  = data.databricks_group.contract_logistics_amr_bu.display_name
     privileges = var.catalog_writer_permission
@@ -635,7 +635,7 @@ resource "databricks_grants" "dev_logisticsamr_catalogs" {
 
 resource "databricks_grants" "uat_logisticsamr_catalogs" {
   provider  = databricks.globaldbw
-  catalog   = join("_", [var.contract_logistics_amr_bu.type, "uat", var.contract_logistics_amr_bu.name])
+  catalog   = join("_", [var.logistics_amr_ext_loc.type, "uat", var.logistics_amr_ext_loc.name])
   grant {
     principal  = data.databricks_group.contract_logistics_amr_bu.display_name
     privileges = var.catalog_writer_permission
@@ -648,7 +648,7 @@ resource "databricks_grants" "uat_logisticsamr_catalogs" {
 
 resource "databricks_grants" "prod_logisticsamr_catalogs" {
   provider  = databricks.globaldbw
-  catalog   = join("_", [var.contract_logistics_amr_bu.type, "prod", var.contract_logistics_amr_bu.name])
+  catalog   = join("_", [var.logistics_amr_ext_loc.type, "prod", var.logistics_amr_ext_loc.name])
   grant {
     principal  = data.databricks_group.contract_logistics_amr_bu.display_name
     privileges = var.catalog_writer_permission
@@ -664,7 +664,7 @@ resource "databricks_grants" "prod_logisticsamr_catalogs" {
 ## DEV
 resource "databricks_grants" "dev_logisticseur_catalogs" {
   provider  = databricks.globaldbw
-  catalog   = join("_", [var.contract_logistics_eur_bu.type, "dev", var.contract_logistics_eur_bu.name])
+  catalog   = join("_", [var.logistics_eur_ext_loc.type, "dev", var.logistics_eur_ext_loc.name])
   grant {
     principal  = data.databricks_group.contract_logistics_eur_bu.display_name
     privileges = var.catalog_writer_permission
@@ -677,7 +677,7 @@ resource "databricks_grants" "dev_logisticseur_catalogs" {
 
 resource "databricks_grants" "uat_logisticseur_catalogs" {
   provider  = databricks.globaldbw
-  catalog   = join("_", [var.contract_logistics_eur_bu.type, "uat", var.contract_logistics_eur_bu.name])
+  catalog   = join("_", [var.logistics_eur_ext_loc.type, "uat", var.logistics_eur_ext_loc.name])
   grant {
     principal  = data.databricks_group.contract_logistics_eur_bu.display_name
     privileges = var.catalog_writer_permission
@@ -690,7 +690,7 @@ resource "databricks_grants" "uat_logisticseur_catalogs" {
 
 resource "databricks_grants" "prod_logisticseur_catalogs" {
   provider  = databricks.globaldbw
-  catalog   = join("_", [var.contract_logistics_eur_bu.type, "prod", var.contract_logistics_eur_bu.name])
+  catalog   = join("_", [var.logistics_eur_ext_loc.type, "prod", var.logistics_eur_ext_loc.name])
   grant {
     principal  = data.databricks_group.contract_logistics_eur_bu.display_name
     privileges = var.catalog_writer_permission
