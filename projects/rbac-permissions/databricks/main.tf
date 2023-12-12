@@ -183,7 +183,7 @@ resource "databricks_permissions" "global_clustersynceur_usage" {
 
   access_control {
     group_name       = data.databricks_group.contract_logistics_eur_bu.display_name
-    permission_level = "CAN_ATTACH_TO"
+    permission_level = "CAN_RESTART"
   }
 
   depends_on = [ 
@@ -223,7 +223,7 @@ resource "databricks_permissions" "global_clustersyncamr_usage" {
 
   access_control {
     group_name       = data.databricks_group.contract_logistics_amr_bu.display_name
-    permission_level = "CAN_ATTACH_TO"
+    permission_level = "CAN_RESTART"
   }
 
   depends_on = [ 
