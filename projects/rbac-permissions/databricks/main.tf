@@ -20,17 +20,17 @@ locals {
   ])
   logistics_amr_ext_loc_falttend = flatten([
     for cont in var.logistics_amr_ext_loc.stconts : {
-          key     = join("-", [stacc.name, cont])
-          stacc   = stacc.name
-          type    = stacc.type
+          key     = join("-", [var.logistics_amr_ext_loc.name, cont])
+          stacc   = var.logistics_amr_ext_loc.name
+          type    = var.logistics_amr_ext_loc.type
           cont    = cont
         }
   ])
   logistics_eur_ext_loc_falttend = flatten([
     for cont in var.logistics_eur_ext_loc.stconts : {
-          key     = join("-", [stacc.name, cont])
-          stacc   = stacc.name
-          type    = stacc.type
+          key     = join("-", [var.logistics_eur_ext_loc.name, cont])
+          stacc   = var.logistics_eur_ext_loc.name
+          type    = var.logistics_eur_ext_loc.type
           cont    = cont
         }
   ])
