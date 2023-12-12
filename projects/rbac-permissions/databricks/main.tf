@@ -172,7 +172,12 @@ data "databricks_cluster" "global_synceur_cluster" {
   cluster_name  = "cdp-synceur-team-cluster"
 }
 
-resource "databricks_permissions" "global_clustereur_usage" {
+data "databricks_sql_warehouse" "global_synceur_warehouse" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-synceur-team-warehouse"
+}
+
+resource "databricks_permissions" "global_clustersynceur_usage" {
   provider          = databricks.globaldbw
   cluster_id        = data.databricks_cluster.global_synceur_cluster.id
 
@@ -187,12 +192,32 @@ resource "databricks_permissions" "global_clustereur_usage" {
   ]
 }
 
+resource "databricks_permissions" "global_warehousesynceur_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_sql_warehouse.global_synceur_warehouse.id
+
+  access_control {
+    group_name       = data.databricks_group.contract_logistics_eur_bu.display_name
+    permission_level = "CAN_USE"
+  }
+
+  depends_on = [ 
+    data.databricks_sql_warehouse.global_synceur_warehouse,
+    data.databricks_group.contract_logistics_eur_bu
+  ]
+}
+
 data "databricks_cluster" "global_syncamr_cluster" {
   provider      = databricks.globaldbw
   cluster_name  = "cdp-syncamr-team-cluster"
 }
 
-resource "databricks_permissions" "global_clusteramr_usage" {
+data "databricks_sql_warehouse" "global_syncamr_warehouse" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-syncamr-team-warehouse"
+}
+
+resource "databricks_permissions" "global_clustersyncamr_usage" {
   provider          = databricks.globaldbw
   cluster_id        = data.databricks_cluster.global_syncamr_cluster.id
 
@@ -203,6 +228,21 @@ resource "databricks_permissions" "global_clusteramr_usage" {
 
   depends_on = [ 
     data.databricks_cluster.global_syncamr_cluster,
+    data.databricks_group.contract_logistics_amr_bu
+  ]
+}
+
+resource "databricks_permissions" "global_warehousesyncamr_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_sql_warehouse.global_syncamr_warehouse.id
+
+  access_control {
+    group_name       = data.databricks_group.contract_logistics_amr_bu.display_name
+    permission_level = "CAN_USE"
+  }
+
+  depends_on = [ 
+    data.databricks_sql_warehouse.global_syncamr_warehouse,
     data.databricks_group.contract_logistics_amr_bu
   ]
 }
