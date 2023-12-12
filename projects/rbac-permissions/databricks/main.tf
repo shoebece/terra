@@ -549,7 +549,8 @@ resource "databricks_grants" "dev_dev_catalogs" {
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
-    data.databricks_group.super_users
+    data.databricks_group.super_users,
+    data.databricks_group.ba_bi_eng
   ]
 }
 
@@ -581,7 +582,8 @@ resource "databricks_grants" "dev_uat_catalogs" {
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
-    data.databricks_group.super_users
+    data.databricks_group.super_users,
+    data.databricks_group.ba_bi_eng
   ]
 }
 
@@ -613,7 +615,8 @@ resource "databricks_grants" "dev_prod_catalogs" {
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
-    data.databricks_group.super_users
+    data.databricks_group.super_users,
+    data.databricks_group.ba_bi_eng
   ]
 }
 
@@ -628,8 +631,32 @@ resource "databricks_grants" "dev_logisticsamr_catalogs" {
     privileges = var.catalog_writer_permission
   }
 
+  grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.super_users.display_name
+    privileges = var.catalog_writer_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.ba_bi_eng.display_name
+    privileges = var.catalog_reader_permission
+  }
+
   depends_on = [
-    data.databricks_group.contract_logistics_amr_bu
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
+    data.databricks_group.super_users,
+    data.databricks_group.ba_bi_eng
   ]
 }
 
@@ -641,8 +668,32 @@ resource "databricks_grants" "uat_logisticsamr_catalogs" {
     privileges = var.catalog_writer_permission
   }
 
+  grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.super_users.display_name
+    privileges = var.catalog_writer_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.ba_bi_eng.display_name
+    privileges = var.catalog_reader_permission
+  }
+
   depends_on = [
-    data.databricks_group.contract_logistics_amr_bu
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
+    data.databricks_group.super_users,
+    data.databricks_group.ba_bi_eng
   ]
 }
 
@@ -654,8 +705,32 @@ resource "databricks_grants" "prod_logisticsamr_catalogs" {
     privileges = var.catalog_writer_permission
   }
 
+  grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.super_users.display_name
+    privileges = var.catalog_writer_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.ba_bi_eng.display_name
+    privileges = var.catalog_reader_permission
+  }
+
   depends_on = [
-    data.databricks_group.contract_logistics_amr_bu
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
+    data.databricks_group.super_users,
+    data.databricks_group.ba_bi_eng
   ]
 }
 
@@ -670,8 +745,32 @@ resource "databricks_grants" "dev_logisticseur_catalogs" {
     privileges = var.catalog_writer_permission
   }
 
+  grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.super_users.display_name
+    privileges = var.catalog_writer_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.ba_bi_eng.display_name
+    privileges = var.catalog_reader_permission
+  }
+
   depends_on = [
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
+    data.databricks_group.super_users,
+    data.databricks_group.ba_bi_eng
   ]
 }
 
@@ -683,8 +782,32 @@ resource "databricks_grants" "uat_logisticseur_catalogs" {
     privileges = var.catalog_writer_permission
   }
 
+  grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.super_users.display_name
+    privileges = var.catalog_writer_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.ba_bi_eng.display_name
+    privileges = var.catalog_reader_permission
+  }
+
   depends_on = [
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
+    data.databricks_group.super_users,
+    data.databricks_group.ba_bi_eng
   ]
 }
 
@@ -696,8 +819,32 @@ resource "databricks_grants" "prod_logisticseur_catalogs" {
     privileges = var.catalog_writer_permission
   }
 
+  grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = var.catalog_reader_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.super_users.display_name
+    privileges = var.catalog_writer_permission
+  }
+
+  grant {
+    principal  = data.databricks_group.ba_bi_eng.display_name
+    privileges = var.catalog_reader_permission
+  }
+
   depends_on = [
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
+    data.databricks_group.super_users,
+    data.databricks_group.ba_bi_eng
   ]
 }
 
