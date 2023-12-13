@@ -16,6 +16,7 @@ locals {
           type    = stacc.type
           cont    = cont
           loc_logistics_amr = stacc.loc_logistics_amr
+          loc_logistics_eur = stacc.loc_logistics_eur
         }
     ]
   ])
@@ -156,11 +157,17 @@ resource "databricks_grants" "dev_data_ext_loc" {
     privileges = each.value.loc_logistics_amr
   }
 
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = each.value.loc_logistics_eur
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
-    data.databricks_group.contract_logistics_amr_bu
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.contract_logistics_eur_bu
   ]
 }
 
@@ -185,10 +192,22 @@ resource "databricks_grants" "uat_data_ext_loc" {
     privileges = ["CREATE_EXTERNAL_TABLE", "READ_FILES", "WRITE_FILES"]
   }
 
+  grant {
+    principal  = data.databricks_group.contract_logistics_amr_bu.display_name
+    privileges = each.value.loc_logistics_amr
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = each.value.loc_logistics_eur
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
-    data.databricks_group.super_users
+    data.databricks_group.super_users,
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.contract_logistics_eur_bu
   ]
 }
 
@@ -214,10 +233,22 @@ resource "databricks_grants" "prod_data_ext_loc" {
     privileges = ["CREATE_EXTERNAL_TABLE", "READ_FILES", "WRITE_FILES"]
   }
 
+  grant {
+    principal  = data.databricks_group.contract_logistics_amr_bu.display_name
+    privileges = each.value.loc_logistics_amr
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = each.value.loc_logistics_eur
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
-    data.databricks_group.super_users
+    data.databricks_group.super_users,
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.contract_logistics_eur_bu
   ]
 }
 
