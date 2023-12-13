@@ -46,23 +46,11 @@ variable "catalog_config" {
         name    = string
         type    = string
         stconts = list(string)
+        loc_logistics_amr = list(string)
+        loc_logistics_eur = list(string)
+        cat_logistics_amr = list(string)
+        cat_logistics_eur = list(string)
     }))
-}
-
-variable "logistics_amr_ext_loc" {
-    type = object({
-        name    = string
-        type    = string
-        stconts = list(string)
-    })
-}
-
-variable "logistics_eur_ext_loc" {
-    type = object({
-        name    = string
-        type    = string
-        stconts = list(string)
-    })
 }
 
 variable "catalog_reader_permission" {type = list(string)}
