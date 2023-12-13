@@ -24,7 +24,7 @@ variable "super_user_aad_group" { type = object({
   id = string
 })}
 
-variable "contract_logistics_bu" { type = object({
+variable "contract_logistics_amr_bu" { type = object({
   name = string
   id = string
 })}
@@ -49,12 +49,20 @@ variable "catalog_config" {
     }))
 }
 
-variable "logistics_ext_loc" {
-    type = list(object({
+variable "logistics_amr_ext_loc" {
+    type = object({
         name    = string
         type    = string
         stconts = list(string)
-    }))
+    })
+}
+
+variable "logistics_eur_ext_loc" {
+    type = object({
+        name    = string
+        type    = string
+        stconts = list(string)
+    })
 }
 
 variable "catalog_reader_permission" {type = list(string)}
