@@ -49,7 +49,7 @@ variable "catalog_config" {
     }))
 }
 
-variable "logistics_amr_ext_loc" {
+variable "logistics_amr" {
     type = object({
         name    = string
         type    = string
@@ -57,7 +57,7 @@ variable "logistics_amr_ext_loc" {
     })
 }
 
-variable "logistics_eur_ext_loc" {
+variable "logistics_eur" {
     type = object({
         name    = string
         type    = string
@@ -67,5 +67,6 @@ variable "logistics_eur_ext_loc" {
 
 variable "catalog_reader_permission" {type = list(string)}
 variable "catalog_writer_permission" {type = list(string)}
+variable "catalog_use_permission" {type = list(string)}
 
 variable "etl_notebook_path"        { type = string }
