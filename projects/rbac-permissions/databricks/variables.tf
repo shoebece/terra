@@ -48,28 +48,10 @@ variable "catalog_config" {
         stconts = list(string)
         loc_logistics_amr = list(string)
         loc_logistics_eur = list(string)
-        slcat_logistics_amr = list(string)
-        slcat_logistics_eur = list(string)
-        tgcat_logistics_amr = list(string)
-        tgcat_logistics_eur = list(string)
+        cat_logistics_amr = list(string)
+        cat_logistics_eur = list(string)
     }))
 }
-
-# variable "logistics_amr" {
-#     type = object({
-#         name    = string
-#         type    = string
-#         stconts = list(string)
-#     })
-# }
-
-# variable "logistics_eur" {
-#     type = object({
-#         name    = string
-#         type    = string
-#         stconts = list(string)
-#     })
-# }
 
 variable "catalog_reader_permission" {type = list(string)}
 variable "catalog_writer_permission" {type = list(string)}

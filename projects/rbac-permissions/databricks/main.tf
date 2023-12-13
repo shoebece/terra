@@ -17,25 +17,11 @@ locals {
           cont    = cont
           loc_logistics_amr = stacc.loc_logistics_amr
           loc_logistics_eur = stacc.loc_logistics_eur
+          cat_logistics_amr = stacc.cat_logistics_amr
+          cat_logistics_eur = stacc.cat_logistics_eur
         }
     ]
   ])
-  # logistics_amr_ext_loc_falttend = flatten([
-  #   for cont in var.logistics_amr.stconts : {
-  #         key     = join("-", [var.logistics_amr.name, cont])
-  #         stacc   = var.logistics_amr.name
-  #         type    = var.logistics_amr.type
-  #         cont    = cont
-  #       }
-  # ])
-  # logistics_eur_ext_loc_falttend = flatten([
-  #   for cont in var.logistics_eur.stconts : {
-  #         key     = join("-", [var.logistics_eur.name, cont])
-  #         stacc   = var.logistics_eur.name
-  #         type    = var.logistics_eur.type
-  #         cont    = cont
-  #       }
-  # ])
 }
 
 #---------------------------------------------
@@ -364,11 +350,23 @@ resource "databricks_grants" "dev_dev_catalogs" {
     privileges = var.catalog_reader_permission
   }
 
+  grant {
+    principal  = data.databricks_group.contract_logistics_amr_bu.display_name
+    privileges = each.value.cat_logistics_amr
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = each.value.cat_logistics_eur
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
-    data.databricks_group.ba_bi_eng
+    data.databricks_group.ba_bi_eng,
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.contract_logistics_eur_bu
   ]
 }
 
@@ -398,11 +396,23 @@ resource "databricks_grants" "dev_uat_catalogs" {
     privileges = var.catalog_reader_permission
   }
 
+  grant {
+    principal  = data.databricks_group.contract_logistics_amr_bu.display_name
+    privileges = each.value.cat_logistics_amr
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = each.value.cat_logistics_eur
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
-    data.databricks_group.ba_bi_eng
+    data.databricks_group.ba_bi_eng,
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.contract_logistics_eur_bu
   ]
 }
 
@@ -432,15 +442,25 @@ resource "databricks_grants" "dev_prod_catalogs" {
     privileges = var.catalog_reader_permission
   }
 
+  grant {
+    principal  = data.databricks_group.contract_logistics_amr_bu.display_name
+    privileges = each.value.cat_logistics_amr
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = each.value.cat_logistics_eur
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
-    data.databricks_group.ba_bi_eng
+    data.databricks_group.ba_bi_eng,
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.contract_logistics_eur_bu
   ]
 }
-
-
 
 
 
@@ -558,341 +578,3 @@ resource "databricks_permissions" "global_warehousesyncamr_usage" {
     data.databricks_group.contract_logistics_amr_bu
   ]
 }
-
-# ## ----------------------------------------------------------
-# ## Logistics AMR external locations
-# ## DEV
-# resource "databricks_grants" "dev_logistics_amr_ext_loc" {
-#   for_each = { for i, ext_loc in local.logistics_amr_ext_loc_falttend: ext_loc.key => ext_loc }
-#   provider  = databricks.globaldbw
-  
-#   external_location = join("-", [each.value.type , "dev", each.value.stacc, each.value.cont, "ext-loc"])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_amr_bu.display_name
-#     privileges = ["WRITE_FILES"]
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_amr_bu
-#   ]
-# }
-
-# # UAT
-# resource "databricks_grants" "uat_logistics_amr_ext_loc" {
-#   for_each = { for i, ext_loc in local.logistics_amr_ext_loc_falttend: ext_loc.key => ext_loc }
-#   provider  = databricks.globaldbw
-  
-#   external_location = join("-", [each.value.type , "uat", each.value.stacc, each.value.cont, "ext-loc"])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_amr_bu.display_name
-#     privileges = ["WRITE_FILES"]
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_amr_bu
-#   ]
-# }
-
-# # PROD
-# resource "databricks_grants" "prod_logistics_amr_ext_loc" {
-#   for_each = { for i, ext_loc in local.logistics_amr_ext_loc_falttend: ext_loc.key => ext_loc }
-#   provider  = databricks.globaldbw
-  
-#   external_location = join("-", [each.value.type , "prod", each.value.stacc, each.value.cont, "ext-loc"])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_amr_bu.display_name
-#     privileges = ["WRITE_FILES"]
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_amr_bu
-#   ]
-# }
-
-# ## ----------------------------------------------------------
-# ## Logistics EUR external locations
-# ## DEV
-# resource "databricks_grants" "dev_logistics_eur_ext_loc" {
-#   for_each = { for i, ext_loc in local.logistics_eur_ext_loc_falttend: ext_loc.key => ext_loc }
-#   provider  = databricks.globaldbw
-  
-#   external_location = join("-", [each.value.type , "dev", each.value.stacc, each.value.cont, "ext-loc"])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_eur_bu.display_name
-#     privileges = ["WRITE_FILES"]
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_eur_bu
-#   ]
-# }
-
-# # UAT
-# resource "databricks_grants" "uat_logistics_eur_ext_loc" {
-#   for_each = { for i, ext_loc in local.logistics_eur_ext_loc_falttend: ext_loc.key => ext_loc }
-#   provider  = databricks.globaldbw
-  
-#   external_location = join("-", [each.value.type , "uat", each.value.stacc, each.value.cont, "ext-loc"])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_eur_bu.display_name
-#     privileges = ["WRITE_FILES"]
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_eur_bu
-#   ]
-# }
-
-# # PROD
-# resource "databricks_grants" "prod_logistics_eur_ext_loc" {
-#   for_each = { for i, ext_loc in local.logistics_eur_ext_loc_falttend: ext_loc.key => ext_loc }
-#   provider  = databricks.globaldbw
-  
-#   external_location = join("-", [each.value.type , "prod", each.value.stacc, each.value.cont, "ext-loc"])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_eur_bu.display_name
-#     privileges = ["WRITE_FILES"]
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_eur_bu
-#   ]
-# }
-
-# ## ----------------------------------------------------------
-# ## Catalogs Logistics AMR
-# ## DEV
-# resource "databricks_grants" "dev_logisticsamr_catalogs" {
-#   provider  = databricks.globaldbw
-#   catalog   = join("_", [var.logistics_amr.type, "dev", var.logistics_amr.name])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_amr_bu.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.data_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.support_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.super_users.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.ba_bi_eng.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_amr_bu,
-#     data.databricks_group.data_engg,
-#     data.databricks_group.support_engg,
-#     data.databricks_group.super_users,
-#     data.databricks_group.ba_bi_eng,
-#     databricks_grants.dev_dev_catalogs
-#   ]
-# }
-
-# # UAT
-# resource "databricks_grants" "uat_logisticsamr_catalogs" {
-#   provider  = databricks.globaldbw
-#   catalog   = join("_", [var.logistics_amr.type, "uat", var.logistics_amr.name])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_amr_bu.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.data_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.support_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.super_users.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.ba_bi_eng.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_amr_bu,
-#     data.databricks_group.data_engg,
-#     data.databricks_group.support_engg,
-#     data.databricks_group.super_users,
-#     data.databricks_group.ba_bi_eng,
-#     databricks_grants.dev_uat_catalogs
-#   ]
-# }
-
-# # PROD
-# resource "databricks_grants" "prod_logisticsamr_catalogs" {
-#   provider  = databricks.globaldbw
-#   catalog   = join("_", [var.logistics_amr.type, "prod", var.logistics_amr.name])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_amr_bu.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.data_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.support_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.super_users.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.ba_bi_eng.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_amr_bu,
-#     data.databricks_group.data_engg,
-#     data.databricks_group.support_engg,
-#     data.databricks_group.super_users,
-#     data.databricks_group.ba_bi_eng,
-#     databricks_grants.dev_prod_catalogs
-#   ]
-# }
-
-# ## ----------------------------------------------------------
-# ## Catalogs Logistics EUR
-# ## DEV
-# resource "databricks_grants" "dev_logisticseur_catalogs" {
-#   provider  = databricks.globaldbw
-#   catalog   = join("_", [var.logistics_eur.type, "dev", var.logistics_eur.name])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_eur_bu.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.data_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.support_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.super_users.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.ba_bi_eng.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_eur_bu,
-#     data.databricks_group.data_engg,
-#     data.databricks_group.support_engg,
-#     data.databricks_group.super_users,
-#     data.databricks_group.ba_bi_eng,
-#     databricks_grants.dev_dev_catalogs
-#   ]
-# }
-
-# # UAT
-# resource "databricks_grants" "uat_logisticseur_catalogs" {
-#   provider  = databricks.globaldbw
-#   catalog   = join("_", [var.logistics_eur.type, "uat", var.logistics_eur.name])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_eur_bu.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.data_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.support_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.super_users.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.ba_bi_eng.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_eur_bu,
-#     data.databricks_group.data_engg,
-#     data.databricks_group.support_engg,
-#     data.databricks_group.super_users,
-#     data.databricks_group.ba_bi_eng,
-#     databricks_grants.dev_uat_catalogs
-#   ]
-# }
-
-# # PROD
-# resource "databricks_grants" "prod_logisticseur_catalogs" {
-#   provider  = databricks.globaldbw
-#   catalog   = join("_", [var.logistics_eur.type, "prod", var.logistics_eur.name])
-#   grant {
-#     principal  = data.databricks_group.contract_logistics_eur_bu.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.data_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.support_engg.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.super_users.display_name
-#     privileges = var.catalog_writer_permission
-#   }
-
-#   grant {
-#     principal  = data.databricks_group.ba_bi_eng.display_name
-#     privileges = var.catalog_reader_permission
-#   }
-
-#   depends_on = [
-#     data.databricks_group.contract_logistics_eur_bu,
-#     data.databricks_group.data_engg,
-#     data.databricks_group.support_engg,
-#     data.databricks_group.super_users,
-#     data.databricks_group.ba_bi_eng,
-#     databricks_grants.dev_prod_catalogs
-#   ]
-# }
