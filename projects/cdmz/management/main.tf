@@ -164,7 +164,8 @@ resource "azurerm_storage_account" "artifactory_dls" {
   }
 
   network_rules {
-    default_action = "Allow"
+    default_action = "Deny"
+    virtual_network_subnet_ids = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"]
   }
 
   tags = merge(
