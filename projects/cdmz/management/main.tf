@@ -129,6 +129,8 @@ resource "azurerm_storage_container" "cont" {
   name                  = "metastore"
   storage_account_name  = azurerm_storage_account.managed_dls.name
   container_access_type = "private"
+
+  depends_on = [ azurerm_storage_account.managed_dls ]
 }
 
 resource "azurerm_storage_account_customer_managed_key" "stacc_cmk" {
