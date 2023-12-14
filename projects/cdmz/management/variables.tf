@@ -14,3 +14,5 @@ variable "sandbox_prefix" {
     type = string 
     default = ""
 }
+
+variable "artifactory_conts" { type = list(string) }

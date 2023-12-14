@@ -74,10 +74,22 @@ resource "azurerm_user_assigned_identity" "meta-umi" {
   location            = var.resource_location
 }
 
+resource "azurerm_user_assigned_identity" "artifactory-umi" {
+  name                = "cdmz-artifactory-umi"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+}
+
 resource "azurerm_role_assignment" "meta-umi-to-kv" {
   scope                = data.azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Crypto Service Encryption User"
   principal_id         = azurerm_user_assigned_identity.meta-umi.principal_id
+}
+
+resource "azurerm_role_assignment" "artifactory-umi-to-kv" {
+  scope                = data.azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Crypto Service Encryption User"
+  principal_id         = azurerm_user_assigned_identity.artifactory-umi.principal_id
 }
 
 resource "azurerm_storage_account" "managed_dls" {
@@ -117,6 +129,8 @@ resource "azurerm_storage_container" "cont" {
   name                  = "metastore"
   storage_account_name  = azurerm_storage_account.managed_dls.name
   container_access_type = "private"
+
+  depends_on = [ azurerm_storage_account.managed_dls ]
 }
 
 resource "azurerm_storage_account_customer_managed_key" "stacc_cmk" {
@@ -129,6 +143,60 @@ resource "azurerm_storage_account_customer_managed_key" "stacc_cmk" {
       azurerm_storage_account.managed_dls
     , azurerm_user_assigned_identity.meta-umi
     , azurerm_role_assignment.meta-umi-to-kv]
+}
+
+resource "azurerm_storage_account" "artifactory_dls" {
+  name                      = join("", [var.sandbox_prefix, "cdmzartifactorydls"])
+  resource_group_name       = data.azurerm_resource_group.resgrp.name
+  location                  = var.resource_location
+  account_tier              = "Standard"
+  account_replication_type  = "LRS"
+  enable_https_traffic_only = true
+  min_tls_version           = "TLS1_2"
+  is_hns_enabled            = true
+  account_kind              = "StorageV2"
+
+  identity {
+    type = "UserAssigned"
+    identity_ids = [
+      azurerm_user_assigned_identity.artifactory-umi.id
+    ]
+  }
+
+  network_rules {
+    default_action = "Deny"
+    virtual_network_subnet_ids = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"]
+  }
+
+  tags = merge(
+    var.resource_tags_common, var.resource_tags_spec
+  )
+
+  depends_on = [
+    azurerm_user_assigned_identity.artifactory-umi
+    ,azurerm_role_assignment.artifactory-umi-to-kv
+  ]
+}
+
+resource "azurerm_storage_container" "artifactory_cont" {
+  count                 = length(var.artifactory_conts)
+  name                  = var.artifactory_conts[count.index]
+  storage_account_name  = azurerm_storage_account.artifactory_dls.name
+  container_access_type = "private"
+
+  depends_on = [ azurerm_storage_account.artifactory_dls ]
+}
+
+resource "azurerm_storage_account_customer_managed_key" "artifactory_stacc_cmk" {
+  storage_account_id        = azurerm_storage_account.artifactory_dls.id
+  key_vault_id              = data.azurerm_key_vault.kv.id
+  key_name                  = data.azurerm_key_vault_key.managed-dbfs-cmk.name
+  user_assigned_identity_id = azurerm_user_assigned_identity.artifactory-umi.id
+
+  depends_on = [
+      azurerm_storage_account.artifactory_dls
+    , azurerm_user_assigned_identity.artifactory-umi
+    , azurerm_role_assignment.artifactory-umi-to-kv]
 }
 
 resource "azurerm_databricks_workspace" "dbws" {
