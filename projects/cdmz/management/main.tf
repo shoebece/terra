@@ -165,7 +165,10 @@ resource "azurerm_storage_account" "artifactory_dls" {
 
   network_rules {
     default_action = "Deny"
-    virtual_network_subnet_ids = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"]
+    virtual_network_subnet_ids = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra",
+    "/subscriptions/7fafdbc0-65a3-4508-a1da-2bbbdbc2299b/resourceGroups/cdmz-networking-rg/providers/Microsoft.Network/virtualNetworks/cdmz-management-vnet/subnets/management-default-snet",
+    "/subscriptions/7fafdbc0-65a3-4508-a1da-2bbbdbc2299b/resourceGroups/cdmz-networking-rg/providers/Microsoft.Network/virtualNetworks/cdmz-management-vnet/subnets/management-dbw-private-snet",
+    "/subscriptions/7fafdbc0-65a3-4508-a1da-2bbbdbc2299b/resourceGroups/cdmz-networking-rg/providers/Microsoft.Network/virtualNetworks/cdmz-management-vnet/subnets/management-dbw-public-snet"]
   }
 
   tags = merge(
