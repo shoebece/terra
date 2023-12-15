@@ -177,18 +177,6 @@ resource "azurerm_storage_container" "artifactory_cont" {
   depends_on = [ azurerm_storage_account.artifactory_dls ]
 }
 
-resource "azurerm_storage_account_customer_managed_key" "artifactory_stacc_cmk" {
-  storage_account_id        = azurerm_storage_account.artifactory_dls.id
-  key_vault_id              = data.azurerm_key_vault.kv.id
-  key_name                  = data.azurerm_key_vault_key.managed-dbfs-cmk.name
-  user_assigned_identity_id = azurerm_user_assigned_identity.acdb-umi.id
-
-  depends_on = [
-      azurerm_storage_account.artifactory_dls
-    , azurerm_user_assigned_identity.acdb-umi
-    ]
-}
-
 resource "azurerm_databricks_workspace" "dbws" {
   name                = "cdmz-management-dbw"
   location            = var.resource_location
