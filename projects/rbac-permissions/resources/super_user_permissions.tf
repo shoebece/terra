@@ -3,7 +3,7 @@
 resource "azurerm_role_assignment" "super-user-to-cmdz" {
   provider             = azurerm.cdmz
   scope                = data.azurerm_subscription.cmdz_sub.id
-  role_definition_name = "Reader"
+  role_definition_name = "Owner"
   principal_id         = var.super_user_aad_group.id
 
   depends_on = [ data.azurerm_subscription.cmdz_sub ]
