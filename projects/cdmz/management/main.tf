@@ -185,7 +185,7 @@ resource "azurerm_storage_account_customer_managed_key" "artifactory_stacc_cmk" 
 
   depends_on = [
       azurerm_storage_account.artifactory_dls
-    , azurerm_user_assigned_identity.acd-umi
+    , azurerm_user_assigned_identity.acdb-umi
     ]
 }
 
