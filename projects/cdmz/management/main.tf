@@ -72,9 +72,19 @@ data "azurerm_key_vault_key" "disks-cmk" {
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
+data "azurerm_key_vault_key" "artifactory-disks-cmk" {
+  name         = "cdmz-artifactory-disks-cmk"
+  key_vault_id = data.azurerm_key_vault.artifactorykv.id
+}
+
 data "azurerm_key_vault_key" "managed-dbfs-cmk" {
   name         = "cdmz-management-dbfs-cmk"
   key_vault_id = data.azurerm_key_vault.kv.id
+}
+
+data "azurerm_key_vault_key" "artifactory-dbfs-cmk" {
+  name         = "cdmz-artifactory-dbfs-cmk"
+  key_vault_id = data.azurerm_key_vault.artifactorykv.id
 }
 
 resource "azurerm_user_assigned_identity" "meta-umi" {
