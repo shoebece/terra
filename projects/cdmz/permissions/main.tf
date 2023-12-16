@@ -20,6 +20,11 @@ data "azurerm_resource_group" "pbi-rg" {
   name      = "cdmz-pbi-gateway-rg"
 }
 
+# Artifactory
+data "azurerm_resource_group" "artifactory-rg" {
+  name      = "cdmz-artifactory-rg"
+}
+
 #CDMZ Identity
 # Management databricks connector User Managed Identity
 data "azurerm_user_assigned_identity" "man-dbw-conn-umi" {
@@ -61,4 +66,11 @@ resource "azurerm_role_assignment" "adf-to-pbi-vms" {
   scope                = data.azurerm_resource_group.pbi-rg.id
   role_definition_name = "Virtual Machine Contributor"
   principal_id         = data.azurerm_user_assigned_identity.adf-umi.principal_id
+}
+
+# Management databricks connector User Managed Identity Storage Blob Data Contributor on Artifactory
+resource "azurerm_role_assignment" "man-db-to-artifactory" {
+  scope                = data.azurerm_resource_group.artifactory-rg.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azurerm_user_assigned_identity.man-dbw-conn-umi.principal_id
 }

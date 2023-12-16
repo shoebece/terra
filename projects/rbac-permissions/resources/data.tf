@@ -139,3 +139,9 @@ data "azurerm_resource_group" "ci-cd-rg" {
   provider  = azurerm.cdmz
   name      = "cdmz-cicd-rg"
 }
+
+# Artifactory
+data "azurerm_resource_group" "artifactory-rg" {
+  provider  = azurerm.cdmz
+  name      = "cdmz-artifactory-rg"
+}
