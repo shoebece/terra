@@ -322,29 +322,29 @@ resource "azurerm_private_endpoint" "endpoint_auth" {
 }
 
 # -------------------------------------Artifactory----------------------------------------------
-# data "azurerm_user_assigned_identity" "man-umi" {
-#   name                = "cdmz-management-acdb-umi"
-#   resource_group_name = data.azurerm_resource_group.resgrp.name
-# }
+data "azurerm_user_assigned_identity" "man-umi" {
+  name                = "cdmz-management-acdb-umi"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+}
 
-# resource "databricks_storage_credential" "man_stacc_cred" {
-#   name = "cdm-man-storage-credentials"
-#   azure_managed_identity {
-#     access_connector_id = "/subscriptions/7fafdbc0-65a3-4508-a1da-2bbbdbc2299b/resourceGroups/cdmz-management-rg/providers/Microsoft.Databricks/accessConnectors/cdmz-management-acdb"
-#     managed_identity_id = data.azurerm_user_assigned_identity.man-umi.id
-#   }
+resource "databricks_storage_credential" "man_stacc_cred" {
+  name = "cdm-man-storage-credentials"
+  azure_managed_identity {
+    access_connector_id = "/subscriptions/7fafdbc0-65a3-4508-a1da-2bbbdbc2299b/resourceGroups/cdmz-management-rg/providers/Microsoft.Databricks/accessConnectors/cdmz-management-acdb"
+    managed_identity_id = data.azurerm_user_assigned_identity.man-umi.id
+  }
 
-#   depends_on = [
-#     data.azurerm_databricks_workspace.man_dbw,
-#     data.azurerm_user_assigned_identity.man-umi
-#   ]
-# }
+  depends_on = [
+    data.azurerm_databricks_workspace.man_dbw,
+    data.azurerm_user_assigned_identity.man-umi
+  ]
+}
 
-# resource "databricks_external_location" "artifactory_ext_loc" {
-#   count = length(var.artifactory_conts)
-#   name = join("-", ["cdm" , "artifactory", var.artifactory_conts[count.index], "ext-loc"])
-#   url = join("", ["abfss://", var.artifactory_conts[count.index], "@", "cdmzartifactorydls.dfs.core.windows.net"])
+resource "databricks_external_location" "artifactory_ext_loc" {
+  count = length(var.artifactory_conts)
+  name = join("-", ["cdm" , "artifactory", var.artifactory_conts[count.index], "ext-loc"])
+  url = join("", ["abfss://", var.artifactory_conts[count.index], "@", "cdmzartifactorydls.dfs.core.windows.net"])
 
-#   credential_name = databricks_storage_credential.man_stacc_cred.id
-#   depends_on = [ databricks_storage_credential.man_stacc_cred ]
-# }
+  credential_name = databricks_storage_credential.man_stacc_cred.id
+  depends_on = [ databricks_storage_credential.man_stacc_cred ]
+}
