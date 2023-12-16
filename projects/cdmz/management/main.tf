@@ -153,7 +153,26 @@ resource "azurerm_storage_account" "artifactory_dls" {
     virtual_network_subnet_ids = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra",
     "/subscriptions/7fafdbc0-65a3-4508-a1da-2bbbdbc2299b/resourceGroups/cdmz-networking-rg/providers/Microsoft.Network/virtualNetworks/cdmz-management-vnet/subnets/management-default-snet",
     "/subscriptions/7fafdbc0-65a3-4508-a1da-2bbbdbc2299b/resourceGroups/cdmz-networking-rg/providers/Microsoft.Network/virtualNetworks/cdmz-management-vnet/subnets/management-dbw-private-snet",
-    "/subscriptions/7fafdbc0-65a3-4508-a1da-2bbbdbc2299b/resourceGroups/cdmz-networking-rg/providers/Microsoft.Network/virtualNetworks/cdmz-management-vnet/subnets/management-dbw-public-snet"]
+    "/subscriptions/7fafdbc0-65a3-4508-a1da-2bbbdbc2299b/resourceGroups/cdmz-networking-rg/providers/Microsoft.Network/virtualNetworks/cdmz-management-vnet/subnets/management-dbw-public-snet",
+    #prod processing
+    "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-prod-processing-vnet/subnets/processing-dbw-private-snet",
+    "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-prod-processing-vnet/subnets/processing-dbw-public-snet",
+    "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-prod-processing-vnet/subnets/processing-default-snet",
+  
+    #global processing
+    "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-global-processing-vnet/subnets/global-processing-default-snet",
+    "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-global-processing-vnet/subnets/global-processing-dbw-private-snet",
+    "/subscriptions/150e946b-38cb-4237-b8d0-2ac92b6174b6/resourceGroups/cdpz-prod-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-global-processing-vnet/subnets/global-processing-dbw-public-snet",
+ 
+    #dev processing
+    "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-dev-processing-vnet/subnets/processing-dbw-private-snet",
+    "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-dev-processing-vnet/subnets/processing-dbw-public-snet",
+    "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-dev-processing-vnet/subnets/processing-default-snet",
+    
+    #uat Processing
+    "/subscriptions/fdb528b2-0e6b-4fc5-b8a9-acc9a7ba3ff6/resourceGroups/cdpz-uat-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-uat-processing-vnet/subnets/processing-dbw-private-snet",
+    "/subscriptions/fdb528b2-0e6b-4fc5-b8a9-acc9a7ba3ff6/resourceGroups/cdpz-uat-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-uat-processing-vnet/subnets/processing-dbw-public-snet",
+    "/subscriptions/fdb528b2-0e6b-4fc5-b8a9-acc9a7ba3ff6/resourceGroups/cdpz-uat-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-uat-processing-vnet/subnets/processing-default-snet"]
   }
 
   tags = merge(

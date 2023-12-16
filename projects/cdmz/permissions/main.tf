@@ -71,6 +71,6 @@ resource "azurerm_role_assignment" "adf-to-pbi-vms" {
 # Management databricks connector User Managed Identity Storage Blob Data Contributor on Artifactory
 resource "azurerm_role_assignment" "man-db-to-artifactory" {
   scope                = data.azurerm_resource_group.artifactory-rg.id
-  role_definition_name = "Storage Blob Data Contributor"
+  role_definition_name = "Storage Blob Data Reader"
   principal_id         = data.azurerm_user_assigned_identity.man-dbw-conn-umi.principal_id
 }
