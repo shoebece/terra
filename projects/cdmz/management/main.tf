@@ -168,7 +168,7 @@ resource "azurerm_storage_account" "artifactory_dls" {
   identity {
     type = "UserAssigned"
     identity_ids = [
-      azurerm_user_assigned_identity.artifactorykv-umi.id
+      azurerm_user_assigned_identity.artifactory-umi.id
     ]
   }
 
@@ -185,7 +185,7 @@ resource "azurerm_storage_account" "artifactory_dls" {
   )
 
   depends_on = [
-    azurerm_user_assigned_identity.artifactorykv-umi
+    azurerm_user_assigned_identity.artifactory-umi
   ]
 }
 
