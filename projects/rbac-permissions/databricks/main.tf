@@ -578,3 +578,81 @@ resource "databricks_permissions" "global_warehousesyncamr_usage" {
     data.databricks_group.contract_logistics_amr_bu
   ]
 }
+
+## ----------------------------------------------------------
+## Artifactory 
+## Maven
+resource "databricks_grants" "artifactory_ext_loc_maven" {
+  provider  = databricks.devdbw
+  external_location = "cdm-artifactory-maven-ext-loc"
+  grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.super_users.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_amr_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  depends_on = [
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
+    data.databricks_group.super_users,
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.contract_logistics_eur_bu
+  ]
+}
+
+## Pypi
+resource "databricks_grants" "artifactory_ext_loc_pypi" {
+  provider  = databricks.devdbw
+  external_location = "cdm-artifactory-pypi-ext-loc"
+  grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.super_users.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_amr_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  depends_on = [
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
+    data.databricks_group.super_users,
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.contract_logistics_eur_bu
+  ]
+}

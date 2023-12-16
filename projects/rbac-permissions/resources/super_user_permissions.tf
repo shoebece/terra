@@ -64,6 +64,15 @@ resource "azurerm_role_assignment" "mngmnt-spn-to-prod" {
   depends_on = [data.azurerm_subscription.prod_cdpz_sub ]
 }
 
+resource "azurerm_role_assignment" "mngmnt-spn-to-mngmnt" {
+  provider             = azurerm.cdmz
+  scope                = data.azurerm_resource_group.artifactory-rg.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = var.management_spn.id
+
+  depends_on = [data.azurerm_resource_group.artifactory-rg ]
+}
+
 #Old subcription SPN permissions //to be deleted
 resource "azurerm_role_assignment" "old-spn-to-prod" {
   provider             = azurerm.prod

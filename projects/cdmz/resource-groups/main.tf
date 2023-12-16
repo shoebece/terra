@@ -109,3 +109,11 @@ resource "azurerm_resource_group" "pbi-gateway-rg" {
   location = var.resource_location
   tags     = var.resource_tags_common
 }
+
+
+#--------------------------------------Artifactory Resource Group ---------------------
+resource "azurerm_resource_group" "artifactory-rg" {
+  name     = "cdmz-artifactory-rg"
+  location = var.resource_location
+  tags     = var.resource_tags_common
+}
