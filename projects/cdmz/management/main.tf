@@ -6,6 +6,10 @@ data "azurerm_resource_group" "resgrp" {
   name     = "cdmz-management-rg"
 }
 
+data "azurerm_resource_group" "artifactoryresgrp" {
+  name     = "cdmz-artifactory-rg"
+}
+
 data "azurerm_virtual_network" "vnet" {
   name                = "cdmz-management-vnet"
   resource_group_name = local.networking_resource_group_name
@@ -58,6 +62,11 @@ data "azurerm_key_vault" "kv" {
   resource_group_name = data.azurerm_resource_group.resgrp.name
 }
 
+data "azurerm_key_vault" "artifactorykv" {
+  name                = var.sandbox_prefix == "" ? "cdmz-artifactory-kv" : "cdmz-${var.sandbox_prefix}-management-kv"
+  resource_group_name = data.azurerm_resource_group.artifactoryresgrp.name
+}
+
 data "azurerm_key_vault_key" "disks-cmk" {
   name         = "cdmz-management-disks-cmk"
   key_vault_id = data.azurerm_key_vault.kv.id
@@ -78,6 +87,18 @@ resource "azurerm_role_assignment" "meta-umi-to-kv" {
   scope                = data.azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Crypto Service Encryption User"
   principal_id         = azurerm_user_assigned_identity.meta-umi.principal_id
+}
+
+resource "azurerm_user_assigned_identity" "artifactory-umi" {
+  name                = "cdmz-artifactory-umi"
+  resource_group_name = data.azurerm_resource_group.artifactoryresgrp.name
+  location            = var.resource_location
+}
+
+resource "azurerm_role_assignment" "artifactory-umi-to-kv" {
+  scope                = data.azurerm_key_vault.artifactorykv.id
+  role_definition_name = "Key Vault Crypto Service Encryption User"
+  principal_id         = azurerm_user_assigned_identity.artifactory-umi.principal_id
 }
 
 resource "azurerm_storage_account" "managed_dls" {
@@ -135,7 +156,7 @@ resource "azurerm_storage_account_customer_managed_key" "stacc_cmk" {
 
 resource "azurerm_storage_account" "artifactory_dls" {
   name                      = join("", [var.sandbox_prefix, "cdmzartifactorydls"])
-  resource_group_name       = data.azurerm_resource_group.resgrp.name
+  resource_group_name       = data.azurerm_resource_group.artifactoryresgrp.name
   location                  = var.resource_location
   account_tier              = "Standard"
   account_replication_type  = "LRS"
@@ -147,7 +168,7 @@ resource "azurerm_storage_account" "artifactory_dls" {
   identity {
     type = "UserAssigned"
     identity_ids = [
-      azurerm_user_assigned_identity.acdb-umi.id
+      azurerm_user_assigned_identity.artifactorykv-umi.id
     ]
   }
 
@@ -164,7 +185,7 @@ resource "azurerm_storage_account" "artifactory_dls" {
   )
 
   depends_on = [
-    azurerm_user_assigned_identity.acdb-umi
+    azurerm_user_assigned_identity.artifactorykv-umi
   ]
 }
 
@@ -176,6 +197,19 @@ resource "azurerm_storage_container" "artifactory_cont" {
 
   depends_on = [ azurerm_storage_account.artifactory_dls ]
 }
+
+resource "azurerm_storage_account_customer_managed_key" "art_stacc_cmk" {
+  storage_account_id        = azurerm_storage_account.artifactory_dls.id
+  key_vault_id              = data.azurerm_key_vault.artifactorykv.id
+  key_name                  = data.azurerm_key_vault_key.artifactory-dbfs-cmk.name
+  user_assigned_identity_id = azurerm_user_assigned_identity.artifactory-umi.id
+
+  depends_on = [
+      azurerm_storage_account.artifactory_dls
+    , azurerm_user_assigned_identity.artifactory-umi
+    , azurerm_role_assignment.artifactory-umi-to-kv]
+}
+
 
 resource "azurerm_databricks_workspace" "dbws" {
   name                = "cdmz-management-dbw"
