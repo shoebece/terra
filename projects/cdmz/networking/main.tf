@@ -143,6 +143,48 @@ resource "azurerm_route_table" "art" {
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.EUR_Int_firewall_ip_address
     },
+    {
+      name                    = "Route_P81_Lirquin_FiveTran_3"
+      address_prefix          = "10.11.23.65/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_SanAntonio_Connector_1"
+      address_prefix          = "10.11.40.177/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_SanAntonio_FiveTran_1"
+      address_prefix          = "10.11.40.31/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_SanAntonio_FiveTran_2"
+      address_prefix          = "10.11.40.32/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_SanAntonio_FiveTran_3"
+      address_prefix          = "10.11.40.35/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_SanAntonio_FiveTran_4"
+      address_prefix          = "10.11.43.31/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_S2S_VPN_FiveTran_CCT"
+      address_prefix          = "10.91.30.64/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
   ]
 
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
