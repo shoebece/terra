@@ -185,6 +185,12 @@ resource "azurerm_route_table" "art" {
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
     },
+    {
+      name                    = "Route_P81_SanAntonio_FiveTran_5"
+      address_prefix          = "10.11.23.62/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
   ]
 
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
