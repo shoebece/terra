@@ -466,7 +466,7 @@ resource "databricks_grants" "dev_prod_catalogs" {
 
 # # ------------------------------- GLOBAL ---------------------------------##
 # # Adding user
-resource "databricks_permission_assignment" "add_data_engg" {
+resource "databricks_permission_assignment" "add_data_engg_global" {
   provider      = databricks.globaldbw
   principal_id  = data.databricks_group.data_engg.id
   permissions   = ["USER"]
@@ -475,7 +475,7 @@ resource "databricks_permission_assignment" "add_data_engg" {
 }
 
 # Support engg
-resource "databricks_permission_assignment" "add_support_engg" {
+resource "databricks_permission_assignment" "add_support_engg_global" {
   provider      = databricks.globaldbw
   principal_id  = data.databricks_group.support_engg.id
   permissions   = ["USER"]
@@ -484,7 +484,7 @@ resource "databricks_permission_assignment" "add_support_engg" {
 }
 
 # BI engg
-resource "databricks_permission_assignment" "add_ba_bi_eng" {
+resource "databricks_permission_assignment" "add_ba_bi_eng_global" {
   provider      = databricks.globaldbw
   principal_id  = data.databricks_group.ba_bi_eng.id
   permissions   = ["USER"]
@@ -493,7 +493,7 @@ resource "databricks_permission_assignment" "add_ba_bi_eng" {
 }
 
 # Super Users permissions
-resource "databricks_permission_assignment" "add_super_users" {
+resource "databricks_permission_assignment" "add_super_users_global" {
   provider      = databricks.globaldbw
   principal_id  = data.databricks_group.super_users.id
   permissions   = ["ADMIN"]
