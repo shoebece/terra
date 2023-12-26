@@ -191,6 +191,12 @@ resource "azurerm_route_table" "art" {
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.uae-cpperimeter81-prod
     },
+    {
+      name                    = "Route_Constanta_Fivetran"
+      address_prefix          = "192.168.24.44/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
   ]
 
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
