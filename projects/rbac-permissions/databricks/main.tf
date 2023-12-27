@@ -19,6 +19,18 @@ locals {
           loc_logistics_eur = stacc.loc_logistics_eur
           cat_logistics_amr = stacc.cat_logistics_amr
           cat_logistics_eur = stacc.cat_logistics_eur
+          loc_pa  = stacc.loc_pa
+          cat_pa  = stacc.cat_pa
+          loc_pa_confd  = stacc.loc_pa_confd
+          cat_pa_confd  = stacc.cat_pa_confd
+          loc_as  = stacc.loc_as
+          cat_as  = stacc.cat_as
+          loc_crmho  = stacc.loc_crmho
+          cat_crmho  = stacc.cat_crmho
+          loc_ila  = stacc.loc_ila
+          cat_ila  = stacc.cat_ila
+          loc_ili  = stacc.loc_ili
+          cat_ili  = stacc.cat_ili
         }
     ]
   ])
@@ -148,12 +160,48 @@ resource "databricks_grants" "dev_data_ext_loc" {
     privileges = each.value.loc_logistics_eur
   }
 
+  grant {
+    principal  = data.databricks_group.product_analytics_bu.display_name
+    privileges = each.value.loc_pa
+  }
+
+  grant {
+    principal  = data.databricks_group.product_analytics_confd_bu.display_name
+    privileges = each.value.loc_pa_confd
+  }
+
+  grant {
+    principal  = data.databricks_group.applied_science_bu.display_name
+    privileges = each.value.loc_as
+  }
+
+  grant {
+    principal  = data.databricks_group.crm_ho_bu.display_name
+    privileges = each.value.loc_crmho
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_africa_bu.display_name
+    privileges = each.value.loc_ila
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_intl_bu.display_name
+    privileges = each.value.loc_ili
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
     data.databricks_group.contract_logistics_amr_bu,
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.product_analytics_bu,
+    data.databricks_group.product_analytics_confd_bu,
+    data.databricks_group.applied_science_bu,
+    data.databricks_group.crm_ho_bu,
+    data.databricks_group.imperial_africa_bu,
+    data.databricks_group.imperial_intl_bu
   ]
 }
 
@@ -188,12 +236,49 @@ resource "databricks_grants" "uat_data_ext_loc" {
     privileges = each.value.loc_logistics_eur
   }
 
+  grant {
+    principal  = data.databricks_group.product_analytics_bu.display_name
+    privileges = each.value.loc_pa
+  }
+
+  grant {
+    principal  = data.databricks_group.product_analytics_confd_bu.display_name
+    privileges = each.value.loc_pa_confd
+  }
+
+  grant {
+    principal  = data.databricks_group.applied_science_bu.display_name
+    privileges = each.value.loc_as
+  }
+
+  grant {
+    principal  = data.databricks_group.crm_ho_bu.display_name
+    privileges = each.value.loc_crmho
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_africa_bu.display_name
+    privileges = each.value.loc_ila
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_intl_bu.display_name
+    privileges = each.value.loc_ili
+  }
+
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
     data.databricks_group.contract_logistics_amr_bu,
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.product_analytics_bu,
+    data.databricks_group.product_analytics_confd_bu,
+    data.databricks_group.applied_science_bu,
+    data.databricks_group.crm_ho_bu,
+    data.databricks_group.imperial_africa_bu,
+    data.databricks_group.imperial_intl_bu
   ]
 }
 
@@ -229,12 +314,48 @@ resource "databricks_grants" "prod_data_ext_loc" {
     privileges = each.value.loc_logistics_eur
   }
 
+  grant {
+    principal  = data.databricks_group.product_analytics_bu.display_name
+    privileges = each.value.loc_pa
+  }
+
+  grant {
+    principal  = data.databricks_group.product_analytics_confd_bu.display_name
+    privileges = each.value.loc_pa_confd
+  }
+
+  grant {
+    principal  = data.databricks_group.applied_science_bu.display_name
+    privileges = each.value.loc_as
+  }
+
+  grant {
+    principal  = data.databricks_group.crm_ho_bu.display_name
+    privileges = each.value.loc_crmho
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_africa_bu.display_name
+    privileges = each.value.loc_ila
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_intl_bu.display_name
+    privileges = each.value.loc_ili
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
     data.databricks_group.contract_logistics_amr_bu,
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.product_analytics_bu,
+    data.databricks_group.product_analytics_confd_bu,
+    data.databricks_group.applied_science_bu,
+    data.databricks_group.crm_ho_bu,
+    data.databricks_group.imperial_africa_bu,
+    data.databricks_group.imperial_intl_bu
   ]
 }
 
@@ -360,13 +481,49 @@ resource "databricks_grants" "dev_dev_catalogs" {
     privileges = each.value.cat_logistics_eur
   }
 
+  grant {
+    principal  = data.databricks_group.product_analytics_bu.display_name
+    privileges = each.value.cat_pa
+  }
+
+  grant {
+    principal  = data.databricks_group.product_analytics_confd_bu.display_name
+    privileges = each.value.cat_pa_confd
+  }
+
+  grant {
+    principal  = data.databricks_group.applied_science_bu.display_name
+    privileges = each.value.cat_as
+  }
+
+  grant {
+    principal  = data.databricks_group.crm_ho_bu.display_name
+    privileges = each.value.cat_crmho
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_africa_bu.display_name
+    privileges = each.value.cat_ila
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_intl_bu.display_name
+    privileges = each.value.cat_ili
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
     data.databricks_group.ba_bi_eng,
     data.databricks_group.contract_logistics_amr_bu,
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.product_analytics_bu,
+    data.databricks_group.product_analytics_confd_bu,
+    data.databricks_group.applied_science_bu,
+    data.databricks_group.crm_ho_bu,
+    data.databricks_group.imperial_africa_bu,
+    data.databricks_group.imperial_intl_bu
   ]
 }
 
@@ -406,13 +563,49 @@ resource "databricks_grants" "dev_uat_catalogs" {
     privileges = each.value.cat_logistics_eur
   }
 
+  grant {
+    principal  = data.databricks_group.product_analytics_bu.display_name
+    privileges = each.value.cat_pa
+  }
+
+  grant {
+    principal  = data.databricks_group.product_analytics_confd_bu.display_name
+    privileges = each.value.cat_pa_confd
+  }
+
+  grant {
+    principal  = data.databricks_group.applied_science_bu.display_name
+    privileges = each.value.cat_as
+  }
+
+  grant {
+    principal  = data.databricks_group.crm_ho_bu.display_name
+    privileges = each.value.cat_crmho
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_africa_bu.display_name
+    privileges = each.value.cat_ila
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_intl_bu.display_name
+    privileges = each.value.cat_ili
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
     data.databricks_group.ba_bi_eng,
     data.databricks_group.contract_logistics_amr_bu,
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.product_analytics_bu,
+    data.databricks_group.product_analytics_confd_bu,
+    data.databricks_group.applied_science_bu,
+    data.databricks_group.crm_ho_bu,
+    data.databricks_group.imperial_africa_bu,
+    data.databricks_group.imperial_intl_bu
   ]
 }
 
@@ -452,13 +645,49 @@ resource "databricks_grants" "dev_prod_catalogs" {
     privileges = each.value.cat_logistics_eur
   }
 
+  grant {
+    principal  = data.databricks_group.product_analytics_bu.display_name
+    privileges = each.value.cat_pa
+  }
+
+  grant {
+    principal  = data.databricks_group.product_analytics_confd_bu.display_name
+    privileges = each.value.cat_pa_confd
+  }
+
+  grant {
+    principal  = data.databricks_group.applied_science_bu.display_name
+    privileges = each.value.cat_as
+  }
+
+  grant {
+    principal  = data.databricks_group.crm_ho_bu.display_name
+    privileges = each.value.cat_crmho
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_africa_bu.display_name
+    privileges = each.value.cat_ila
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_intl_bu.display_name
+    privileges = each.value.cat_ili
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
     data.databricks_group.ba_bi_eng,
     data.databricks_group.contract_logistics_amr_bu,
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.product_analytics_bu,
+    data.databricks_group.product_analytics_confd_bu,
+    data.databricks_group.applied_science_bu,
+    data.databricks_group.crm_ho_bu,
+    data.databricks_group.imperial_africa_bu,
+    data.databricks_group.imperial_intl_bu
   ]
 }
 
@@ -527,8 +756,92 @@ resource "databricks_permission_assignment" "add_contract_logistics_eur_bu" {
   depends_on = [ data.databricks_group.contract_logistics_eur_bu ]
 }
 
+# product_analytics
+data "databricks_group" "product_analytics_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.product_analytics_bu.name
+}
+
+resource "databricks_permission_assignment" "add_product_analytics_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.product_analytics_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.product_analytics_bu ]
+}
+
+# product_analytics_confidential
+data "databricks_group" "product_analytics_confd_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.product_analytics_confd_bu.name
+}
+
+resource "databricks_permission_assignment" "add_product_analytics_confd_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.product_analytics_confd_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.product_analytics_confd_bu ]
+}
+
+# applied_science
+data "databricks_group" "applied_science_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.applied_science_bu.name
+}
+
+resource "databricks_permission_assignment" "add_applied_science_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.applied_science_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.applied_science_bu ]
+}
+
+# crm_ho
+data "databricks_group" "crm_ho_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.crm_ho_bu.name
+}
+
+resource "databricks_permission_assignment" "add_crm_ho_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.crm_ho_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.crm_ho_bu ]
+}
+
+# imperial_africa
+data "databricks_group" "imperial_africa_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.imperial_africa_bu.name
+}
+
+resource "databricks_permission_assignment" "add_imperial_africa_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.imperial_africa_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.imperial_africa_bu ]
+}
+
+# imperial_intl
+data "databricks_group" "imperial_intl_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.imperial_intl_bu.name
+}
+
+resource "databricks_permission_assignment" "add_imperial_intl_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.imperial_intl_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.imperial_intl_bu ]
+}
+
 ## ----------------------------------------------------------
-## Cluster
+## Cluster Sync EUR
 data "databricks_cluster" "global_synceur_cluster" {
   provider      = databricks.globaldbw
   cluster_name  = "cdp-synceur-team-cluster"
@@ -549,7 +862,7 @@ resource "databricks_permissions" "global_clustersynceur_usage" {
   ]
 }
 
-# SQL Waerhouse
+# SQL Waerhouse Sync EUR
 data "databricks_sql_warehouse" "global_synceur_warehouse" {
   provider      = databricks.globaldbw
   name          = "cdp-synceur-team-warehouse"
@@ -570,7 +883,7 @@ resource "databricks_permissions" "global_warehousesynceur_usage" {
   ]
 }
 
-# Cluster
+# Cluster Sync AMR
 data "databricks_cluster" "global_syncamr_cluster" {
   provider      = databricks.globaldbw
   cluster_name  = "cdp-syncamr-team-cluster"
@@ -591,7 +904,7 @@ resource "databricks_permissions" "global_clustersyncamr_usage" {
   ]
 }
 
-# SQL Warehouse
+# SQL Warehouse Sync AMR
 data "databricks_sql_warehouse" "global_syncamr_warehouse" {
   provider      = databricks.globaldbw
   name          = "cdp-syncamr-team-warehouse"
@@ -609,6 +922,228 @@ resource "databricks_permissions" "global_warehousesyncamr_usage" {
   depends_on = [ 
     data.databricks_sql_warehouse.global_syncamr_warehouse,
     data.databricks_group.contract_logistics_amr_bu
+  ]
+}
+
+## Cluster PA
+data "databricks_cluster" "global_pa_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-pa-team-cluster"
+}
+
+resource "databricks_permissions" "global_clusterpa_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_pa_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.product_analytics_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  access_control {
+    group_name       = data.databricks_group.product_analytics_confd_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_pa_cluster,
+    data.databricks_group.product_analytics_bu,
+    data.databricks_group.product_analytics_confd_bu
+  ]
+}
+
+# SQL Waerhouse PA
+data "databricks_sql_warehouse" "global_pa_warehouse" {
+  provider      = databricks.globaldbw
+  name          = "cdp-pa-team-warehouse"
+}
+
+resource "databricks_permissions" "global_warehousepa_usage" {
+  provider          = databricks.globaldbw
+  sql_endpoint_id   = data.databricks_sql_warehouse.global_pa_warehouse.id
+
+  access_control {
+    group_name       = data.databricks_group.product_analytics_bu.display_name
+    permission_level = "CAN_USE"
+  }
+
+  access_control {
+    group_name       = data.databricks_group.product_analytics_confd_bu.display_name
+    permission_level = "CAN_USE"
+  }
+
+  depends_on = [ 
+    data.databricks_sql_warehouse.global_pa_warehouse,
+    data.databricks_group.product_analytics_bu,
+    data.databricks_group.product_analytics_confd_bu
+  ]
+}
+
+# Cluster Applied Science
+data "databricks_cluster" "global_as_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-as-team-cluster"
+}
+
+resource "databricks_permissions" "global_clusteras_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_as_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.applied_science_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_as_cluster,
+    data.databricks_group.applied_science_bu
+  ]
+}
+
+# SQL Warehouse Applied Science
+data "databricks_sql_warehouse" "global_as_warehouse" {
+  provider      = databricks.globaldbw
+  name          = "cdp-as-team-warehouse"
+}
+
+resource "databricks_permissions" "global_warehouseas_usage" {
+  provider          = databricks.globaldbw
+  sql_endpoint_id   = data.databricks_sql_warehouse.global_as_warehouse.id
+
+  access_control {
+    group_name       = data.databricks_group.applied_science_bu.display_name
+    permission_level = "CAN_USE"
+  }
+
+  depends_on = [ 
+    data.databricks_sql_warehouse.global_as_warehouse,
+    data.databricks_group.applied_science_bu
+  ]
+}
+
+# Cluster CRM HO
+data "databricks_cluster" "global_crmho_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-crmho-team-cluster"
+}
+
+resource "databricks_permissions" "global_clustercrmho_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_crmho_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.crm_ho_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_crmho_cluster,
+    data.databricks_group.crm_ho_bu
+  ]
+}
+
+# SQL Warehouse CRM HO
+data "databricks_sql_warehouse" "global_crmho_warehouse" {
+  provider      = databricks.globaldbw
+  name          = "cdp-crmho-team-warehouse"
+}
+
+resource "databricks_permissions" "global_warehousecrmho_usage" {
+  provider          = databricks.globaldbw
+  sql_endpoint_id   = data.databricks_sql_warehouse.global_crmho_warehouse.id
+
+  access_control {
+    group_name       = data.databricks_group.crm_ho_bu.display_name
+    permission_level = "CAN_USE"
+  }
+
+  depends_on = [ 
+    data.databricks_sql_warehouse.global_crmho_warehouse,
+    data.databricks_group.crm_ho_bu
+  ]
+}
+
+# Cluster ILA
+data "databricks_cluster" "global_ila_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-ila-team-cluster"
+}
+
+resource "databricks_permissions" "global_clusterila_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_ila_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.imperial_africa_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_ila_cluster,
+    data.databricks_group.imperial_africa_bu
+  ]
+}
+
+# SQL Warehouse ILA
+data "databricks_sql_warehouse" "global_ila_warehouse" {
+  provider      = databricks.globaldbw
+  name          = "cdp-ila-team-warehouse"
+}
+
+resource "databricks_permissions" "global_warehouseila_usage" {
+  provider          = databricks.globaldbw
+  sql_endpoint_id   = data.databricks_sql_warehouse.global_ila_warehouse.id
+
+  access_control {
+    group_name       = data.databricks_group.imperial_africa_bu.display_name
+    permission_level = "CAN_USE"
+  }
+
+  depends_on = [ 
+    data.databricks_sql_warehouse.global_ila_warehouse,
+    data.databricks_group.imperial_africa_bu
+  ]
+}
+
+# Cluster ILI
+data "databricks_cluster" "global_ili_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-ili-team-cluster"
+}
+
+resource "databricks_permissions" "global_clusterili_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_ili_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.imperial_intl_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_ili_cluster,
+    data.databricks_group.imperial_intl_bu
+  ]
+}
+
+# SQL Warehouse ILI
+data "databricks_sql_warehouse" "global_ili_warehouse" {
+  provider      = databricks.globaldbw
+  name          = "cdp-ili-team-warehouse"
+}
+
+resource "databricks_permissions" "global_warehouseili_usage" {
+  provider          = databricks.globaldbw
+  sql_endpoint_id   = data.databricks_sql_warehouse.global_ili_warehouse.id
+
+  access_control {
+    group_name       = data.databricks_group.imperial_intl_bu.display_name
+    permission_level = "CAN_USE"
+  }
+
+  depends_on = [ 
+    data.databricks_sql_warehouse.global_ili_warehouse,
+    data.databricks_group.imperial_intl_bu
   ]
 }
 
@@ -643,12 +1178,48 @@ resource "databricks_grants" "artifactory_ext_loc_maven" {
     privileges = ["READ_FILES"]
   }
 
+  grant {
+    principal  = data.databricks_group.product_analytics_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.product_analytics_confd_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.applied_science_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.crm_ho_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_africa_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_intl_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
     data.databricks_group.contract_logistics_amr_bu,
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.product_analytics_bu,
+    data.databricks_group.product_analytics_confd_bu,
+    data.databricks_group.applied_science_bu,
+    data.databricks_group.crm_ho_bu,
+    data.databricks_group.imperial_africa_bu,
+    data.databricks_group.imperial_intl_bu
   ]
 }
 
@@ -681,11 +1252,47 @@ resource "databricks_grants" "artifactory_ext_loc_pypi" {
     privileges = ["READ_FILES"]
   }
 
+  grant {
+    principal  = data.databricks_group.product_analytics_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.product_analytics_confd_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.applied_science_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.crm_ho_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_africa_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_intl_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
     data.databricks_group.super_users,
     data.databricks_group.contract_logistics_amr_bu,
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.product_analytics_bu,
+    data.databricks_group.product_analytics_confd_bu,
+    data.databricks_group.applied_science_bu,
+    data.databricks_group.crm_ho_bu,
+    data.databricks_group.imperial_africa_bu,
+    data.databricks_group.imperial_intl_bu
   ]
 }
