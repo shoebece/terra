@@ -584,7 +584,7 @@ resource "databricks_permission_assignment" "add_crm_ho_bu" {
 }
 
 # imperial_africa
-data "databricks_group" "imperial_africa" {
+data "databricks_group" "imperial_africa_bu" {
   provider      = databricks.globaldbw
   display_name  = var.imperial_africa_bu.name
 }
@@ -612,7 +612,7 @@ resource "databricks_permission_assignment" "add_imperial_intl_bu" {
 }
 
 ## ----------------------------------------------------------
-## Cluster
+## Cluster Sync EUR
 data "databricks_cluster" "global_synceur_cluster" {
   provider      = databricks.globaldbw
   cluster_name  = "cdp-synceur-team-cluster"
@@ -633,7 +633,7 @@ resource "databricks_permissions" "global_clustersynceur_usage" {
   ]
 }
 
-# SQL Waerhouse
+# SQL Waerhouse Sync EUR
 data "databricks_sql_warehouse" "global_synceur_warehouse" {
   provider      = databricks.globaldbw
   name          = "cdp-synceur-team-warehouse"
@@ -654,7 +654,7 @@ resource "databricks_permissions" "global_warehousesynceur_usage" {
   ]
 }
 
-# Cluster
+# Cluster Sync AMR
 data "databricks_cluster" "global_syncamr_cluster" {
   provider      = databricks.globaldbw
   cluster_name  = "cdp-syncamr-team-cluster"
@@ -675,7 +675,7 @@ resource "databricks_permissions" "global_clustersyncamr_usage" {
   ]
 }
 
-# SQL Warehouse
+# SQL Warehouse Sync AMR
 data "databricks_sql_warehouse" "global_syncamr_warehouse" {
   provider      = databricks.globaldbw
   name          = "cdp-syncamr-team-warehouse"
@@ -696,7 +696,7 @@ resource "databricks_permissions" "global_warehousesyncamr_usage" {
   ]
 }
 
-## Cluster
+## Cluster PA
 data "databricks_cluster" "global_pa_cluster" {
   provider      = databricks.globaldbw
   cluster_name  = "cdp-pa-team-cluster"
@@ -723,7 +723,7 @@ resource "databricks_permissions" "global_clusterpa_usage" {
   ]
 }
 
-# SQL Waerhouse
+# SQL Waerhouse PA
 data "databricks_sql_warehouse" "global_pa_warehouse" {
   provider      = databricks.globaldbw
   name          = "cdp-pa-team-warehouse"
@@ -750,7 +750,7 @@ resource "databricks_permissions" "global_warehousepa_usage" {
   ]
 }
 
-# Cluster
+# Cluster Applied Science
 data "databricks_cluster" "global_as_cluster" {
   provider      = databricks.globaldbw
   cluster_name  = "cdp-as-team-cluster"
@@ -771,7 +771,7 @@ resource "databricks_permissions" "global_clusteras_usage" {
   ]
 }
 
-# SQL Warehouse
+# SQL Warehouse Applied Science
 data "databricks_sql_warehouse" "global_as_warehouse" {
   provider      = databricks.globaldbw
   name          = "cdp-as-team-warehouse"
@@ -792,7 +792,7 @@ resource "databricks_permissions" "global_warehouseas_usage" {
   ]
 }
 
-# Cluster
+# Cluster CRM HO
 data "databricks_cluster" "global_crmho_cluster" {
   provider      = databricks.globaldbw
   cluster_name  = "cdp-crmho-team-cluster"
@@ -813,7 +813,7 @@ resource "databricks_permissions" "global_clustercrmho_usage" {
   ]
 }
 
-# SQL Warehouse
+# SQL Warehouse CRM HO
 data "databricks_sql_warehouse" "global_crmho_warehouse" {
   provider      = databricks.globaldbw
   name          = "cdp-crmho-team-warehouse"
@@ -834,7 +834,7 @@ resource "databricks_permissions" "global_warehousecrmho_usage" {
   ]
 }
 
-# Cluster
+# Cluster ILA
 data "databricks_cluster" "global_ila_cluster" {
   provider      = databricks.globaldbw
   cluster_name  = "cdp-ila-team-cluster"
@@ -855,7 +855,7 @@ resource "databricks_permissions" "global_clusterila_usage" {
   ]
 }
 
-# SQL Warehouse
+# SQL Warehouse ILA
 data "databricks_sql_warehouse" "global_ila_warehouse" {
   provider      = databricks.globaldbw
   name          = "cdp-ila-team-warehouse"
@@ -876,7 +876,7 @@ resource "databricks_permissions" "global_warehouseila_usage" {
   ]
 }
 
-# Cluster
+# Cluster ILI
 data "databricks_cluster" "global_ili_cluster" {
   provider      = databricks.globaldbw
   cluster_name  = "cdp-ili-team-cluster"
@@ -897,7 +897,7 @@ resource "databricks_permissions" "global_clusterili_usage" {
   ]
 }
 
-# SQL Warehouse
+# SQL Warehouse ILI
 data "databricks_sql_warehouse" "global_ili_warehouse" {
   provider      = databricks.globaldbw
   name          = "cdp-ili-team-warehouse"
