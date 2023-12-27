@@ -845,13 +845,13 @@ resource "databricks_permissions" "global_clusterila_usage" {
   cluster_id        = data.databricks_cluster.global_ila_cluster.id
 
   access_control {
-    group_name       = data.databricks_group.imperial_africa.display_name
+    group_name       = data.databricks_group.imperial_africa_bu.display_name
     permission_level = "CAN_RESTART"
   }
 
   depends_on = [ 
     data.databricks_cluster.global_ila_cluster,
-    data.databricks_group.imperial_africa
+    data.databricks_group.imperial_africa_bu
   ]
 }
 
@@ -866,13 +866,13 @@ resource "databricks_permissions" "global_warehouseila_usage" {
   sql_endpoint_id   = data.databricks_sql_warehouse.global_ila_warehouse.id
 
   access_control {
-    group_name       = data.databricks_group.imperial_africa.display_name
+    group_name       = data.databricks_group.imperial_africa_bu.display_name
     permission_level = "CAN_USE"
   }
 
   depends_on = [ 
     data.databricks_sql_warehouse.global_ila_warehouse,
-    data.databricks_group.imperial_africa
+    data.databricks_group.imperial_africa_bu
   ]
 }
 
