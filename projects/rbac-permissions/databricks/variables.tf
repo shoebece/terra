@@ -34,6 +34,36 @@ variable "contract_logistics_eur_bu" { type = object({
   id = string
 })}
 
+variable "product_analytics_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "product_analytics_confd_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "applied_science_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "crm_ho_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "imperial_africa_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "imperial_intl_bu" { type = object({
+  name = string
+  id = string
+})}
+
 variable "landing_ext_loc" {
     type = list(object({
         name    = string
