@@ -77,9 +77,21 @@ variable "catalog_config" {
         type    = string
         stconts = list(string)
         loc_logistics_amr = list(string)
-        loc_logistics_eur = list(string)
         cat_logistics_amr = list(string)
+        loc_logistics_eur = list(string)
         cat_logistics_eur = list(string)
+        loc_pa  = list(string)
+        cat_pa  = list(string)
+        loc_pa_confd  = list(string)
+        cat_pa_confd  = list(string)
+        loc_as  = list(string)
+        cat_as  = list(string)
+        loc_crmho  = list(string)
+        cat_crmho  = list(string)
+        loc_ila  = list(string)
+        cat_ila  = list(string)
+        loc_ili  = list(string)
+        cat_ili  = list(string)
     }))
 }
 
