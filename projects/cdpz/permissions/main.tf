@@ -21,6 +21,11 @@ data "azurerm_resource_group" "processing-rg" {
   name      = join("-", ["cdpz", var.environment, "data-processing-rg"])
 }
 
+# Global
+data "azurerm_resource_group" "global-rg" {
+  name = "cdpz-global-processing-rg"
+}
+
 #------------------------------------------------------------------------------------------------
 # Service principals
 
@@ -138,6 +143,12 @@ resource "azurerm_role_assignment" "man-db-to-landing" {
 
 resource "azurerm_role_assignment" "databricks-sp-to-proc-kv" {
   scope                = data.azurerm_resource_group.processing-rg.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = "b2da8212-90d4-45e0-a84e-aae2f5ca9964"
+}
+
+resource "azurerm_role_assignment" "databricks-sp-to-global-kv" {
+  scope                = data.azurerm_resource_group.global-rg.id
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = "b2da8212-90d4-45e0-a84e-aae2f5ca9964"
 }
