@@ -1296,3 +1296,77 @@ resource "databricks_grants" "artifactory_ext_loc_pypi" {
     data.databricks_group.imperial_intl_bu
   ]
 }
+
+## Scripts
+resource "databricks_grants" "artifactory_ext_loc_scripts" {
+  provider  = databricks.devdbw
+  external_location = "cdm-artifactory-scripts-ext-loc"
+  grant {
+    principal  = data.databricks_group.data_engg.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.support_engg.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.super_users.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_amr_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.contract_logistics_eur_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.product_analytics_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.product_analytics_confd_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.applied_science_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.crm_ho_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_africa_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.imperial_intl_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  depends_on = [
+    data.databricks_group.data_engg,
+    data.databricks_group.support_engg,
+    data.databricks_group.super_users,
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_group.product_analytics_bu,
+    data.databricks_group.product_analytics_confd_bu,
+    data.databricks_group.applied_science_bu,
+    data.databricks_group.crm_ho_bu,
+    data.databricks_group.imperial_africa_bu,
+    data.databricks_group.imperial_intl_bu
+  ]
+}
