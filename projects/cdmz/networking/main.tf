@@ -211,7 +211,7 @@ resource "azurerm_route_table" "art" {
     },
     {
       name                    = "Route_Constanta_Fivetran"
-      address_prefix          = "172.19.240.164/32"
+      address_prefix          = "172.19.240.120/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
     },
