@@ -98,7 +98,7 @@ resource "azurerm_key_vault" "mgmt-fivetran-kv" {
     virtual_network_subnet_ids = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"]
   }
 
-  depends_on = [azurerm_resource_group.mgmt-fivetran-rg.name]
+  depends_on = [azurerm_resource_group.mgmt-fivetran-rg]
 }
 
 resource "azurerm_resource_group" "governance-rg" {
