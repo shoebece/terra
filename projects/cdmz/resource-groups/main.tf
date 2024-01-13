@@ -80,7 +80,7 @@ resource "azurerm_key_vault_key" "management-dbfs-cmk" {
   depends_on = [azurerm_key_vault.management-kv]
 }
 
-resource "azurerm_key_vault" "management-kv" {
+resource "azurerm_key_vault" "mgmt-fivetran-kv" {
   name                       = "cdmz-mgmt-fivetran-kv"
   resource_group_name        = azurerm_resource_group.mgmt-fivetran-rg.name
   location                   = var.resource_location
@@ -98,7 +98,7 @@ resource "azurerm_key_vault" "management-kv" {
     virtual_network_subnet_ids = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"]
   }
 
-  depends_on = [azurerm_resource_group.management-rg]
+  depends_on = [azurerm_resource_group.mgmt-fivetran-rg.name]
 }
 
 resource "azurerm_resource_group" "governance-rg" {
