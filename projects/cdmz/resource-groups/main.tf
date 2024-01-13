@@ -25,6 +25,7 @@ resource "azurerm_key_vault" "management-kv" {
     default_action  = "Deny"
     bypass          = "AzureServices"
     virtual_network_subnet_ids = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"]
+    ip_rules = "34.85.252.27/32"
   }
 
   depends_on = [azurerm_resource_group.management-rg]
