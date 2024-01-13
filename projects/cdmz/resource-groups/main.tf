@@ -9,6 +9,12 @@ resource "azurerm_resource_group" "management-rg" {
   tags     = var.resource_tags_common
 }
 
+resource "azurerm_resource_group" "mgmt-fivetran-rg" {
+  name     = "cdmz-mgmt-fivetran-rg"
+  location = var.resource_location
+  tags     = var.resource_tags_common
+}
+
 resource "azurerm_key_vault" "management-kv" {
   name                       = "cdmz-management-kv"
   resource_group_name        = azurerm_resource_group.management-rg.name
@@ -25,9 +31,6 @@ resource "azurerm_key_vault" "management-kv" {
     default_action  = "Deny"
     bypass          = "AzureServices"
     virtual_network_subnet_ids = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"]
-    ip_rules = [
-    "34.85.252.27/32",
-  ]
   }
 
   depends_on = [azurerm_resource_group.management-rg]
@@ -75,6 +78,27 @@ resource "azurerm_key_vault_key" "management-dbfs-cmk" {
   }
 
   depends_on = [azurerm_key_vault.management-kv]
+}
+
+resource "azurerm_key_vault" "management-kv" {
+  name                       = "cdmz-mgmt-fivetran-kv"
+  resource_group_name        = azurerm_resource_group.mgmt-fivetran-rg.name
+  location                   = var.resource_location
+  tenant_id                  = var.tenant_id
+  sku_name                   = "standard"
+  soft_delete_retention_days = 60
+  purge_protection_enabled   = true
+  enable_rbac_authorization  = true
+  tags                       = var.resource_tags_common
+  public_network_access_enabled = "true"
+
+  network_acls {
+    default_action  = "Deny"
+    bypass          = "AzureServices"
+    virtual_network_subnet_ids = ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"]
+  }
+
+  depends_on = [azurerm_resource_group.management-rg]
 }
 
 resource "azurerm_resource_group" "governance-rg" {
