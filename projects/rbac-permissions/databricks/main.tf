@@ -884,25 +884,25 @@ resource "databricks_permissions" "global_pbiclustersynceur_usage" {
 }
 
 # SQL Waerhouse Sync EUR
-# data "databricks_sql_warehouse" "global_synceur_warehouse" {
-#   provider      = databricks.globaldbw
-#   name          = "cdp-synceur-team-warehouse"
-# }
+data "databricks_sql_warehouse" "global_synceur_warehouse" {
+  provider      = databricks.globaldbw
+  name          = "cdp-synceur-team-warehouse"
+}
 
-# resource "databricks_permissions" "global_warehousesynceur_usage" {
-#   provider          = databricks.globaldbw
-#   sql_endpoint_id   = data.databricks_sql_warehouse.global_synceur_warehouse.id
+resource "databricks_permissions" "global_warehousesynceur_usage" {
+  provider          = databricks.globaldbw
+  sql_endpoint_id   = data.databricks_sql_warehouse.global_synceur_warehouse.id
 
-#   access_control {
-#     group_name       = data.databricks_group.contract_logistics_eur_bu.display_name
-#     permission_level = "CAN_USE"
-#   }
+  access_control {
+    group_name       = data.databricks_group.contract_logistics_eur_bu.display_name
+    permission_level = "CAN_USE"
+  }
 
-#   depends_on = [ 
-#     data.databricks_sql_warehouse.global_synceur_warehouse,
-#     data.databricks_group.contract_logistics_eur_bu
-#   ]
-# }
+  depends_on = [ 
+    data.databricks_sql_warehouse.global_synceur_warehouse,
+    data.databricks_group.contract_logistics_eur_bu
+  ]
+}
 
 # Cluster Sync AMR
 data "databricks_cluster" "global_syncamr_cluster" {
@@ -946,25 +946,25 @@ resource "databricks_permissions" "global_pbiclustersyncamr_usage" {
 }
 
 # SQL Warehouse Sync AMR
-# data "databricks_sql_warehouse" "global_syncamr_warehouse" {
-#   provider      = databricks.globaldbw
-#   name          = "cdp-syncamr-team-warehouse"
-# }
+data "databricks_sql_warehouse" "global_syncamr_warehouse" {
+  provider      = databricks.globaldbw
+  name          = "cdp-syncamr-team-warehouse"
+}
 
-# resource "databricks_permissions" "global_warehousesyncamr_usage" {
-#   provider          = databricks.globaldbw
-#   sql_endpoint_id   = data.databricks_sql_warehouse.global_syncamr_warehouse.id
+resource "databricks_permissions" "global_warehousesyncamr_usage" {
+  provider          = databricks.globaldbw
+  sql_endpoint_id   = data.databricks_sql_warehouse.global_syncamr_warehouse.id
 
-#   access_control {
-#     group_name       = data.databricks_group.contract_logistics_amr_bu.display_name
-#     permission_level = "CAN_USE"
-#   }
+  access_control {
+    group_name       = data.databricks_group.contract_logistics_amr_bu.display_name
+    permission_level = "CAN_USE"
+  }
 
-#   depends_on = [ 
-#     data.databricks_sql_warehouse.global_syncamr_warehouse,
-#     data.databricks_group.contract_logistics_amr_bu
-#   ]
-# }
+  depends_on = [ 
+    data.databricks_sql_warehouse.global_syncamr_warehouse,
+    data.databricks_group.contract_logistics_amr_bu
+  ]
+}
 
 ## Cluster PA
 data "databricks_cluster" "global_pa_cluster" {
