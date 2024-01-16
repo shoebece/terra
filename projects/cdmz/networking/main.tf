@@ -2,6 +2,10 @@ data "azurerm_resource_group" "resgrp" {
   name      = "cdmz-networking-rg"
 }
 
+data "azurerm_resource_group" "resgrpfv" {
+  name      = "cdmz-mgmt-fivetran-rg"
+}
+
 resource "azurerm_network_watcher" "netw" {
   count = var.deploy_network_watcher ? 1 : 0
   
@@ -251,6 +255,11 @@ data "azurerm_key_vault" "kv" {
   resource_group_name = "cdmz-management-rg"
 }
 
+data "azurerm_key_vault" "kvfv" {
+  name                = "cdmz-mgmt-fivetran-kv"
+  resource_group_name = "cdmz-mgmt-fivetran-rg"
+}
+
 data "azurerm_private_dns_zone" "pdnsz" {
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = data.azurerm_resource_group.resgrp.name
@@ -283,6 +292,50 @@ resource "azurerm_private_endpoint" "kv_endpoint" {
   ip_configuration {
     name               = "cdmz-management-kv-ipc"
     private_ip_address = var.kv_ip_address
+    subresource_name   = "vault"
+    member_name        = "default"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    data.azurerm_private_dns_zone.pdnsz
+  ]
+}
+
+resource "azurerm_private_endpoint" "kv_endpoint_fv" {
+  name                = "cdmz-mgmt-fivetran-kv-pep"
+  resource_group_name = data.azurerm_resource_group.resgrpfv.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-kv-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns"
+    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz.id ]
+  }
+
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-kv-psc"
+    private_connection_resource_id = data.azurerm_key_vault.kvfv.id
+    subresource_names              = ["vault"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-kv-ipc"
+    private_ip_address = var.kv_fv_ip_address
     subresource_name   = "vault"
     member_name        = "default"
   }
