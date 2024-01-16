@@ -224,6 +224,12 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "10.2.2.105/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_P81_Caucedo_DR_FiveTran"
+      address_prefix          = "192.168.6.44/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
     }
   ]
 
