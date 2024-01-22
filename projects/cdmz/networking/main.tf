@@ -420,7 +420,7 @@ resource "azurerm_private_endpoint" "AzureSQL_endpoint_pep" {
     name               = "cdmz-mgmt-fivetran-ecommSQL-ipc"
     private_ip_address = var.ecommSQL_fv_ip_address
     subresource_name   = "sqlServer"
-    member_name        = "default"
+    member_name        = "sqlServer"
   }
 
   tags = merge(
