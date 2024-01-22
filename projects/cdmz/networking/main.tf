@@ -411,7 +411,7 @@ resource "azurerm_private_endpoint" "AzureSQL_endpoint_pep" {
 
   private_service_connection {
     name                           = "cdmz-mgmt-fivetran-pdnsz_sql-psc"
-    private_connection_resource_id = data.azurerm_private_dns_zone.pdnsz_sql.id
+    private_connection_resource_id = data.azurerm_mssql_server.AzureSQL_Ecomm.id
     subresource_names              = ["sqlServer"]
     is_manual_connection           = false
   }
