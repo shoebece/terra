@@ -284,20 +284,8 @@ data "azurerm_key_vault" "kvfv" {
   resource_group_name = "cdmz-mgmt-fivetran-rg"
 }
 
-data "azurerm_mssql_server" "AzureSQL_Ecomm" {
-  name                = "sqlprdecomm"
-  resource_group_name = "rg-ecommerce-prod"
-}
-
 data "azurerm_private_dns_zone" "pdnsz" {
   name                = "privatelink.vaultcore.azure.net"
-  resource_group_name = data.azurerm_resource_group.resgrp.name
-
-  depends_on = [ azurerm_private_dns_zone.dnss ]
-}
-
-data "azurerm_private_dns_zone" "pdnsz_sql" {
-  name                = "privatelink.database.windows.net"
   resource_group_name = data.azurerm_resource_group.resgrp.name
 
   depends_on = [ azurerm_private_dns_zone.dnss ]
@@ -375,51 +363,6 @@ resource "azurerm_private_endpoint" "kv_endpoint_fv" {
     name               = "cdmz-mgmt-fivetran-kv-ipc"
     private_ip_address = var.kv_fv_ip_address
     subresource_name   = "vault"
-    member_name        = "default"
-  }
-
-  tags = merge(
-    var.resource_tags_spec
-  )
-
-  lifecycle {
-    ignore_changes = [
-      subnet_id
-    ]
-  }
-
-  depends_on = [
-    data.azurerm_subnet.snet-default,
-    data.azurerm_private_dns_zone.pdnsz
-  ]
-}
-
-# Private end point management for Azure SQL Ecomm
-resource "azurerm_private_endpoint" "AzureSQL_endpoint_pep" {
-  name                = "cdmz-mgmt-fivetran-ecommSQL-pep"
-  resource_group_name = data.azurerm_resource_group.resgrp.name
-  location            = var.resource_location
-
-  subnet_id = data.azurerm_subnet.snet-default.id
-
-  custom_network_interface_name = "cdmz-mgmt-fivetran-ecommSQL-nic"
-
-  private_dns_zone_group {
-    name = "add_to_azure_private_dns_sql"
-    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_sql.id ]
-  }
-
-  private_service_connection {
-    name                           = "cdmz-mgmt-fivetran-pdnsz_sql-psc"
-    private_connection_resource_id = data.azurerm_private_dns_zone.pdnsz_sql.id
-    subresource_names              = ["sqlServer"]
-    is_manual_connection           = false
-  }
-
-  ip_configuration {
-    name               = "cdmz-mgmt-fivetran-ecommSQL-ipc"
-    private_ip_address = var.ecommSQL_fv_ip_address
-    subresource_name   = "sqlServer"
     member_name        = "default"
   }
 
