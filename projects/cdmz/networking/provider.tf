@@ -36,3 +36,19 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias           = "Ecommerce"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "039efcb8-56e2-459b-ad3c-68c086e8feb9"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}
