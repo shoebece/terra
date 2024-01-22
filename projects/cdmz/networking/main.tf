@@ -287,6 +287,7 @@ data "azurerm_key_vault" "kvfv" {
 data "azurerm_mssql_server" "AzureSQL_Ecomm" {
   name                = "sqlprdecomm"
   resource_group_name = "rg-ecommerce-prod"
+  provider            = azurerm.Ecommerce
 }
 
 data "azurerm_private_dns_zone" "pdnsz" {
@@ -299,7 +300,6 @@ data "azurerm_private_dns_zone" "pdnsz" {
 data "azurerm_private_dns_zone" "pdnsz_sql" {
   name                = "privatelink.database.windows.net"
   resource_group_name = data.azurerm_resource_group.resgrp.name
-  provider            = azurerm.Ecommerce
   depends_on = [ azurerm_private_dns_zone.dnss ]
 }
 
