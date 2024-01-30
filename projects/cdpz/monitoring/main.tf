@@ -11,6 +11,7 @@ locals {
 
   data_storage_rg      = join("-", ["cdpz", var.environment, "data-storage-rg"])
   kv_data_storage_name = join("-", ["cdpz", var.environment, "data-kv"])
+  silver_stacc_name    = join("", ["cdpz", var.environment, "silver01dls"])
 
   data_processing_rg       = join("-", ["cdpz", var.environment, "data-processing-rg"])
   kv_data_processing_name  = join("-", ["cdpz", var.environment, "proc-kv"])
@@ -45,6 +46,11 @@ data "azurerm_key_vault" "landing-kv" {
 
 data "azurerm_key_vault" "data-kv" {
   name                = local.kv_data_storage_name
+  resource_group_name = local.data_storage_rg
+}
+
+data "azurerm_storage_account" "silver-stacc" {
+  name                = local.silver_stacc_name
   resource_group_name = local.data_storage_rg
 }
 
@@ -554,6 +560,31 @@ resource "azurerm_monitor_diagnostic_setting" "synapse-ws-diag-set" {
     category = "BuiltinSqlReqsEnded"
     retention_policy {
       enabled = true
+    }
+  }
+}
+
+resource "azurerm_monitor_diagnostic_setting" "silver-stacc-log" {
+  count                           = (var.environment == "prod" ? 1 : 0)
+  name                            = join("-", [local.silver_stacc_name, "diag-set"])
+  target_resource_id              = "${data.azurerm_storage_account.silver-stacc.id}/blobServices/default/"
+  log_analytics_workspace_id      = azurerm_log_analytics_workspace.monitoring-log.id
+  log_analytics_destination_type  = "Dedicated"
+
+  log {
+    category = "StorageRead"
+    enabled  = true
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
+  metric {
+    category = "Transaction"
+    enabled  = false
+    retention_policy {
+      days    = 0
+      enabled = false
     }
   }
 }
