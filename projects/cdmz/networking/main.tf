@@ -75,12 +75,6 @@ resource "azurerm_route_table" "art" {
 
   route = [
     {
-      name                    = "firewall"
-      address_prefix          = "0.0.0.0/0"
-      next_hop_type           = "VirtualAppliance"
-      next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
       name                    = "powerbi"
       address_prefix          = "PowerBI"
       next_hop_type           = "VirtualAppliance"
