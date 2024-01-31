@@ -160,12 +160,6 @@ resource "azurerm_route_table" "art" {
       next_hop_in_ip_address  = var.uae-cpperimeter81-prod
     },
     {
-      name                    = "Route_P81_SanAntonio_FiveTran_2"
-      address_prefix          = "10.11.40.32/32"
-      next_hop_type           = "VirtualAppliance"
-      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
-    },
-    {
       name                    = "Route_P81_SanAntonio_FiveTran_3"
       address_prefix          = "10.11.40.35/32"
       next_hop_type           = "VirtualAppliance"
@@ -182,12 +176,6 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "10.91.30.64/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
-      name                    = "Route_P81_SanAntonio_FiveTran_5"
-      address_prefix          = "10.11.23.62/32"
-      next_hop_type           = "VirtualAppliance"
-      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
     },
     {
       name                    = "Route_Constanta_Fivetran"
@@ -224,12 +212,54 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "192.168.6.44/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },  
+    {
+      name                    = "Route_ANZ_Fivetran"
+      address_prefix          = "10.0.6.10/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
     },
     {
-      name                    = "Route_P81_Syncreon_FiveTran_1"
-      address_prefix          = "10.1.100.56/32"
+      name                    = "Route_rotterdam_Fivetran"
+      address_prefix          = "10.168.100.22/32"
       next_hop_type           = "VirtualAppliance"
-      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_cdpz-dev-processing-vnet"
+      address_prefix          = "10.220.200.0/23"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.firewall_ip_address
+    },
+    {
+      name                    = "Route_cdpz-uat-processing-vnet"
+      address_prefix          = "10.220.208.0/23"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.firewall_ip_address
+    },
+    {
+      name                    = "Route_cdpz-prod-processing-vnet"
+      address_prefix          = "10.220.216.0/23"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.firewall_ip_address
+    },
+    {
+      name                    = "Route_cdpz-prod-access-vnet"
+      address_prefix          = "10.220.226.0/23"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.firewall_ip_address
+    },
+    {
+      name                    = "Route_cdpz-global-processing-vnet"
+      address_prefix          = "10.220.228.0/23"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.firewall_ip_address
+    },
+    {
+      name                    = "Route_Antwerp_Fivetran"
+      address_prefix          = "185.47.68.34/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.firewall_ip_address
     }
   ]
 
