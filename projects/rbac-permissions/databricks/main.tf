@@ -742,6 +742,15 @@ resource "databricks_permission_assignment" "add_contract_logistics_amr_bu" {
   depends_on = [ data.databricks_group.contract_logistics_amr_bu ]
 }
 
+resource "databricks_entitlements" "entitle_contract_logistics_amr" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.contract_logistics_amr_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.contract_logistics_amr_bu ]
+}
+
 # contract_logistics_eur
 data "databricks_group" "contract_logistics_eur_bu" {
   provider      = databricks.globaldbw
@@ -752,6 +761,15 @@ resource "databricks_permission_assignment" "add_contract_logistics_eur_bu" {
   provider      = databricks.globaldbw
   principal_id  = data.databricks_group.contract_logistics_eur_bu.id
   permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.contract_logistics_eur_bu ]
+}
+
+resource "databricks_entitlements" "entitle_contract_logistics_eur" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.contract_logistics_eur_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
 
   depends_on = [ data.databricks_group.contract_logistics_eur_bu ]
 }
@@ -770,6 +788,15 @@ resource "databricks_permission_assignment" "add_product_analytics_bu" {
   depends_on = [ data.databricks_group.product_analytics_bu ]
 }
 
+resource "databricks_entitlements" "entitle_product_analytics" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.product_analytics_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.product_analytics_bu ]
+}
+
 # product_analytics_confidential
 data "databricks_group" "product_analytics_confd_bu" {
   provider      = databricks.globaldbw
@@ -780,6 +807,15 @@ resource "databricks_permission_assignment" "add_product_analytics_confd_bu" {
   provider      = databricks.globaldbw
   principal_id  = data.databricks_group.product_analytics_confd_bu.id
   permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.product_analytics_confd_bu ]
+}
+
+resource "databricks_entitlements" "entitle_product_analytics_confd" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.product_analytics_confd_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
 
   depends_on = [ data.databricks_group.product_analytics_confd_bu ]
 }
@@ -798,6 +834,15 @@ resource "databricks_permission_assignment" "add_applied_science_bu" {
   depends_on = [ data.databricks_group.applied_science_bu ]
 }
 
+resource "databricks_entitlements" "entitle_applied_science" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.applied_science_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.applied_science_bu ]
+}
+
 # crm_ho
 data "databricks_group" "crm_ho_bu" {
   provider      = databricks.globaldbw
@@ -808,6 +853,15 @@ resource "databricks_permission_assignment" "add_crm_ho_bu" {
   provider      = databricks.globaldbw
   principal_id  = data.databricks_group.crm_ho_bu.id
   permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.crm_ho_bu ]
+}
+
+resource "databricks_entitlements" "entitle_crm_ho" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.crm_ho_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
 
   depends_on = [ data.databricks_group.crm_ho_bu ]
 }
@@ -826,6 +880,15 @@ resource "databricks_permission_assignment" "add_imperial_africa_bu" {
   depends_on = [ data.databricks_group.imperial_africa_bu ]
 }
 
+resource "databricks_entitlements" "entitle_imperial_africa" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.imperial_africa_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.imperial_africa_bu ]
+}
+
 # imperial_intl
 data "databricks_group" "imperial_intl_bu" {
   provider      = databricks.globaldbw
@@ -836,6 +899,15 @@ resource "databricks_permission_assignment" "add_imperial_intl_bu" {
   provider      = databricks.globaldbw
   principal_id  = data.databricks_group.imperial_intl_bu.id
   permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.imperial_intl_bu ]
+}
+
+resource "databricks_entitlements" "entitle_imperial_intl" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.imperial_intl_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
 
   depends_on = [ data.databricks_group.imperial_intl_bu ]
 }
