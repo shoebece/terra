@@ -56,6 +56,11 @@ module "vnet" {
   ]
 }
 
+data "azurerm_virtual_network" "vnet"{
+  name     =  cdmz-management-vnet
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+}
+
 data "azurerm_subnet" "route-table-snet" {
   count                 = length(var.route_table_snets)
 
@@ -486,6 +491,13 @@ resource "azurerm_private_endpoint" "AzurePSQL_BP_endpoint_pep" {
     data.azurerm_subnet.snet-default,
     azurerm_private_dns_zone.pdnsz_psql
   ]
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "psqldnss-vnet-link" {
+  name                  = "pdnsz_psql-link"
+  resource_group_name   = data.azurerm_resource_group.resgrp.name
+  private_dns_zone_name = azurerm_private_dns_zone.pdnsz_psql.name
+  virtual_network_id    = data.azurerm_virtual_network.vnet.id
 }
 
 resource "azurerm_virtual_network_peering" "hub_peer" {
