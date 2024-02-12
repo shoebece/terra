@@ -56,8 +56,8 @@ module "vnet" {
   ]
 }
 
-data "azurerm_virtual_network" "vnet"{
-  name     =  cdmz-management-vnet
+data "azurerm_virtual_network" "vnet" {
+  name     =  "cdmz-management-vnet"
   resource_group_name = data.azurerm_resource_group.resgrp.name
 }
 
