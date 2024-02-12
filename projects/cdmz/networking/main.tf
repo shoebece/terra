@@ -260,19 +260,7 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "185.47.68.34/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
-      name                    = "Route_P81_Syncreon_FiveTran_2"
-      address_prefix          = "10.1.6.168/32"
-      next_hop_type           = "VirtualAppliance"
-      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
-    },
-    {
-      name                    = "Route_P81_Syncreon_FiveTran_1"
-      address_prefix          = "10.1.6.169/32"
-      next_hop_type           = "VirtualAppliance"
-      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
-    } 
+    }
   ]
 
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
