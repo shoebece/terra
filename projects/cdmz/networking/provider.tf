@@ -100,3 +100,19 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias           = "TradeFinance"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "f3d35456-12f8-4897-a1c3-2bb59e949ec5"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}
