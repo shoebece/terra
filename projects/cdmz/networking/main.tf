@@ -284,6 +284,12 @@ data "azurerm_mssql_server" "AzureSQL_Ecomm" {
   provider            = azurerm.Ecommerce
 }
 
+data "azurerm_postgresql_server" "AzurePSQL_BerthPlanningApplication" {
+  name                = "psql-bpa-prod"
+  resource_group_name = "rg-bpa-prod"
+  provider            = azurerm.BerthPlanningApplication
+}
+
 data "azurerm_private_dns_zone" "pdnsz" {
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = data.azurerm_resource_group.resgrp.name
@@ -430,6 +436,55 @@ resource "azurerm_private_endpoint" "AzureSQL_endpoint_pep" {
   depends_on = [
     data.azurerm_subnet.snet-default,
     data.azurerm_private_dns_zone.pdnsz
+  ]
+}
+
+# Private end point management for PostgreSQL single server psql-bpa-prod
+resource "azurerm_private_dns_zone" "pdnsz_psql" {
+  name                = "privatelink.postgres.database.azure.com"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+}
+resource "azurerm_private_endpoint" "AzurePSQL_BP_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-BerthPlanningApplication-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-BerthPlanningApplication-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_psql"
+    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_psql.id ]
+  }
+  
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_psql-psc"
+    private_connection_resource_id = data.azurerm_postgresql_server.AzurePSQL_BerthPlanningApplication.id
+    subresource_names              = ["postgresqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-BerthPlanningApplication-ipc"
+    private_ip_address = var.BerthPlanningApplication_fv_ip_address
+    subresource_name   = "postgresqlServer"
+    member_name        = "postgresqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    data.azurerm_private_dns_zone.pdnsz_psql
   ]
 }
 

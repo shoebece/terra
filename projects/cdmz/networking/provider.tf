@@ -52,3 +52,19 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias           = "BerthPlanningApplication"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "623cd43f-a4c3-4dbc-881c-3ba2804a8a4c"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}
