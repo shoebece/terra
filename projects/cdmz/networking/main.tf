@@ -484,7 +484,7 @@ resource "azurerm_private_endpoint" "AzurePSQL_BP_endpoint_pep" {
 
   depends_on = [
     data.azurerm_subnet.snet-default,
-    azurerm.azurerm_private_dns_zone.pdnsz_psql
+    azurerm_private_dns_zone.pdnsz_psql
   ]
 }
 
