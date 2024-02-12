@@ -455,7 +455,7 @@ resource "azurerm_private_endpoint" "AzurePSQL_BP_endpoint_pep" {
 
   private_dns_zone_group {
     name = "add_to_azure_private_dns_psql"
-    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_psql.id ]
+    private_dns_zone_ids = [ azurerm.azurerm_private_dns_zone.pdnsz_psql.id ]
   }
   
   private_service_connection {
@@ -484,7 +484,7 @@ resource "azurerm_private_endpoint" "AzurePSQL_BP_endpoint_pep" {
 
   depends_on = [
     data.azurerm_subnet.snet-default,
-    data.azurerm_private_dns_zone.pdnsz_psql
+    azurerm.azurerm_private_dns_zone.pdnsz_psql
   ]
 }
 
