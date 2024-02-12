@@ -301,6 +301,12 @@ data "azurerm_postgresql_server" "AzurePSQL_DPWFoundationalServicesProd" {
   provider            = azurerm.DPWFoundationalServicesProd
 }
 
+data "azurerm_postgresql_server" "AzurePSQL_CargoesFlow" {
+  name                = "pg-cargoesflow-prod1-dr"
+  resource_group_name = "rg-cargoesflow-prod"
+  provider            = azurerm.CargoesFlow
+}
+
 data "azurerm_private_dns_zone" "pdnsz" {
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = data.azurerm_resource_group.resgrp.name
@@ -551,6 +557,51 @@ resource "azurerm_private_endpoint" "AzurePSQL_cpp_endpoint_pep" {
   ]
 }
 
+# Private end point management for PostgreSQL single server pg-cargoesflow-prod1-dr
+
+resource "azurerm_private_endpoint" "AzurePSQL_cargoesflow_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-cargoesflow-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-cargoesflow-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_psql"
+    private_dns_zone_ids = [ azurerm_private_dns_zone.pdnsz_psql.id ]
+  }
+  
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_psql-psc"
+    private_connection_resource_id = data.azurerm_postgresql_server.AzurePSQL_cargoesflow.id
+    subresource_names              = ["postgresqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-cargoesflow-ipc"
+    private_ip_address = var.cargoesflow_fv_ip_address
+    subresource_name   = "postgresqlServer"
+    member_name        = "postgresqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    azurerm_private_dns_zone.pdnsz_psql
+  ]
+}
 
 resource "azurerm_virtual_network_peering" "hub_peer" {
   name                      = "peer-hub-to-cdp-management"

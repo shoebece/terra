@@ -33,6 +33,7 @@ variable "kv_fv_ip_address"                 { type = string }
 variable "ecommSQL_fv_ip_address"                 { type = string }
 variable "BerthPlanningApplication_fv_ip_address" { type = string }
 variable "DPWFoundationalServicesProd_fv_ip_address" { type = string }
+variable "cargoesflow_fv_ip_address"  { type = string }
 variable "sandbox_prefix" {
     type = string 
     default = ""
