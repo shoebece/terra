@@ -575,7 +575,7 @@ resource "azurerm_private_endpoint" "AzurePSQL_cargoesflow_endpoint_pep" {
   
   private_service_connection {
     name                           = "cdmz-mgmt-fivetran-pdnsz_psql-psc"
-    private_connection_resource_id = data.azurerm_postgresql_server.AzurePSQL_cargoesflow.id
+    private_connection_resource_id = data.azurerm_postgresql_server.AzurePSQL_CargoesFlow.id
     subresource_names              = ["postgresqlServer"]
     is_manual_connection           = false
   }
