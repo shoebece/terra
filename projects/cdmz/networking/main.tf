@@ -247,6 +247,12 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "185.47.68.34/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
+    },
+    {
+      name                    = "Route_Antwerp_Fivetran"
+      address_prefix          = "10.91.5.58/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
     }
   ]
 
