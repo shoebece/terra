@@ -255,7 +255,7 @@ resource "azurerm_route_table" "art" {
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
     }
   ]
-  
+    
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
 }
 
