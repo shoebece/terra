@@ -12,6 +12,7 @@ locals {
   data_storage_rg      = join("-", ["cdpz", var.environment, "data-storage-rg"])
   kv_data_storage_name = join("-", ["cdpz", var.environment, "data-kv"])
   silver_stacc_name    = join("", ["cdpz", var.environment, "silver01dls"])
+  internal_stacc_name  = join("", ["cdpz", var.environment, "internal02dls"])
 
   data_processing_rg       = join("-", ["cdpz", var.environment, "data-processing-rg"])
   kv_data_processing_name  = join("-", ["cdpz", var.environment, "proc-kv"])
@@ -51,6 +52,11 @@ data "azurerm_key_vault" "data-kv" {
 
 data "azurerm_storage_account" "silver-stacc" {
   name                = local.silver_stacc_name
+  resource_group_name = local.data_storage_rg
+}
+
+data "azurerm_storage_account" "internal-stacc" {
+  name                = local.internal_stacc_name
   resource_group_name = local.data_storage_rg
 }
 
@@ -587,4 +593,14 @@ resource "azurerm_monitor_diagnostic_setting" "silver-stacc-log" {
       enabled = false
     }
   }
+}
+
+resource "azurerm_log_analytics_data_export_rule" "export_silver_stacc_log" {
+  count                   = (var.environment == "prod" ? 1 : 0)
+  name                    = "exportSilverStaccLogs"
+  resource_group_name     = local.resource_group_name
+  workspace_resource_id   = azurerm_log_analytics_workspace.monitoring-log.id
+  destination_resource_id = data.azurerm_storage_account.internal-stacc.id
+  table_names             = ["StorageBlobLogs"]
+  enabled                 = true
 }
