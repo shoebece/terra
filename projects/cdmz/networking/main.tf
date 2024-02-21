@@ -253,6 +253,12 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "10.91.5.58/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_cdpz-dev-processing-vnet"
+      address_prefix          = "10.2.161.0/25"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.EUR_Int_firewall_ip_address
     }
   ]
     
