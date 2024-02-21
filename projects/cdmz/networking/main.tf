@@ -319,6 +319,12 @@ data "azurerm_postgresql_server" "AzurePSQL_TradeFinance" {
   provider            = azurerm.TradeFinance
 }
 
+data "azurerm_postgresql_server" "AzurePSQL_CargoesLogistics" {
+  name                = "psql-cargoeslogistics-prod-dr"
+  resource_group_name = "rg-cargoeslogistics-prod-dr"
+  provider            = azurerm.CargoesLogistics
+}
+
 data "azurerm_private_dns_zone" "pdnsz" {
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = data.azurerm_resource_group.resgrp.name
@@ -640,6 +646,51 @@ resource "azurerm_private_endpoint" "AzurePSQL_TradeFinance_endpoint_pep" {
   ip_configuration {
     name               = "cdmz-mgmt-fivetran-TradeFinance-ipc"
     private_ip_address = var.TradeFinance_fv_ip_address
+    subresource_name   = "postgresqlServer"
+    member_name        = "postgresqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    azurerm_private_dns_zone.pdnsz_psql
+  ]
+}
+
+# # Private end point management for PostgreSQL single server psql-cargoeslogistics-prod-dr
+resource "azurerm_private_endpoint" "AzurePSQL_CargoesLogistics_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-CargoesLogistics-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-CargoesLogistics-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_psql"
+    private_dns_zone_ids = [ azurerm_private_dns_zone.pdnsz_psql.id ]
+  }
+  
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_psql-psc"
+    private_connection_resource_id = data.azurerm_postgresql_server.AzurePSQL_CargoesLogistics.id
+    subresource_names              = ["postgresqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-CargoesLogistics-ipc"
+    private_ip_address = var.CargoesLogistics_fv_ip_address
     subresource_name   = "postgresqlServer"
     member_name        = "postgresqlServer"
   }

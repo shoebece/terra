@@ -116,3 +116,19 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias           = "CargoesLogistics"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "a3e25ce2-341c-4f68-b42d-0ec5f349a526"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}
