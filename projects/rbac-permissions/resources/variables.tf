@@ -33,3 +33,8 @@ variable old_subscription_spn { type = object({
   name = string
   id = string
 })}
+
+variable em_engg_aad_group { type = object({
+  name = string
+  id = string
+})}
