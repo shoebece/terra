@@ -127,7 +127,7 @@ resource "azurerm_mssql_elasticpool" "fivetran_config_sql_pool" {
   sku {
     name     = "StandardPool"
     tier     = "Standard"
-    capacity = 100
+    capacity = 200
   }
 
   per_database_settings {
