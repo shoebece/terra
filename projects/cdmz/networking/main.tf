@@ -480,11 +480,33 @@ resource "azurerm_private_endpoint" "AzureSQL_endpoint_pep" {
   ]
 }
 
-# Private end point management for PostgreSQL single server psql-bpa-prod
+# Private dns creation for postgres and linked to CDP Management VNET
+
 resource "azurerm_private_dns_zone" "pdnsz_psql" {
   name                = "privatelink.postgres.database.azure.com"
   resource_group_name = data.azurerm_resource_group.resgrp.name
 }
+
+resource "azurerm_private_dns_zone_virtual_network_link" "psqldnss-vnet-link" {
+  name                  = "pdnsz_psql-link"
+  resource_group_name   = data.azurerm_resource_group.resgrp.name
+  private_dns_zone_name = azurerm_private_dns_zone.pdnsz_psql.name
+  virtual_network_id    = data.azurerm_virtual_network.vnet.id
+}
+
+resource "azurerm_private_dns_zone" "pdnsz_flex_psql" {
+  name                = "private.postgres.database.azure.com"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "psqldnsss-vnet-link" {
+  name                  = "pdnsz_flex_psql-link"
+  resource_group_name   = data.azurerm_resource_group.resgrp.name
+  private_dns_zone_name = azurerm_private_dns_zone.pdnsz_psql.name
+  virtual_network_id    = data.azurerm_virtual_network.vnet.id
+}
+
+# Private end point management for PostgreSQL single server psql-bpa-prod
 resource "azurerm_private_endpoint" "AzurePSQL_BP_endpoint_pep" {
   name                = "cdmz-mgmt-fivetran-BerthPlanningApplication-pep"
   resource_group_name = data.azurerm_resource_group.resgrp.name
@@ -527,13 +549,6 @@ resource "azurerm_private_endpoint" "AzurePSQL_BP_endpoint_pep" {
     data.azurerm_subnet.snet-default,
     azurerm_private_dns_zone.pdnsz_psql
   ]
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "psqldnss-vnet-link" {
-  name                  = "pdnsz_psql-link"
-  resource_group_name   = data.azurerm_resource_group.resgrp.name
-  private_dns_zone_name = azurerm_private_dns_zone.pdnsz_psql.name
-  virtual_network_id    = data.azurerm_virtual_network.vnet.id
 }
 
 # Private end point management for PostgreSQL single server cargoes-platform-prod-postgresql-server-dr
