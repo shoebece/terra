@@ -502,7 +502,7 @@ resource "azurerm_private_dns_zone" "pdnsz_flex_psql" {
 resource "azurerm_private_dns_zone_virtual_network_link" "psqldnsss-vnet-link" {
   name                  = "pdnsz_flex_psql-link"
   resource_group_name   = data.azurerm_resource_group.resgrp.name
-  private_dns_zone_name = azurerm_private_dns_zone.pdnsz_psql.name
+  private_dns_zone_name = azurerm_private_dns_zone.pdnsz_flex_psql.name
   virtual_network_id    = data.azurerm_virtual_network.vnet.id
 }
 
