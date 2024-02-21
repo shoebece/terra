@@ -255,7 +255,7 @@ resource "azurerm_route_table" "art" {
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
     },
     {
-      name                    = "Route_cdpz-dev-processing-vnet"
+      name                    = "Route_psql-cargoeslogisticsabbs-prod"
       address_prefix          = "10.2.161.0/25"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.EUR_Int_firewall_ip_address
