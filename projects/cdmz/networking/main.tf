@@ -259,6 +259,12 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "10.2.161.0/25"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.EUR_Int_firewall_ip_address
+    },
+    {
+      name                    = "Route_psql-trackingservice-prod"
+      address_prefix          = "10.143.68.0/28"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.firewall_ip_address
     }
   ]
     
