@@ -31,6 +31,15 @@ resource "azurerm_role_assignment" "data-eng-to-dev-orch-and-ingest" {
   depends_on = [data.azurerm_resource_group.dev-orch-and-ingest-rg  ]
 }
 
+resource "azurerm_role_assignment" "em-eng-to-dev-orch-and-ingest" {
+  provider             = azurerm.dev
+  scope                = data.azurerm_resource_group.dev-orch-and-ingest-rg.id
+  role_definition_name = "Data Factory Contributor"
+  principal_id         = var.em_engg_aad_group.id
+
+  depends_on = [data.azurerm_resource_group.dev-orch-and-ingest-rg  ]
+}
+
 resource "azurerm_synapse_role_assignment" "data-eng-to-dev-synapse" {
   provider              = azurerm.dev
   synapse_workspace_id  = data.azurerm_synapse_workspace.dev_synapse_ws.id
