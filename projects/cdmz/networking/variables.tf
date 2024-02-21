@@ -35,6 +35,7 @@ variable "BerthPlanningApplication_fv_ip_address" { type = string }
 variable "DPWFoundationalServicesProd_fv_ip_address" { type = string }
 variable "cargoesflow_fv_ip_address"  { type = string }
 variable "TradeFinance_fv_ip_address"  { type = string }
+variable "CargoesLogistics_fv_ip_address"  { type = string }
 variable "sandbox_prefix" {
     type = string 
     default = ""
