@@ -38,6 +38,7 @@ variable "TradeFinance_fv_ip_address"  { type = string }
 variable "CargoesLogistics_fv_ip_address"  { type = string }
 variable "datalakestrprod_fv_ip_address"  { type = string }
 variable "datalakestrprod_dfs_fv_ip_address"  { type = string }
+variable "pgecommipms_fv_ip_address"  { type = string }
 variable "sandbox_prefix" {
     type = string 
     default = ""

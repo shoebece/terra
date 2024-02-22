@@ -307,6 +307,12 @@ data "azurerm_mssql_server" "AzureSQL_Ecomm" {
   provider            = azurerm.Ecommerce
 }
 
+data "azurerm_postgresql_server" "AzurePSQL_Ecomm" {
+  name                = "pgecommipms-prod-dr"
+  resource_group_name = "rg-ecommerce-prod-dr"
+  provider            = azurerm.Ecommerce
+}
+
 data "azurerm_postgresql_server" "AzurePSQL_BerthPlanningApplication" {
   name                = "psql-bpa-prod"
   resource_group_name = "rg-bpa-prod"
@@ -530,6 +536,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "psqldnsss-vnet-link" {
 }
 
 # Private end point management for PostgreSQL single server psql-bpa-prod
+
 resource "azurerm_private_endpoint" "AzurePSQL_BP_endpoint_pep" {
   name                = "cdmz-mgmt-fivetran-BerthPlanningApplication-pep"
   resource_group_name = data.azurerm_resource_group.resgrp.name
@@ -845,6 +852,52 @@ resource "azurerm_private_endpoint" "AzureStorage_dfs_BusinessAnalytics_endpoint
     data.azurerm_private_dns_zone.pdnsz
   ]
 }
+
+# # Private end point management for PostgreSQL single server psql-cargoeslogistics-prod-dr
+resource "azurerm_private_endpoint" "AzurePSQL_pgecommipms_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-pgecommipms-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-pgecommipms-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_psql"
+    private_dns_zone_ids = [ azurerm_private_dns_zone.pdnsz_psql.id ]
+  }
+  
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_psql-psc"
+    private_connection_resource_id = data.azurerm_postgresql_server.AzurePSQL_Ecomm.id
+    subresource_names              = ["postgresqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-pgecommipms-ipc"
+    private_ip_address = var.pgecommipms_fv_ip_address
+    subresource_name   = "postgresqlServer"
+    member_name        = "postgresqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    azurerm_private_dns_zone.pdnsz_psql
+  ]
+}
+
 
 
 resource "azurerm_virtual_network_peering" "hub_peer" {
