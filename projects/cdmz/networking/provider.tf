@@ -132,3 +132,20 @@ provider "azurerm" {
     }
   }
 }
+
+
+provider "azurerm" {
+  alias           = "BusinessAnalytics"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "3c44ba2d-eba5-4d51-adb8-8614bf03bd29"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}
