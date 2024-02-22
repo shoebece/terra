@@ -265,6 +265,12 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "10.143.68.0/28"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
+    },
+    {
+      name                    = "QICT_Bryteflow_S2S"
+      address_prefix          = "10.92.16.85/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
     }
   ]
     
