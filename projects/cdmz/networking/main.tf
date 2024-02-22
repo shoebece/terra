@@ -362,6 +362,11 @@ data "azurerm_private_dns_zone" "pdnsz_blob" {
   depends_on = [ azurerm_private_dns_zone.dnss ]
 }
 
+data "azurerm_private_dns_zone" "pdnsz_dfs" {
+  name                = "privatelink.dfs.core.windows.net"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  depends_on = [ azurerm_private_dns_zone.dnss ]
+}
 # Private end point management key vault
 resource "azurerm_private_endpoint" "kv_endpoint" {
   name                = "cdmz-management-kv-pep"
@@ -795,6 +800,52 @@ resource "azurerm_private_endpoint" "AzureStorage_BusinessAnalytics_endpoint_pep
     data.azurerm_private_dns_zone.pdnsz
   ]
 }
+
+#private endpoint connection to the BA datalakestrprod for DFS - RITM0091858 - DL to DL One time Copy via ADF
+resource "azurerm_private_endpoint" "AzureStorage_dfs_BusinessAnalytics_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-datalakestrproddfs-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-datalakestrproddfs-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_AzureStorage"
+    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_dfs.id ]
+  }
+
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_dfs-psc"
+    private_connection_resource_id = data.azurerm_storage_account.AzureStorage_BusinessAnalytics.id
+    subresource_names              = ["dfs"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-AzureStoragedfs-ipc"
+    private_ip_address = var.datalakestrprod_dfs_fv_ip_address
+    subresource_name   = "dfs"
+    member_name        = "dfs"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    data.azurerm_private_dns_zone.pdnsz
+  ]
+}
+
 
 resource "azurerm_virtual_network_peering" "hub_peer" {
   name                      = "peer-hub-to-cdp-management"
