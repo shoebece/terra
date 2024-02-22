@@ -271,6 +271,12 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "10.92.16.85/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_Jeddah_SAJED_Fivetran"
+      address_prefix          = "192.168.203.169/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
     }
   ]
     
