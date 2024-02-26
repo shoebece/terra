@@ -83,6 +83,15 @@ resource "azurerm_role_assignment" "old-spn-to-prod" {
   depends_on = [data.azurerm_subscription.prod_cdpz_sub ]
 }
 
+resource "azurerm_role_assignment" "old-spn-to-dev" {
+  provider             = azurerm.dev
+  scope                = data.azurerm_subscription.dev_cdpz_sub.id
+  role_definition_name = "Storage Blob Data Reader"
+  principal_id         = var.old_subscription_spn.id
+
+  depends_on = [data.azurerm_subscription.dev_cdpz_sub ]
+}
+
 # VMs 
 resource "azurerm_role_assignment" "super-user-vm-contr-cmdz" {
   provider             = azurerm.cdmz
