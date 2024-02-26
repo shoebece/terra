@@ -149,3 +149,19 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias           = "NAU"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "ededa550-54e3-4ac7-a6b0-bca51f3c1495"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}
