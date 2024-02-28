@@ -986,6 +986,22 @@ resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
   ]
 }
 
+# # Private end point management for Zodiac Coud AULAD FT 
+
+resource "azurerm_private_endpoint" "azurepep_zodiac_aulad_ft" {
+  name                = "cdmz-mgmt-fivetran-zodiac-aulad-ft"
+  location            = var.resource_location
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  subnet_id           = data.azurerm_subnet.snet-default.id
+
+  private_service_connection {
+    name                              = "zodiac-aulad-ft-privateserviceconnection"
+    private_connection_resource_alias = "zodiaccloud_shareinfra_laddtla_privatelinkservice.acedad72-63a4-41b8-a6b1-df98890642f2.francecentral.azure.privatelinkservice"
+    is_manual_connection              = true
+    request_message                   = "connectivity from 10.220.224.15"
+  }
+}
+
 resource "azurerm_virtual_network_peering" "hub_peer" {
   name                      = "peer-hub-to-cdp-management"
   resource_group_name       = data.azurerm_resource_group.resgrp.name
