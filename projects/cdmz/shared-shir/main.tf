@@ -294,7 +294,7 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "shared-shir-vm-autoshdt
     for_each              = { for i, vm in var.vms: vm.vm => vm }
     virtual_machine_id    = azurerm_windows_virtual_machine.shir-vm[each.value.vm].id
     location              = var.resource_location
-    enabled               = true
+    enabled               = false
     daily_recurrence_time = "1000"
     timezone              = "Central Europe Standard Time"
     notification_settings {
