@@ -64,6 +64,7 @@ resource "azurerm_storage_account" "landing_staccs" {
   min_tls_version           = "TLS1_2"
   is_hns_enabled            = true
   account_kind              = "StorageV2"
+  sftp_enabled              = each.value.sftp_enabled
   
   identity {
     type = "UserAssigned"
