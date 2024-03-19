@@ -13,6 +13,7 @@ variable "staccs" {
             code = string
             ip   = string
         }))
+        sftp_enabled = optional(bool, "false")
         stconts = list(string)
         specyfic_service_endpoint_snets = list(string)
     }))
