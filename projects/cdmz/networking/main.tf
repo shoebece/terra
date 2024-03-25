@@ -952,7 +952,7 @@ resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
   
   private_service_connection {
     name                           = "cdmz-mgmt-fivetran-pdnsz_mysql-psc"
-    private_connection_resource_id = data.azurerm_mysql_server.AzureMysql_mysql-naudb-prod-dr.id
+    private_connection_resource_id = data.azurerm_mysql_flexible_server.AzureMysql_mysql-naudb-prod-dr.id
     subresource_names              = ["mysqlServer"]
     is_manual_connection           = false
   }
