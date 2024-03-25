@@ -373,9 +373,9 @@ data "azurerm_storage_account" "AzureStorage_BusinessAnalytics" {
   provider            = azurerm.BusinessAnalytics
 }
 
-data "azurerm_mysql_server" "AzureMysql_mysql-nau-dr" {
-  name                = "mysql-nau-dr"
-  resource_group_name = "Rg-nau-prod-dr"
+data "azurerm_mysql_server" "AzureMysql_mysql-naudb-prod-dr" {
+  name                = "mysql-naudb-prod-dr"
+  resource_group_name = "Rg-nau-production"
   provider            = azurerm.NAU
 }
 
@@ -943,13 +943,13 @@ resource "azurerm_private_endpoint" "AzurePSQL_pgecommipms_endpoint_pep" {
 # # Private end point management for MySQl single server mysql-nau-dr
 
 resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
-  name                = "cdmz-mgmt-fivetran-mysql-nau-dr-pep"
+  name                = "cdmz-mgmt-fivetran-mysql-naudb-prod-dr-pep"
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
 
   subnet_id = data.azurerm_subnet.snet-default.id
 
-  custom_network_interface_name = "cdmz-mgmt-fivetran-mysql-nau-dr-nic"
+  custom_network_interface_name = "cdmz-mgmt-fivetran-mysql-naudb-prod-dr-nic"
 
   private_dns_zone_group {
     name = "add_to_azure_private_dns_psql"
@@ -958,13 +958,13 @@ resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
   
   private_service_connection {
     name                           = "cdmz-mgmt-fivetran-pdnsz_mysql-psc"
-    private_connection_resource_id = data.azurerm_mysql_server.AzureMysql_mysql-nau-dr.id
+    private_connection_resource_id = data.azurerm_mysql_server.AzureMysql_mysql-naudb-prod-dr.id
     subresource_names              = ["mysqlServer"]
     is_manual_connection           = false
   }
 
   ip_configuration {
-    name               = "cdmz-mgmt-fivetran-mysql-nau-dr-ipc"
+    name               = "cdmz-mgmt-fivetran-mysql-naudb-prod-dr-ipc"
     private_ip_address = var.mysql-nau-dr_fv_ip_address
     subresource_name   = "mysqlServer"
     member_name        = "mysqlServer"
