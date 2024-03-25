@@ -367,7 +367,7 @@ data "azurerm_storage_account" "AzureStorage_BusinessAnalytics" {
   provider            = azurerm.BusinessAnalytics
 }
 
-data "azurerm_mysql_server" "AzureMysql_mysql-naudb-prod-dr" {
+data "azurerm_mysql_flexible_server" "AzureMysql_mysql-naudb-prod-dr" {
   name                = "mysql-naudb-prod-dr"
   resource_group_name = "Rg-nau-production"
   provider            = azurerm.NAU
