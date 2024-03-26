@@ -289,7 +289,7 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "AzureUpdateDelivery"
       next_hop_type           = "Internet"
       next_hop_in_ip_address  = ""
-    },
+    }
   ]
     
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
