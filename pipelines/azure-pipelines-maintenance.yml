@@ -22,12 +22,12 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/data-storage/'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/landing/'
           backendServiceArm: 'CDP_Management'
           backendAzureRmResourceGroupName: 'cdmz-cicd-rg'
           backendAzureRmStorageAccountName: 'cdmztfstatefiledls'
           backendAzureRmContainerName: 'tfstate'
-          backendAzureRmKey: 'uat/cdpz/data-storage.tfstate'
+          backendAzureRmKey: 'dev/cdpz/landing.tfstate'
       - task: TerraformCLI@1
         env:
           ARM_USE_MSI: true
@@ -36,5 +36,5 @@ stages:
           ARM_CLIENT_ID: "4bdad00a-f14e-4129-a845-c2a2f221dfbb"
         inputs:
           command: 'forceunlock'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/data-storage/'
-          lockID: '4ef2c986-c2f7-3f8e-fe59-504c8f087db2'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/landing/'
+          lockID: 'ac407cec-4718-6baa-0d91-4200610ecdfc'
