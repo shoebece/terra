@@ -85,7 +85,7 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "pbi-vm-autoshdt" {
     for_each = { for vm in var.vms: vm.vm => vm }
     virtual_machine_id = azurerm_windows_virtual_machine.pbi-gateway-vm[each.value.vm].id
     location = var.resource_location
-    enabled = true
+    enabled = false
     daily_recurrence_time = "1200"
     timezone = "Central Europe Standard Time"
     notification_settings {
