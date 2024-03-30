@@ -289,6 +289,18 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "10.91.62.120/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_Pusan_Fivetrain_2"
+      address_prefix          = "10.2.2.30/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_S2S_VPN_MICT"
+      address_prefix          = "10.88.228.197/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
     }
   ]
     
