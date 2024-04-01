@@ -110,6 +110,24 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "PowerBI"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
+    },
+    {
+      name                    = "Route_P81_Syncreon_FiveTran_2"
+      address_prefix          = "10.1.6.168/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Syncreon_FiveTran_1"
+      address_prefix          = "10.1.6.169/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_DPWPLUS_CDP_Synapse"
+      address_prefix          = "10.2.0.0/28"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.eur-checkpoint-intfw
     }
   ]
 
@@ -210,5 +228,13 @@ resource "azurerm_virtual_network_peering" "hub_peer_access" {
   resource_group_name = data.azurerm_resource_group.resgrp.name
   virtual_network_name = module.acc_vnet.vnet_name
   remote_virtual_network_id = "/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam"     
+  allow_forwarded_traffic = "true"
+}
+
+resource "azurerm_virtual_network_peering" "eur_hub_peer" {
+  name = join("-", ["peer-eur-hub-to-cdp", var.environment, "processing"])
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  virtual_network_name = module.proc_vnet.vnet_name
+  remote_virtual_network_id = "/subscriptions/1b37d994-cdaf-4d33-b73d-afb406d36357/resourceGroups/rg-eur-sechub/providers/Microsoft.Network/virtualNetworks/EUR-Vnetsechub"     
   allow_forwarded_traffic = "true"
 }
