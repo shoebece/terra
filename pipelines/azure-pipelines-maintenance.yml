@@ -37,4 +37,4 @@ stages:
         inputs:
           command: 'forceunlock'
           workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/landing/'
-          lockID: 'fe626eb9-d14b-8d86-dd79-eae9abd8fc52'
+          lockID: 'c7d9a9fa-51d4-1539-5c8a-a624a1b212f5'
