@@ -154,7 +154,10 @@ resource "azurerm_key_vault" "proc-kv" {
   network_acls {
     default_action  = "Deny"
     bypass          = "AzureServices"
-    virtual_network_subnet_ids = [local.devops_subnet_id]
+    virtual_network_subnet_ids = concat(
+      [local.devops_subnet_id],
+      var.common_service_endpoint_snets
+    )
   }
 
   depends_on = [azurerm_resource_group.data-processing-rg]
