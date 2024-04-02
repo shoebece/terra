@@ -186,7 +186,7 @@ data "azurerm_resource_group" "global-rg" {
 
 resource "azurerm_role_assignment" "databricks-sp-to-global-kv" {
   scope                = data.azurerm_resource_group.global-rg.id
-  role_definition_name = "Key Vault Secrets Officer"
+  role_definition_name = "Key Vault Administrator"
   principal_id         = "b2da8212-90d4-45e0-a84e-aae2f5ca9964"
 }
 
