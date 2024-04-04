@@ -78,6 +78,22 @@ resource "databricks_permission_assignment" "add_super_users" {
   depends_on = [ data.databricks_group.super_users ]
 }
 
+resource "databricks_permission_assignment" "add_super_users_uat" {
+  provider      = databricks.uatdbw
+  principal_id  = data.databricks_group.super_users.id
+  permissions   = ["ADMIN"]
+
+  depends_on = [ data.databricks_group.super_users ]
+}
+
+resource "databricks_permission_assignment" "add_super_users_prod" {
+  provider      = databricks.proddbw
+  principal_id  = data.databricks_group.super_users.id
+  permissions   = ["ADMIN"]
+
+  depends_on = [ data.databricks_group.super_users ]
+}
+
 # ADF Dev UAMI
 data "databricks_service_principal" "adf_dev_umi" {
   provider      = databricks.devdbw
@@ -212,6 +228,69 @@ resource "databricks_permissions" "prod_cluster_usage" {
     data.databricks_cluster.prod_interactive_cluster,
     data.databricks_group.super_users,
     var.adf_prod_umi
+  ]
+}
+
+# DEV ADF Cluster
+data "databricks_cluster" "dev_adf_cluster" {
+  provider      = databricks.devdbw
+  cluster_name  = "cdp-adf-proc-cluster"
+}
+
+resource "databricks_permissions" "dev_adf_cluster_usage" {
+  provider          = databricks.devdbw
+  cluster_id        = data.databricks_cluster.dev_adf_cluster.id
+
+  access_control {
+    service_principal_name = data.databricks_service_principal.adf_dev_umi.application_id
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.dev_adf_cluster,
+    data.databricks_service_principal.adf_dev_umi
+  ]
+}
+
+# UAT ADF Cluster
+data "databricks_cluster" "uat_adf_cluster" {
+  provider      = databricks.uatdbw
+  cluster_name  = "cdp-adf-proc-cluster"
+}
+
+resource "databricks_permissions" "uat_adf_cluster_usage" {
+  provider          = databricks.uatdbw
+  cluster_id        = data.databricks_cluster.uat_adf_cluster.id
+
+  access_control {
+    service_principal_name = data.databricks_service_principal.adf_uat_umi.application_id
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.uat_adf_cluster,
+    data.databricks_service_principal.adf_uat_umi
+  ]
+}
+
+# PROD ADF Cluster
+data "databricks_cluster" "prod_adf_cluster" {
+  provider      = databricks.proddbw
+  cluster_name  = "cdp-adf-proc-cluster"
+}
+
+resource "databricks_permissions" "prod_adf_cluster_usage" {
+  provider          = databricks.proddbw
+  cluster_id        = data.databricks_cluster.prod_adf_cluster.id
+
+  access_control {
+    service_principal_name = data.databricks_service_principal.adf_prod_umi.application_id
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.prod_adf_cluster,
+    data.databricks_service_principal.adf_prod_umi
   ]
 }
 
