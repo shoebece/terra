@@ -163,17 +163,11 @@ resource "databricks_permissions" "dev_cluster_usage" {
     permission_level = "CAN_MANAGE"
   }
 
-  access_control {
-    user_name        = var.adf_dev_umi.app_id
-    permission_level = "CAN_RESTART"
-  }
-
   depends_on = [ 
     data.databricks_cluster.dev_interactive_cluster,
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
-    data.databricks_group.super_users,
-    var.adf_dev_umi
+    data.databricks_group.super_users
   ]
 }
 
@@ -192,15 +186,9 @@ resource "databricks_permissions" "uat_cluster_usage" {
     permission_level = "CAN_MANAGE"
   }
 
-  access_control {
-    user_name        = var.adf_uat_umi.app_id
-    permission_level = "CAN_RESTART"
-  }
-
   depends_on = [ 
     data.databricks_cluster.uat_interactive_cluster,
-    data.databricks_group.super_users,
-    var.adf_uat_umi
+    data.databricks_group.super_users
   ]
 }
 
@@ -219,15 +207,9 @@ resource "databricks_permissions" "prod_cluster_usage" {
     permission_level = "CAN_MANAGE"
   }
 
-  access_control {
-    user_name        = var.adf_prod_umi.app_id
-    permission_level = "CAN_RESTART"
-  }
-
   depends_on = [ 
     data.databricks_cluster.prod_interactive_cluster,
-    data.databricks_group.super_users,
-    var.adf_prod_umi
+    data.databricks_group.super_users
   ]
 }
 
@@ -882,6 +864,90 @@ resource "databricks_entitlements" "entitle_pa_trade_finance_bu" {
   depends_on = [ data.databricks_group.pa_trade_finance_bu ]
 }
 
+# synceur_spn
+data "databricks_service_principal" "synceur_spn" {
+  provider      = databricks.globaldbw
+  application_id  = var.synceur_spn.app_id
+}
+
+resource "databricks_permission_assignment" "add_synceur_spn" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_service_principal.synceur_spn.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_service_principal.synceur_spn ]
+}
+
+# syncamr_spn
+data "databricks_service_principal" "syncamr_spn" {
+  provider      = databricks.globaldbw
+  application_id  = var.syncamr_spn.app_id
+}
+
+resource "databricks_permission_assignment" "add_syncamr_spn" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_service_principal.syncamr_spn.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_service_principal.syncamr_spn ]
+}
+
+# pa_spn
+data "databricks_service_principal" "pa_spn" {
+  provider      = databricks.globaldbw
+  application_id  = var.pa_spn.app_id
+}
+
+resource "databricks_permission_assignment" "add_pa_spn" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_service_principal.pa_spn.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_service_principal.pa_spn ]
+}
+
+# ili_spn
+data "databricks_service_principal" "ili_spn" {
+  provider      = databricks.globaldbw
+  application_id  = var.ili_spn.app_id
+}
+
+resource "databricks_permission_assignment" "add_ili_spn" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_service_principal.ili_spn.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_service_principal.ili_spn ]
+}
+
+# crmho_spn
+data "databricks_service_principal" "crmho_spn" {
+  provider      = databricks.globaldbw
+  application_id  = var.crmho_spn.app_id
+}
+
+resource "databricks_permission_assignment" "add_crmho_spn" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_service_principal.crmho_spn.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_service_principal.crmho_spn ]
+}
+
+# as_spn
+data "databricks_service_principal" "as_spn" {
+  provider      = databricks.globaldbw
+  application_id  = var.as_spn.app_id
+}
+
+resource "databricks_permission_assignment" "add_as_spn" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_service_principal.as_spn.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_service_principal.as_spn ]
+}
+
 ## ----------------------------------------------------------
 ## Cluster Sync EUR
 data "databricks_cluster" "global_synceur_cluster" {
@@ -919,9 +985,15 @@ resource "databricks_permissions" "global_pbiclustersynceur_usage" {
     permission_level = "CAN_RESTART"
   }
 
+  access_control {
+    service_principal_name = data.databricks_service_principal.synceur_spn.application_id
+    permission_level       = "CAN_RESTART"
+  }
+
   depends_on = [ 
     data.databricks_cluster.global_synceur_pbicluster,
-    data.databricks_group.contract_logistics_eur_bu
+    data.databricks_group.contract_logistics_eur_bu,
+    data.databricks_service_principal.synceur_spn
   ]
 }
 
@@ -981,9 +1053,15 @@ resource "databricks_permissions" "global_pbiclustersyncamr_usage" {
     permission_level = "CAN_RESTART"
   }
 
+  access_control {
+    service_principal_name = data.databricks_service_principal.syncamr_spn.application_id
+    permission_level       = "CAN_RESTART"
+  }
+
   depends_on = [ 
     data.databricks_cluster.global_syncamr_pbicluster,
-    data.databricks_group.contract_logistics_amr_bu
+    data.databricks_group.contract_logistics_amr_bu,
+    data.databricks_service_principal.syncamr_spn
   ]
 }
 
@@ -1098,6 +1176,11 @@ resource "databricks_permissions" "global_pbiclusterpa_usage" {
     permission_level = "CAN_RESTART"
   }
 
+  access_control {
+    service_principal_name = data.databricks_service_principal.pa_spn.application_id
+    permission_level       = "CAN_RESTART"
+  }
+
   depends_on = [ 
     data.databricks_cluster.global_pa_pbicluster,
     data.databricks_group.pa_global_bu,
@@ -1105,7 +1188,8 @@ resource "databricks_permissions" "global_pbiclusterpa_usage" {
     data.databricks_group.pa_freight_forwarding_bu,
     data.databricks_group.pa_sco_bu,
     data.databricks_group.pa_searates_bu,
-    data.databricks_group.pa_trade_finance_bu
+    data.databricks_group.pa_trade_finance_bu,
+    data.databricks_service_principal.pa_spn
   ]
 }
 
@@ -1171,9 +1255,15 @@ resource "databricks_permissions" "global_pbiclusteras_usage" {
     permission_level = "CAN_RESTART"
   }
 
+  access_control {
+    service_principal_name = data.databricks_service_principal.as_spn.application_id
+    permission_level       = "CAN_RESTART"
+  }
+
   depends_on = [ 
     data.databricks_cluster.global_as_pbicluster,
-    data.databricks_group.applied_science_bu
+    data.databricks_group.applied_science_bu,
+    data.databricks_service_principal.as_spn
   ]
 }
 
@@ -1233,9 +1323,15 @@ resource "databricks_permissions" "global_pbiclustercrmho_usage" {
     permission_level = "CAN_RESTART"
   }
 
+  access_control {
+    service_principal_name = data.databricks_service_principal.crmho_spn.application_id
+    permission_level       = "CAN_RESTART"
+  }
+
   depends_on = [ 
     data.databricks_cluster.global_crmho_pbicluster,
-    data.databricks_group.crm_ho_bu
+    data.databricks_group.crm_ho_bu,
+    data.databricks_service_principal.crmho_spn
   ]
 }
 
@@ -1295,9 +1391,15 @@ resource "databricks_permissions" "global_pbiclusterila_usage" {
     permission_level = "CAN_RESTART"
   }
 
+  access_control {
+    service_principal_name = data.databricks_service_principal.ila_spn.application_id
+    permission_level       = "CAN_RESTART"
+  }
+
   depends_on = [ 
     data.databricks_cluster.global_ila_pbicluster,
-    data.databricks_group.imperial_africa_bu
+    data.databricks_group.imperial_africa_bu,
+    data.databricks_service_principal.ila_spn
   ]
 }
 
@@ -1357,9 +1459,15 @@ resource "databricks_permissions" "global_pbiclusterili_usage" {
     permission_level = "CAN_RESTART"
   }
 
+  access_control {
+    service_principal_name = data.databricks_service_principal.ili_spn.application_id
+    permission_level       = "CAN_RESTART"
+  }
+
   depends_on = [ 
     data.databricks_cluster.global_ili_pbicluster,
-    data.databricks_group.imperial_intl_bu
+    data.databricks_group.imperial_intl_bu,
+    data.databricks_service_principal.ili_spn
   ]
 }
 
