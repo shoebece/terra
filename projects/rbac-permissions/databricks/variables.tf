@@ -99,6 +99,46 @@ variable "adf_prod_umi" { type = object({
   app_id = string
 })}
 
+variable "pbi_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "synceur_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "syncamr_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "pa_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "ili_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "ila_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "crmho_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "as_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
 variable "landing_ext_loc" {
     type = list(object({
         name    = string
