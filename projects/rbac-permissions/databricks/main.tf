@@ -920,6 +920,20 @@ resource "databricks_permission_assignment" "add_ili_spn" {
   depends_on = [ data.databricks_service_principal.ili_spn ]
 }
 
+# ila_spn
+data "databricks_service_principal" "ila_spn" {
+  provider      = databricks.globaldbw
+  application_id  = var.ila_spn.app_id
+}
+
+resource "databricks_permission_assignment" "add_ila_spn" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_service_principal.ila_spn.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_service_principal.ila_spn ]
+}
+
 # crmho_spn
 data "databricks_service_principal" "crmho_spn" {
   provider      = databricks.globaldbw
