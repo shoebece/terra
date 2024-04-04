@@ -34,16 +34,6 @@ variable "contract_logistics_eur_bu" { type = object({
   id = string
 })}
 
-variable "product_analytics_bu" { type = object({
-  name = string
-  id = string
-})}
-
-variable "product_analytics_confd_bu" { type = object({
-  name = string
-  id = string
-})}
-
 variable "applied_science_bu" { type = object({
   name = string
   id = string
@@ -64,6 +54,51 @@ variable "imperial_intl_bu" { type = object({
   id = string
 })}
 
+variable "pa_global_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "pa_ecomm_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "pa_freight_forwarding_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "pa_sco_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "pa_searates_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "pa_trade_finance_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "adf_dev_umi" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "adf_uat_umi" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "adf_prod_umi" { type = object({
+  name = string
+  app_id = string
+})}
+
 variable "landing_ext_loc" {
     type = list(object({
         name    = string
@@ -76,22 +111,6 @@ variable "catalog_config" {
         name    = string
         type    = string
         stconts = list(string)
-        loc_logistics_amr = list(string)
-        cat_logistics_amr = list(string)
-        loc_logistics_eur = list(string)
-        cat_logistics_eur = list(string)
-        loc_pa  = list(string)
-        cat_pa  = list(string)
-        loc_pa_confd  = list(string)
-        cat_pa_confd  = list(string)
-        loc_as  = list(string)
-        cat_as  = list(string)
-        loc_crmho  = list(string)
-        cat_crmho  = list(string)
-        loc_ila  = list(string)
-        cat_ila  = list(string)
-        loc_ili  = list(string)
-        cat_ili  = list(string)
     }))
 }
 
