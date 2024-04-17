@@ -299,3 +299,14 @@ resource "azurerm_synapse_workspace_sql_aad_admin" "super-user-as-prod-synapse-a
 
   depends_on = [ data.azurerm_synapse_workspace.prod_synapse_ws ]
 }
+
+##SSH-Keys
+
+resource "azurerm_role_assignment" "super-user-to-prod-landing-SSH-Keys" {
+  provider             = azurerm.prod
+  scope                = data.azurerm_resource_group.prod-landing-rg.id
+  role_definition_name = "SSHKeyPairGenerator"
+  principal_id         = var.super_user_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.prod-landing-rg ]
+}
