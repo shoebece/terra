@@ -226,7 +226,7 @@ resource "azurerm_windows_virtual_machine" "shir-vm" {
     version   = "latest"
   }
 
-  tags = merge(var.resource_tags_common, var.resource_tags_spec)
+  tags = merge(var.resource_tags_common, var.resource_tags_spec,  var.resource_ospatching_tags_spec)
 
   lifecycle {
     ignore_changes = [
@@ -275,7 +275,7 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
     version   = "latest"
   }
 
-  tags = merge(var.resource_tags_common, var.resource_tags_spec)
+  tags = merge(var.resource_tags_common, var.resource_tags_spec,  var.resource_ospatching_tags_spec)
 
   lifecycle {
     ignore_changes = [
