@@ -67,7 +67,7 @@ resource "azurerm_windows_virtual_machine" "pbi-gateway-vm" {
     version   = "latest"
   }
 
-  tags = merge(var.resource_tags_common, var.resource_tags_spec)
+  tags = merge(var.resource_tags_common, var.resource_tags_spec, var.resource_ospatching_tags_spec)
 
   lifecycle {
     ignore_changes = [
