@@ -22,12 +22,12 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/landing/'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/rbac-permissions/'
           backendServiceArm: 'CDP_Management'
           backendAzureRmResourceGroupName: 'cdmz-cicd-rg'
           backendAzureRmStorageAccountName: 'cdmztfstatefiledls'
           backendAzureRmContainerName: 'tfstate'
-          backendAzureRmKey: 'dev/cdpz/landing.tfstate'
+          backendAzureRmKey: 'prod/rbac-permissions.tfstate'
       - task: TerraformCLI@1
         env:
           ARM_USE_MSI: true
@@ -36,5 +36,5 @@ stages:
           ARM_CLIENT_ID: "4bdad00a-f14e-4129-a845-c2a2f221dfbb"
         inputs:
           command: 'forceunlock'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/landing/'
-          lockID: 'c7d9a9fa-51d4-1539-5c8a-a624a1b212f5'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/rbac-permissions/'
+          lockID: '009fdde2-be92-6f06-5f8f-6a6b310950bc'
