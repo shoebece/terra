@@ -27,7 +27,7 @@ stages:
           backendAzureRmResourceGroupName: 'cdmz-cicd-rg'
           backendAzureRmStorageAccountName: 'cdmztfstatefiledls'
           backendAzureRmContainerName: 'tfstate'
-          backendAzureRmKey: 'prod/rbac-permissions/rbac-permissions.tfstate'
+          backendAzureRmKey: 'prod/rbac-permissions.tfstate'
       - task: TerraformCLI@1
         env:
           ARM_USE_MSI: true
