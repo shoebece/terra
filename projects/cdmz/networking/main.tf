@@ -469,6 +469,12 @@ data "azurerm_mysql_flexible_server" "AzureMysql_mysql-global-dr" {
   provider            = azurerm.CCSGlobal
 }
 
+data "azurerm_mysql_flexible_server" "AzureMysql_mysql-ecommerce-prod-01" {
+  name                = "mysql-ecommerce-prod-01"
+  resource_group_name = "rg-ecommerce-prod"
+  provider            = azurerm.Ecommerce
+}
+
 data "azurerm_mysql_server" "AzureMysql_mysql-accounts-prod-dr" {
   name                = "mysql-accounts-prod-dr"
   resource_group_name = "rg-accounts-dr"
@@ -1199,6 +1205,52 @@ resource "azurerm_private_endpoint" "AzureMysql_accountsdb_mysql_endpoint_pep" {
   ip_configuration {
     name               = "cdmz-mgmt-fivetran-mysql-accountsdb-prod-dr-ipc"
     private_ip_address = var.DTWorld_fv_ip_address
+    subresource_name   = "mysqlServer"
+    member_name        = "mysqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    azurerm_private_dns_zone.pdnsz_mysql
+  ]
+}
+
+# # Private end point management for MySQl single server mysql-ecommerce-prod-01
+
+resource "azurerm_private_endpoint" "AzureMysql_ecommerce_mysql_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-mysql-ecommerce-prod-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-mysql-ecommerce-prod-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_psql"
+    private_dns_zone_ids = [ azurerm_private_dns_zone.pdnsz_mysql.id ]
+  }
+  
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_mysql-psc"
+    private_connection_resource_id = data.azurerm_mysql_flexible_server.AzureMysql_mysql-ecommerce-prod-01.id
+    subresource_names              = ["mysqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-mysql-ecommerce-prod-ipc"
+    private_ip_address = var.ecommmySQL_fv_ip_address
     subresource_name   = "mysqlServer"
     member_name        = "mysqlServer"
   }
