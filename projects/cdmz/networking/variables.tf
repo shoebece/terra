@@ -40,6 +40,7 @@ variable "datalakestrprod_fv_ip_address"  { type = string }
 variable "datalakestrprod_dfs_fv_ip_address"  { type = string }
 variable "pgecommipms_fv_ip_address"  { type = string }
 variable "mysql-nau-dr_fv_ip_address"  { type = string }
+variable "btdr_firewall_ip_address"           { type = string }
 variable "sandbox_prefix" {
     type = string 
     default = ""

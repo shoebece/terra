@@ -301,7 +301,79 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "10.88.228.197/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    }
+    },
+    {
+      name                    = "Route_Rotterdam_fivetran3"
+      address_prefix          = "10.168.221.31/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_Pusan_Fivetran_3"
+      address_prefix          = "10.2.2.31/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_Pusan_Fivetran_4"
+      address_prefix          = "10.2.2.32/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_Pusan_Fivetran_5"
+      address_prefix          = "10.2.2.33/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_Pusan_Fivetran_6"
+      address_prefix          = "10.2.2.34/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_Sokhna_TOS_DB"
+      address_prefix          = "101.101.100.3/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_mysq_bt_prod_dr"
+      address_prefix          = "172.17.12.0/28"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_mysq_bt_prod_dr"
+      address_prefix          = "172.17.12.0/28"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.btdr_firewall_ip_address
+    },
+    {
+      name                    = "Route_AEJA3"
+      address_prefix          = "172.20.49.154/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_mysql_cns_dr"
+      address_prefix          = "172.21.18.4/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.EUR_Int_firewall_ip_address
+    },
+    {
+      name                    = "Route_Djen_Fivetran"
+      address_prefix          = "192.168.10.7/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_ATI_Manila_VPN"
+      address_prefix          = "192.168.2.35/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
   ]
     
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
