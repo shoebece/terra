@@ -457,6 +457,25 @@ data "azurerm_mysql_flexible_server" "AzureMysql_mysql-naudb-prod-dr" {
   provider            = azurerm.NAU
 }
 
+data "azurerm_mysql_server" "AzureMysql_mysql-mea-dr" {
+  name                = "mysql-mea-dr"
+  resource_group_name = "rg-mea-prod"
+  provider            = azurerm.CCSMEA
+}
+
+data "azurerm_mysql_flexible_server" "AzureMysql_mysql-global-dr" {
+  name                = "mysql-global-dr"
+  resource_group_name = "rg-global-prod"
+  provider            = azurerm.CCSGlobal
+}
+
+data "azurerm_mysql_server" "AzureMysql_mysql-accounts-prod-dr" {
+  name                = "mysql-accounts-prod-dr"
+  resource_group_name = "rg-accounts-dr"
+  provider            = azurerm.DTWorld
+}
+
+
 data "azurerm_private_dns_zone" "pdnsz" {
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = data.azurerm_resource_group.resgrp.name
@@ -1044,6 +1063,142 @@ resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
   ip_configuration {
     name               = "cdmz-mgmt-fivetran-mysql-naudb-prod-dr-ipc"
     private_ip_address = var.mysql-nau-dr_fv_ip_address
+    subresource_name   = "mysqlServer"
+    member_name        = "mysqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    azurerm_private_dns_zone.pdnsz_mysql
+  ]
+}
+
+# # Private end point management for MySQl single server mysql-mea-dr
+resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-mysql-meadb-prod-dr-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-mysql-meadb-prod-dr-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_psql"
+    private_dns_zone_ids = [ azurerm_private_dns_zone.pdnsz_mysql.id ]
+  }
+  
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_mysql-psc"
+    private_connection_resource_id = data.azurerm_mysql_server.AzureMysql_mysql-mea-dr.id
+    subresource_names              = ["mysqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-mysql-meadb-prod-dr-ipc"
+    private_ip_address = var.CCSMEA_fv_ip_address
+    subresource_name   = "mysqlServer"
+    member_name        = "mysqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    azurerm_private_dns_zone.pdnsz_mysql
+  ]
+}
+
+# # Private end point management for MySQl flex server mysql-global-dr
+
+resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-mysql-globaldb-prod-dr-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-mysql-globaldb-prod-dr-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_psql"
+    private_dns_zone_ids = [ azurerm_private_dns_zone.pdnsz_mysql.id ]
+  }
+  
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_mysql-psc"
+    private_connection_resource_id = data.azurerm_mysql_flexible_server.AzureMysql_mysql-global-dr.id
+    subresource_names              = ["mysqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-mysql-globaldb-prod-dr-ipc"
+    private_ip_address = var.CCSGlobal_fv_ip_address
+    subresource_name   = "mysqlServer"
+    member_name        = "mysqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    azurerm_private_dns_zone.pdnsz_mysql
+  ]
+}
+
+# # Private end point management for MySQl single server mysql-accounts-prod-dr
+resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-mysql-accountsdb-prod-dr-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-mysql-accountsdb-prod-dr-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_psql"
+    private_dns_zone_ids = [ azurerm_private_dns_zone.pdnsz_mysql.id ]
+  }
+  
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_mysql-psc"
+    private_connection_resource_id = data.azurerm_mysql_server.AzureMysql_mysql-accounts-prod-dr.id
+    subresource_names              = ["mysqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-mysql-accountsdb-prod-dr-ipc"
+    private_ip_address = var.DTWorld_fv_ip_address
     subresource_name   = "mysqlServer"
     member_name        = "mysqlServer"
   }

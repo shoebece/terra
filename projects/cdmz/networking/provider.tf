@@ -165,3 +165,51 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias           = "CCSMEA"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "ad86c834-0651-4e48-8c88-2cf8289e2fe7"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}
+
+provider "azurerm" {
+  alias           = "CCSGlobal"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "7076703f-57ca-4c30-9d69-94c008f7a470"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}
+
+provider "azurerm" {
+  alias           = "DTWorld"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "56a6b4b1-7256-4834-9817-e27c75f1ae05"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}

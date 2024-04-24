@@ -41,6 +41,9 @@ variable "datalakestrprod_dfs_fv_ip_address"  { type = string }
 variable "pgecommipms_fv_ip_address"  { type = string }
 variable "mysql-nau-dr_fv_ip_address"  { type = string }
 variable "btdr_firewall_ip_address"           { type = string }
+variable "CCSMEA_fv_ip_address"           { type = string }
+variable "CCSGlobal_fv_ip_address"           { type = string }
+variable "DTWorld_fv_ip_address"           { type = string }
 variable "sandbox_prefix" {
     type = string 
     default = ""
