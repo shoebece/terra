@@ -51,7 +51,7 @@ resource "azurerm_eventhub_namespace" "ehns" {
          data.azurerm_subnet.cdmz-snet-srvend, 
          ["/subscriptions/1691759c-bec8-41b8-a5eb-03c57476ffdb/resourceGroups/rg-infrateam/providers/Microsoft.Network/virtualNetworks/vnet-infrateam/subnets/snet-aks-infra"]) :
       {
-        subnet_id = s.id
+        subnet_id = data.azurerm_subnet.snet.id
         ignore_missing_virtual_network_service_endpoint = "true"
       }
     ]
@@ -64,13 +64,13 @@ resource "azurerm_eventhub_namespace" "ehns" {
 }
 
 data "azurerm_subnet" "snet" {
-  name                 = "privatelink.servicebus.windows.net"
+  name                 = "processing-default-snet"
   resource_group_name  = local.networking_resource_group_name
   virtual_network_name = join("-", ["cdpz", var.environment, "processing-vnet"])
 }
 
 data "azurerm_private_dns_zone" "pdnsz" {
-  name                = "privatelink.sql.azuresynapse.net"
+  name                = "privatelink.servicebus.windows.net"
   resource_group_name = local.networking_resource_group_name
 }
 
