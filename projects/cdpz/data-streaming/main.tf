@@ -122,7 +122,7 @@ resource "azurerm_private_endpoint" "pep" {
 resource "azurerm_eventhub" "ehs" {
     name                = "data-streaming"
     namespace_name      = azurerm_eventhub_namespace.ehns.name
-    resource_group_name = azurerm_resource_group.resgrp.name
+    resource_group_name = data.azurerm_resource_group.resgrp.name
 
     partition_count     = 2
     message_retention   = 1
