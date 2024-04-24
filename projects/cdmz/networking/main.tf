@@ -1084,7 +1084,7 @@ resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
 }
 
 # # Private end point management for MySQl single server mysql-mea-dr
-resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
+resource "azurerm_private_endpoint" "AzureMysql_meadb_mysql_endpoint_pep" {
   name                = "cdmz-mgmt-fivetran-mysql-meadb-prod-dr-pep"
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
@@ -1130,7 +1130,7 @@ resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
 
 # # Private end point management for MySQl flex server mysql-global-dr
 
-resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
+resource "azurerm_private_endpoint" "AzureMysql_globaldb_mysql_endpoint_pep" {
   name                = "cdmz-mgmt-fivetran-mysql-globaldb-prod-dr-pep"
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
@@ -1175,7 +1175,7 @@ resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
 }
 
 # # Private end point management for MySQl single server mysql-accounts-prod-dr
-resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
+resource "azurerm_private_endpoint" "AzureMysql_accountsdb_mysql_endpoint_pep" {
   name                = "cdmz-mgmt-fivetran-mysql-accountsdb-prod-dr-pep"
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
