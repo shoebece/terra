@@ -481,6 +481,17 @@ data "azurerm_mysql_server" "AzureMysql_mysql-accounts-prod-dr" {
   provider            = azurerm.DTWorld
 }
 
+data "azurerm_mssql_server" "AzureSQL_POEMS" {
+  name                = "sqlprdrostimadbserver-dr"
+  resource_group_name = "Rg-Rostima-Prod"
+  provider            = azurerm.POEMS
+}
+
+data "azurerm_mssql_server" "AzureSQL_BASQL" {
+  name                = "ba-sqlprod"
+  resource_group_name = "Rg-sqlbamanagedprod"
+  provider            = azurerm.BusinessAnalytics
+}
 
 data "azurerm_private_dns_zone" "pdnsz" {
   name                = "privatelink.vaultcore.azure.net"
@@ -1236,6 +1247,98 @@ resource "azurerm_private_endpoint" "AzureMysql_accountsdb_mysql_endpoint_pep" {
     azurerm_private_dns_zone.pdnsz_mysql
   ]
 }
+
+# # Private end point management for SQL Server - sqlprdrostimadbserver-dr
+
+resource "azurerm_private_endpoint" "AzureSQL_POEMS_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-PoemsSQL-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-PoemsSQL-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_sql"
+    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_sql.id ]
+  }
+
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_sql-psc"
+    private_connection_resource_id = data.azurerm_mssql_server.AzureSQL_POEMS.id
+    subresource_names              = ["sqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-PoemsSQL-ipc"
+    private_ip_address = var.POEMSSQL_fv_ip_address
+    subresource_name   = "sqlServer"
+    member_name        = "sqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    data.azurerm_private_dns_zone.pdnsz
+  ]
+}
+
+# # Private end point management for SQL Server - ba-sqlprod
+resource "azurerm_private_endpoint" "AzureSQL_BASQL_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-BaSQL-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-BaSQL-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_sql"
+    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_sql.id ]
+  }
+
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_sql-psc"
+    private_connection_resource_id = data.azurerm_mssql_server.AzureSQL_BASQL.id
+    subresource_names              = ["sqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-BaSQL-ipc"
+    private_ip_address = var.BASQL_fv_ip_address
+    subresource_name   = "sqlServer"
+    member_name        = "sqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    data.azurerm_private_dns_zone.pdnsz
+  ]
+}
+
 
 # # Private end point management for Zodiac Coud AULAD FT 
 
