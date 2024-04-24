@@ -270,6 +270,15 @@ resource "azurerm_synapse_role_assignment" "super-user-to-prod-synapse" {
   depends_on = [ data.azurerm_synapse_workspace.prod_synapse_ws ]
 }
 
+resource "azurerm_role_assignment" "super-user-to-prod-sharing" {
+  provider             = azurerm.prod
+  scope                = data.azurerm_resource_group.prod-sharing.id
+  role_definition_name = "Contributor"
+  principal_id         = var.data_engg_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.prod-sharing ]
+}
+
 resource "azurerm_synapse_workspace_sql_aad_admin" "super-user-as-dev-synapse-aad-admin" {
   provider              = azurerm.dev
   synapse_workspace_id  = data.azurerm_synapse_workspace.dev_synapse_ws.id
