@@ -342,12 +342,6 @@ resource "azurerm_route_table" "art" {
       name                    = "Route_mysq_bt_prod_dr"
       address_prefix          = "172.17.12.0/28"
       next_hop_type           = "VirtualAppliance"
-      next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
-      name                    = "Route_mysq_bt_prod_dr"
-      address_prefix          = "172.17.12.0/28"
-      next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.btdr_firewall_ip_address
     },
     {
