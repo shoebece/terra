@@ -31,7 +31,7 @@ data azurerm_subnet cdmz-snet-srvend {
 }
 
 resource "azurerm_eventhub_namespace" "ehns" {
-  name = join("-", ["cdpz", var.environment, "data-streaming-ehns"])
+  name = join("-", ["cdpz", var.environment, "data-streaming-ehnsp"])
 
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
