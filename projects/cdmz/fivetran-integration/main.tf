@@ -48,6 +48,7 @@ resource "azurerm_windows_virtual_machine" "fivetran-vm" {
   computer_name       = each.value.computer_name
   admin_username      = each.value.admin_username
   admin_password      = var.vm_admin_password
+  license_type        = Windows_Server
 
   #encryption_at_host_enabled = ?
 
