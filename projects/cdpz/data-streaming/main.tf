@@ -30,8 +30,8 @@ data azurerm_subnet cdmz-snet-srvend {
     name                 = var.cdmz_service_endpoint_snets[count.index].snet
 }
 
-resource "azurerm_eventhub_namespace" "ehns" {
-  name = join("-", ["cdpz", var.environment, "data-streaming-ehnsp"])
+resource "azurerm_eventhub_namespace" "portsterms" {
+  name = join("-", ["cdpz", var.environment, "ingestion-portsterms-evh01"])
 
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
@@ -41,6 +41,8 @@ resource "azurerm_eventhub_namespace" "ehns" {
   sku                           = "Standard"
   capacity                      = 1
   zone_redundant                = true
+  auto_inflate_enabled          = true
+  maximum_throughput_units      = 4
 
   network_rulesets {
     default_action                 = "Deny"
@@ -75,13 +77,13 @@ data "azurerm_private_dns_zone" "pdnsz" {
 }
 
 resource "azurerm_private_endpoint" "pep" {
-  name                            = join("-", ["cdpz", var.environment, "data-streaming-ehns-pep"])  
+  name                            = join("-", ["cdpz", var.environment, "data-streaming-portsterms-pep"])  
   resource_group_name             = local.networking_resource_group_name
   location                        = var.resource_location
 
   subnet_id                       = data.azurerm_subnet.snet.id
 
-  custom_network_interface_name   = join("-", ["cdpz", var.environment, "data-streaming-ehns-nic"])
+  custom_network_interface_name   = join("-", ["cdpz", var.environment, "data-streaming-portsterms-nic"])
 
   private_dns_zone_group {
     name = "add_to_azure_private_dns"
@@ -89,14 +91,14 @@ resource "azurerm_private_endpoint" "pep" {
   }
 
   private_service_connection {
-    name                            = join("-", ["cdpz", var.environment, "data-streaming-ehns-psc"])
-    private_connection_resource_id  = azurerm_eventhub_namespace.ehns.id
+    name                            = join("-", ["cdpz", var.environment, "data-streaming-portsterms-psc"])
+    private_connection_resource_id  = azurerm_eventhub_namespace.portsterms.id
     subresource_names               = ["namespace"]
     is_manual_connection            = false
   }
 
   ip_configuration {
-    name                =   join("-", ["cdpz", var.environment, "data-streaming-ehns-ipc"])
+    name                =   join("-", ["cdpz", var.environment, "data-streaming-portsterms-ipc"])
     private_ip_address  =   var.private_endpoint_ip_address
     subresource_name    =   "namespace"
     member_name         =   "namespace"
@@ -113,19 +115,52 @@ resource "azurerm_private_endpoint" "pep" {
   }
 
   depends_on = [
-    azurerm_eventhub_namespace.ehns,
+    azurerm_eventhub_namespace.portsterms,
     data.azurerm_private_dns_zone.pdnsz,
     data.azurerm_subnet.snet
   ]
 }
 
-resource "azurerm_eventhub" "ehs" {
-    name                = "data-streaming"
-    namespace_name      = azurerm_eventhub_namespace.ehns.name
+resource "azurerm_eventhub" "tiot_delayed" {
+    name                = "tiot_delayed"
+    namespace_name      = azurerm_eventhub_namespace.portsterms.name
     resource_group_name = data.azurerm_resource_group.resgrp.name
 
     partition_count     = 2
     message_retention   = 1
 
-    depends_on = [ azurerm_eventhub_namespace.ehns ]
+    depends_on = [ azurerm_eventhub_namespace.portsterms ]
+}
+
+resource "azurerm_eventhub" "tiot_error" {
+    name                = "tiot_error"
+    namespace_name      = azurerm_eventhub_namespace.portsterms.name
+    resource_group_name = data.azurerm_resource_group.resgrp.name
+
+    partition_count     = 2
+    message_retention   = 1
+
+    depends_on = [ azurerm_eventhub_namespace.portsterms ]
+}
+
+resource "azurerm_eventhub" "tiot_event" {
+    name                = "tiot_event"
+    namespace_name      = azurerm_eventhub_namespace.portsterms.name
+    resource_group_name = data.azurerm_resource_group.resgrp.name
+
+    partition_count     = 2
+    message_retention   = 1
+
+    depends_on = [ azurerm_eventhub_namespace.portsterms ]
+}
+
+resource "azurerm_eventhub" "tiot_uptime" {
+    name                = "tiot_uptime"
+    namespace_name      = azurerm_eventhub_namespace.portsterms.name
+    resource_group_name = data.azurerm_resource_group.resgrp.name
+
+    partition_count     = 2
+    message_retention   = 1
+
+    depends_on = [ azurerm_eventhub_namespace.portsterms ]
 }
