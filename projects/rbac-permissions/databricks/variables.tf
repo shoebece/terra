@@ -54,6 +54,11 @@ variable "imperial_intl_bu" { type = object({
   id = string
 })}
 
+variable "external_users_bu" { type = object({
+  name = string
+  id = string
+})}
+
 variable "pa_global_bu" { type = object({
   name = string
   id = string
