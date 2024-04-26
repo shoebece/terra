@@ -8,6 +8,7 @@ variable "resource_tags_common" { type = map(string) }
 variable "resource_tags_spec" { type = map(string) }
 
 variable "private_endpoint_ip_address" { type = string }
+variable "private_endpoint_ip_address_ilamix" { type = string }
 
 variable "service_endpoint_snets" { type = list(object({
   rgname = string
