@@ -208,17 +208,6 @@ resource "azurerm_eventhub_namespace" "ila" {
   }
 }
 
-data "azurerm_subnet" "snet" {
-  name                 = "processing-default-snet"
-  resource_group_name  = local.networking_resource_group_name
-  virtual_network_name = join("-", ["cdpz", var.environment, "processing-vnet"])
-}
-
-data "azurerm_private_dns_zone" "pdnsz" {
-  name                = "privatelink.servicebus.windows.net"
-  resource_group_name = local.networking_resource_group_name
-}
-
 resource "azurerm_private_endpoint" "pep-ila" {
   name                            = join("-", ["cdpz", var.environment, "data-streaming-ila-pep"])  
   resource_group_name             = local.networking_resource_group_name
