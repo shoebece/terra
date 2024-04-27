@@ -864,6 +864,29 @@ resource "databricks_entitlements" "entitle_pa_trade_finance_bu" {
   depends_on = [ data.databricks_group.pa_trade_finance_bu ]
 }
 
+# cdpz-ext-users
+data "databricks_group" "external_users_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.external_users_bu.name
+}
+
+resource "databricks_permission_assignment" "add_external_users_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.external_users_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.external_users_bu ]
+}
+
+resource "databricks_entitlements" "entitle_external_users_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.external_users_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.external_users_bu ]
+}
+
 # synceur_spn
 data "databricks_service_principal" "synceur_spn" {
   provider      = databricks.globaldbw
@@ -1506,6 +1529,27 @@ resource "databricks_permissions" "global_pbiclusterili_usage" {
 #   ]
 # }
 
+# Cluster External Users
+data "databricks_cluster" "global_extusers_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-ext-team-cluster"
+}
+
+resource "databricks_permissions" "global_clusterext_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_extusers_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.external_users_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_extusers_cluster,
+    data.databricks_group.external_users_bu
+  ]
+}
+
 ## ----------------------------------------------------------
 ## Artifactory 
 ## Maven
@@ -1587,6 +1631,11 @@ resource "databricks_grants" "artifactory_ext_loc_maven" {
     privileges = ["READ_FILES"]
   }
 
+  grant {
+    principal  = data.databricks_group.external_users_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
@@ -1602,7 +1651,8 @@ resource "databricks_grants" "artifactory_ext_loc_maven" {
     data.databricks_group.applied_science_bu,
     data.databricks_group.crm_ho_bu,
     data.databricks_group.imperial_africa_bu,
-    data.databricks_group.imperial_intl_bu
+    data.databricks_group.imperial_intl_bu,
+    data.databricks_group.external_users_bu
   ]
 }
 
@@ -1685,6 +1735,11 @@ resource "databricks_grants" "artifactory_ext_loc_pypi" {
     privileges = ["READ_FILES"]
   }
 
+  grant {
+    principal  = data.databricks_group.external_users_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
@@ -1700,7 +1755,8 @@ resource "databricks_grants" "artifactory_ext_loc_pypi" {
     data.databricks_group.applied_science_bu,
     data.databricks_group.crm_ho_bu,
     data.databricks_group.imperial_africa_bu,
-    data.databricks_group.imperial_intl_bu
+    data.databricks_group.imperial_intl_bu,
+    data.databricks_group.external_users_bu
   ]
 }
 
@@ -1783,6 +1839,11 @@ resource "databricks_grants" "artifactory_ext_loc_scripts" {
     privileges = ["READ_FILES"]
   }
 
+  grant {
+    principal  = data.databricks_group.external_users_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
@@ -1798,6 +1859,7 @@ resource "databricks_grants" "artifactory_ext_loc_scripts" {
     data.databricks_group.applied_science_bu,
     data.databricks_group.crm_ho_bu,
     data.databricks_group.imperial_africa_bu,
-    data.databricks_group.imperial_intl_bu
+    data.databricks_group.imperial_intl_bu,
+    data.databricks_group.external_users_bu
   ]
 }
