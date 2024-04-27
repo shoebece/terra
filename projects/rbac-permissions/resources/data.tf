@@ -145,3 +145,19 @@ data "azurerm_resource_group" "artifactory-rg" {
   provider  = azurerm.cdmz
   name      = "cdmz-artifactory-rg"
 }
+
+# Streaming
+data "azurerm_resource_group" "prod-data-streaming-rg" {
+  provider  = azurerm.prod
+  name      = "cdpz-prod-data-streaming-rg"
+}
+
+data "azurerm_resource_group" "uat-data-streaming-rg" {
+  provider  = azurerm.uat
+  name      = "cdpz-uat-data-streaming-rg"
+}
+
+data "azurerm_resource_group" "dev-data-streaming-rg" {
+  provider  = azurerm.dev
+  name      = "cdpz-dev-data-streaming-rg"
+}

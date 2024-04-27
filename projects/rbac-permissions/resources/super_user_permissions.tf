@@ -355,3 +355,32 @@ resource "azurerm_role_assignment" "super-user-to-uat-landing-SSH-Keys" {
 
   depends_on = [ data.azurerm_resource_group.uat-landing-rg ]
 }
+
+## EventHub Management
+
+resource "azurerm_role_assignment" "super-user-to-prod-landing-SSH-Keys" {
+  provider             = azurerm.prod
+  scope                = data.azurerm_resource_group.prod-data-streaming-rg.id
+  role_definition_name = "SSHKeyPairGenerator"
+  principal_id         = var.super_user_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.prod-landing-rg ]
+}
+
+resource "azurerm_role_assignment" "super-user-to-dev-landing-SSH-Keys" {
+  provider             = azurerm.dev
+  scope                = data.azurerm_resource_group.dev-data-streaming-rg.id
+  role_definition_name = "SSHKeyPairGenerator"
+  principal_id         = var.super_user_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.dev-landing-rg ]
+}
+
+resource "azurerm_role_assignment" "super-user-to-uat-landing-SSH-Keys" {
+  provider             = azurerm.uat
+  scope                = data.azurerm_resource_group.uat-data-streaming-rg.id
+  role_definition_name = "SSHKeyPairGenerator"
+  principal_id         = var.super_user_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.uat-landing-rg ]
+}
