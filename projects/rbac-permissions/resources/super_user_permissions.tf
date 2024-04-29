@@ -182,7 +182,7 @@ resource "azurerm_role_assignment" "super-user-to-prod-data-storage" {
 resource "azurerm_role_assignment" "super-user-to-dev-landing" {
   provider             = azurerm.dev
   scope                = data.azurerm_resource_group.dev-landing-rg.id
-  role_definition_name = "Storage Blob Data Contributor"
+  role_definition_name = "Storage Blob Data Owner"
   principal_id         = var.super_user_aad_group.id
 
   depends_on = [ data.azurerm_resource_group.dev-landing-rg ]
