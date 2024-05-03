@@ -276,6 +276,8 @@ resource "azurerm_linux_virtual_machine" "ado-shir-vm" {
     version   = "latest"
   }
 
+  patch_mode            = "AutomaticByPlatform"
+  patch_assessment_mode = "AutomaticByPlatform"
   tags = merge(var.resource_tags_common, var.resource_tags_spec,  var.resource_ospatching_tags_spec)
 
   lifecycle {
