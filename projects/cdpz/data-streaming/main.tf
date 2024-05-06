@@ -201,7 +201,6 @@ resource "azurerm_eventhub_namespace" "ila" {
       }
     ]
   }
-
   identity {
     type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.umi1.id]
