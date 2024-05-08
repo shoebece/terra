@@ -16,6 +16,10 @@ variable "staccs" {
             ip   = string
         }))
         specyfic_service_endpoint_snets = list(string)
+        is_hns_enabled = {
+            type = bool
+            default = "true"
+            }
     }))
 }
 
@@ -31,7 +35,7 @@ variable public_access_enabled {
     default = "true"
 }
 
-variable is_hns_enabled {
-    type = bool
-    default = "true"
-}
+# variable is_hns_enabled {
+#     type = bool
+#     default = "true"
+# }
