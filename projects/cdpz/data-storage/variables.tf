@@ -30,3 +30,8 @@ variable public_access_enabled {
     type = bool
     default = "true"
 }
+
+variable is_hns_enabled {
+    type = bool
+    default = "true"
+}
