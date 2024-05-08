@@ -41,7 +41,7 @@ resource "azurerm_storage_account" "data_staccs" {
   public_network_access_enabled       = var.public_access_enabled
   allow_nested_items_to_be_public     = false
   min_tls_version           = "TLS1_2"
-  is_hns_enabled            = var.is_hns_enabled
+  is_hns_enabled            = each.value.is_hns_enabled
   account_kind              = "StorageV2"
   
   identity {
