@@ -419,13 +419,13 @@ resource "azurerm_route_table" "art" {
     {
       name                    = "Route_update_endpoints_01"
       address_prefix          = "AzureFrontDoor.FirstParty"
-      next_hop_type           = Internet
+      next_hop_type           = "Internet"
       next_hop_in_ip_address  = ""
     },
     {
       name                    = "Route_update_endpoints"
-      address_prefix          = AzureUpdateDelivery
-      next_hop_type           = Internet
+      address_prefix          = "AzureUpdateDelivery"
+      next_hop_type           = "Internet"
       next_hop_in_ip_address  = ""
     }
   ]
