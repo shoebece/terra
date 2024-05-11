@@ -214,3 +214,10 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vnetlinkcdpdev" {
   private_dns_zone_name = data.azurerm_private_dns_zone.pdnsz_sql.name
   virtual_network_id    = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-dev-processing-vnet"
 }
+
+resource "azurerm_private_dns_zone_virtual_network_link" "vnetlinkcdpuat" {
+  name                  = "vlink_sql_cdpz-uat-processing-vnet"
+  resource_group_name   = local.networking_resource_group_name
+  private_dns_zone_name = data.azurerm_private_dns_zone.pdnsz_sql.name
+  virtual_network_id    = "/subscriptions/fdb528b2-0e6b-4fc5-b8a9-acc9a7ba3ff6/resourceGroups/cdpz-uat-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-uat-processing-vnet"
+}
