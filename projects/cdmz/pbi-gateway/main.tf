@@ -43,6 +43,9 @@ resource "azurerm_windows_virtual_machine" "pbi-gateway-vm" {
   admin_username      = each.value.admin_username
   admin_password      = var.admin_password
   license_type        = "Windows_Server"
+  patch_assessment_mode = "AutomaticByPlatform"
+  patch_mode          = "AutomaticByPlatform"
+  bypass_platform_safety_checks_on_user_schedule_enabled  = true
 
   #encryption_at_host_enabled = ?
 
