@@ -75,7 +75,8 @@ resource "azurerm_windows_virtual_machine" "pbi-gateway-vm" {
 
   lifecycle {
     ignore_changes = [
-      admin_password
+      admin_password,
+      tags
     ]
   }
 
