@@ -404,30 +404,30 @@ resource "azurerm_route_table" "art" {
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
     },
-    # {
-    #   name                    = "AVD-ServiceTags-AzureKMS"
-    #   address_prefix          = "20.118.99.224/32"
-    #   next_hop_type           = "Internet"
-    #   # next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    # },
-    # {
-    #   name                    = "AVD-ServiceTags-AzureKMS01"
-    #   address_prefix          = "40.83.235.53/32"
-    #   next_hop_type           = "Internet"
-    #   # next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    # },
-    # {
-    #   name                    = "Route_update_endpoints_01"
-    #   address_prefix          = "AzureFrontDoor.FirstParty"
-    #   next_hop_type           = Internet
-    #   # next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    # },
-    # {
-    #   name                    = "Route_update_endpoints"
-    #   address_prefix          = AzureUpdateDelivery
-    #   next_hop_type           = Internet
-    #   # next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    # }
+    {
+      name                    = "AVD-ServiceTags-AzureKMS"
+      address_prefix          = "20.118.99.224/32"
+      next_hop_type           = "Internet"
+      next_hop_in_ip_address  = ""
+    },
+    {
+      name                    = "AVD-ServiceTags-AzureKMS01"
+      address_prefix          = "40.83.235.53/32"
+      next_hop_type           = "Internet"
+      next_hop_in_ip_address  = ""
+    },
+    {
+      name                    = "Route_update_endpoints_01"
+      address_prefix          = "AzureFrontDoor.FirstParty"
+      next_hop_type           = Internet
+      next_hop_in_ip_address  = ""
+    },
+    {
+      name                    = "Route_update_endpoints"
+      address_prefix          = AzureUpdateDelivery
+      next_hop_type           = Internet
+      next_hop_in_ip_address  = ""
+    }
   ]
     
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
