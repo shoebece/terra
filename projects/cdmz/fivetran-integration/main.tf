@@ -207,3 +207,10 @@ resource "azurerm_private_endpoint" "endpoint_adf" {
     data.azurerm_private_dns_zone.pdnsz_sql
   ]
 }
+
+resource "azurerm_private_dns_zone_virtual_network_link" "vnetlinkcdpdev" {
+  name                  = "vlink_sql_cdpz-dev-processing-vnet"
+  resource_group_name   = local.networking_resource_group_name
+  private_dns_zone_name = data.azurerm_private_dns_zone.pdnsz_sql.name
+  virtual_network_id    = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-dev-processing-vnet"
+}
