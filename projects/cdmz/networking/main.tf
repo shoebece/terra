@@ -373,6 +373,60 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "10.165.108.0/25"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
+    },
+    {
+      name                    = "Route_S2S_OCI_YMS1"
+      address_prefix          = "10.100.100.11/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_S2S_OCI_YMS2"
+      address_prefix          = "10.100.100.29/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_mysql-cargoscanadaprod-dr"
+      address_prefix          = "10.163.0.0/21"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.AMR_Int_firewall_ip_address
+    },
+    {
+      name                    = "Route_S2S_Rotterdam"
+      address_prefix          = "10.168.222.31/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_IFS__DDW"
+      address_prefix          = "10.238.3.41/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "AVD-ServiceTags-AzureKMS"
+      address_prefix          = "20.118.99.224/32"
+      next_hop_type           = "Internet"
+      # next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "AVD-ServiceTags-AzureKMS01"
+      address_prefix          = "40.83.235.53/32"
+      next_hop_type           = "Internet"
+      # next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_update_endpoints_01"
+      address_prefix          = "AzureFrontDoor.FirstParty"
+      next_hop_type           = "Internet"
+      # next_hop_in_ip_address  = var.vpn_firewall_ip_address
+    },
+    {
+      name                    = "Route_update_endpoints"
+      address_prefix          = "AzureUpdateDelivery"
+      next_hop_type           = "Internet"
+      # next_hop_in_ip_address  = var.vpn_firewall_ip_address
     }
   ]
     

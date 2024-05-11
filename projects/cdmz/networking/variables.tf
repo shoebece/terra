@@ -28,6 +28,7 @@ variable "vpn_firewall_ip_address"       { type = string }
 variable "kv_ip_address"                 { type = string }
 variable "synapse_plhub_ip_address"      { type = string }
 variable "EUR_Int_firewall_ip_address"      { type = string }
+variable "AMR_Int_firewall_ip_address"      { type = string }
 variable "uae-cpperimeter81-prod"      { type = string }
 variable "kv_fv_ip_address"                 { type = string }
 variable "ecommSQL_fv_ip_address"                 { type = string }
