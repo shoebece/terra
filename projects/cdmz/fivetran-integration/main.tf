@@ -51,6 +51,8 @@ resource "azurerm_windows_virtual_machine" "fivetran-vm" {
   license_type        = "Windows_Server"
   patch_assessment_mode = "AutomaticByPlatform"
   patch_mode          = "AutomaticByPlatform"
+  bypass_platform_safety_checks_on_user_schedule_enabled  = true
+
 
   #encryption_at_host_enabled = ?
 
@@ -80,7 +82,8 @@ resource "azurerm_windows_virtual_machine" "fivetran-vm" {
 
   lifecycle {
     ignore_changes = [
-      admin_password
+      admin_password,
+      tags
     ]
   }
 
