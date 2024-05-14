@@ -17,6 +17,7 @@ variable "staccs" {
         }))
         specyfic_service_endpoint_snets = list(string)
         is_hns_enabled = bool
+        stconts = list(string)
     }))
 }
 
