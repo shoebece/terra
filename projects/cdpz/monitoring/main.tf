@@ -22,6 +22,10 @@ locals {
   kv_access_name  = join("-", ["cdpz", var.environment, "access-kv"])
   dbw_access_name = join("-", ["cdpz", var.environment, "access-dbw"])
 
+  global_rg       = join("-", ["cdpz", "global", "processing-rg"])
+  kv_global_name  = join("-", ["cdpz", "global", "proc-kv"])
+  dbw_global_name = join("-", ["cdpz", "global", "processing-dbw"])
+
   sharing_rg      = join("-", ["cdpz", var.environment, "sharing-rg"])
   syapse_ws_name  = join("-", ["cdpz", var.environment, "sharing-synapse"])
 }
@@ -71,6 +75,13 @@ data "azurerm_key_vault" "access-kv" {
   resource_group_name = local.access_rg
 }
 
+data "azurerm_key_vault" "global-kv" {
+  count               = (var.environment == "prod" ? 1 : 0)
+  name                = local.kv_global_name
+  resource_group_name = local.global_rg
+}
+
+
 data "azurerm_databricks_workspace" "processing-dbws" {
   name                = local.dbw_data_processing_name
   resource_group_name = local.data_processing_rg
@@ -80,6 +91,12 @@ data "azurerm_databricks_workspace" "access-dbws" {
   count               = (var.environment == "prod" ? 1 : 0)
   name                = local.dbw_access_name
   resource_group_name = local.access_rg
+}
+
+data "azurerm_databricks_workspace" "global-dbws" {
+  count               = (var.environment == "prod" ? 1 : 0)
+  name                = local.dbw_global_name
+  resource_group_name = local.global_rg
 }
 
 data "azurerm_synapse_workspace" "synapse_ws" {
@@ -225,6 +242,29 @@ resource "azurerm_monitor_diagnostic_setting" "access-kv-diag-set" {
   count                          = (var.environment == "prod" ? 1 : 0)
   name                           = join("-", [local.kv_access_name, "diag-set"])
   target_resource_id             = data.azurerm_key_vault.access-kv[0].id
+  log_analytics_workspace_id     = azurerm_log_analytics_workspace.monitoring-log.id
+  log_analytics_destination_type = "Dedicated"
+
+  enabled_log {
+    category = "AuditEvent"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "AzurePolicyEvaluationDetails"
+    retention_policy {
+      enabled = true
+    }
+  }
+  depends_on = [data.azurerm_key_vault.access-kv]
+}
+
+resource "azurerm_monitor_diagnostic_setting" "global-kv-diag-set" {
+  count                          = (var.environment == "prod" ? 1 : 0)
+  name                           = join("-", [local.kv_global_name, "diag-set"])
+  target_resource_id             = data.azurerm_key_vault.global-kv[0].id
   log_analytics_workspace_id     = azurerm_log_analytics_workspace.monitoring-log.id
   log_analytics_destination_type = "Dedicated"
 
@@ -404,6 +444,162 @@ resource "azurerm_monitor_diagnostic_setting" "access-dbw-diag-set" {
   count                          = (var.environment == "prod" ? 1 : 0)
   name                           = join("-", [local.dbw_access_name, "diag-set"])
   target_resource_id             = data.azurerm_databricks_workspace.access-dbws[0].id
+  log_analytics_workspace_id     = azurerm_log_analytics_workspace.monitoring-log.id
+  log_analytics_destination_type = "Dedicated"
+
+  enabled_log {
+    category = "dbfs"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "clusters"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "accounts"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "jobs"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "notebook"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "ssh"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "workspace"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "secrets"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "sqlPermissions"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "instancePools"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "sqlanalytics"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "genie"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "globalInitScripts"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "iamRole"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "databrickssql"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "deltaPipelines"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "repos"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "unityCatalog"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "clusterLibraries"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "webTerminal"
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "gitCredentials"
+    retention_policy {
+      enabled = true
+    }
+  }
+  depends_on = [data.azurerm_databricks_workspace.access-dbws]
+}
+
+resource "azurerm_monitor_diagnostic_setting" "global-dbw-diag-set" {
+  count                          = (var.environment == "prod" ? 1 : 0)
+  name                           = join("-", [local.dbw_global_name, "diag-set"])
+  target_resource_id             = data.azurerm_databricks_workspace.global-dbws[0].id
   log_analytics_workspace_id     = azurerm_log_analytics_workspace.monitoring-log.id
   log_analytics_destination_type = "Dedicated"
 
