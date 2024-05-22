@@ -128,6 +128,18 @@ resource "azurerm_route_table" "art" {
       address_prefix          = "10.2.0.0/28"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.eur-checkpoint-intfw
+    },
+    {
+      name                    = "Route_P81_Caucedo_DataStream_1"
+      address_prefix          = "192.168.6.47/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Caucedo_portsterms_evh01"
+      address_prefix          = "10.193.1.47/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-smart-vpn-firewall_ip_address
     }
   ]
 
@@ -236,5 +248,13 @@ resource "azurerm_virtual_network_peering" "eur_hub_peer" {
   resource_group_name = data.azurerm_resource_group.resgrp.name
   virtual_network_name = module.proc_vnet.vnet_name
   remote_virtual_network_id = "/subscriptions/1b37d994-cdaf-4d33-b73d-afb406d36357/resourceGroups/rg-eur-sechub/providers/Microsoft.Network/virtualNetworks/EUR-Vnetsechub"     
+  allow_forwarded_traffic = "true"
+}
+
+resource "azurerm_virtual_network_peering" "uae_smart_hub_peer" {
+  name = join("-", ["peer-uae-smart-hub-to-cdp", var.environment, "processing"])
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  virtual_network_name = module.proc_vnet.vnet_name
+  remote_virtual_network_id = "/subscriptions/113fbeb3-ce3b-4e2a-b3fd-f9176ff893f3/resourceGroups/rg-dpw-uae-smart-ssh/providers/Microsoft.Network/virtualNetworks/vnet-dpw-uae-smart-ssh"     
   allow_forwarded_traffic = "true"
 }

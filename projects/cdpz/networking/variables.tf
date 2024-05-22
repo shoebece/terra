@@ -35,6 +35,7 @@ variable "route_table_snets" { type = list(object({
 variable "firewall_ip_address"           { type = string }
 variable "uae-cpperimeter81-prod"      { type = string }
 variable "eur-checkpoint-intfw"      { type = string }
+variable "uae-smart-vpn-firewall_ip_address"      { type = string }
 
 variable "key_vault_pep" { type = list(object({
   rg_code = string
