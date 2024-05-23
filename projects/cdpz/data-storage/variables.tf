@@ -15,9 +15,9 @@ variable "staccs" {
             code = string
             ip   = string
         }))
+        # stconts = list(string)
         specyfic_service_endpoint_snets = list(string)
         is_hns_enabled = bool
-        stconts = list(string)
     }))
 }
 

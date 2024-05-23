@@ -1,14 +1,14 @@
 locals {
   networking_resource_group_name = join("-", ["cdpz", var.environment, "networking-rg"])
-  stacc_conts = flatten([
-    for stacc_key, stacc in var.staccs : [
-        for cont_key, cont in stacc.stconts : {
-          key     = join("-", [stacc.stacc, cont])
-          stacc   = stacc.stacc
-          cont    = cont
-        }
-    ]
-  ])
+  # stacc_conts = flatten([
+  #   for stacc_key, stacc in var.staccs : [
+  #       for cont_key, cont in stacc.stconts : {
+  #         key     = join("-", [stacc.stacc, cont])
+  #         stacc   = stacc.stacc
+  #         cont    = cont
+  #       }
+  #   ]
+  # ])
   stacc_peps = flatten([
     for stacc in var.staccs : [
         for pep in stacc.pep : {
