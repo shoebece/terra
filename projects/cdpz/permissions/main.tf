@@ -43,6 +43,12 @@ data "azurerm_user_assigned_identity" "acc-dbw-conn-umi" {
   resource_group_name = join("-", ["cdpz", var.environment, "access-rg"])
 }
 
+# Synapse User Managed Identity
+data "azurerm_user_assigned_identity" "synapse-umi" {
+  name                = join("-", ["cdpz", var.environment, "sharing-synapse-umi"])
+  resource_group_name = join("-", ["cdpz", var.environment, "sharing-rg"])
+}
+
 # Streaming UMI
 data "azurerm_user_assigned_identity" "stream-umi" {
   name                = join("-", ["cdpz", var.environment, "data-streaming-ehns-umi"])
@@ -64,6 +70,20 @@ resource "azurerm_role_assignment" "adf-to-landing" {
   scope                = data.azurerm_resource_group.landing-rg.id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = data.azurerm_user_assigned_identity.adf-umi.principal_id
+}
+
+# Synapse UMI is Storage Blob Data Reader on Data storage RG
+resource "azurerm_role_assignment" "synapse-to-data-storage" {
+  scope                = data.azurerm_resource_group.data-storage-rg.id
+  role_definition_name = "Storage Blob Data Reader"
+  principal_id         = data.azurerm_user_assigned_identity.synapse-umi.principal_id
+}
+
+# Synapse UMI is Storage Blob Data Reader on landing RG
+resource "azurerm_role_assignment" "synapse-to-landing" {
+  scope                = data.azurerm_resource_group.landing-rg.id
+  role_definition_name = "Storage Blob Data Reader"
+  principal_id         = data.azurerm_user_assigned_identity.synapse-umi.principal_id
 }
 
 # ADF UMI is Data Factory Contributor on Orchestration and igestion RG
