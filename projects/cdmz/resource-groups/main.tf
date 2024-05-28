@@ -15,6 +15,12 @@ resource "azurerm_resource_group" "mgmt-fivetran-rg" {
   tags     = var.resource_tags_common
 }
 
+resource "azurerm_resource_group" "common-db-fivetran-rg" {
+  name     = "cdmz-mgmt-common-db-rg"
+  location = var.resource_location
+  tags     = var.resource_tags_common
+}
+
 resource "azurerm_key_vault" "management-kv" {
   name                       = "cdmz-management-kv"
   resource_group_name        = azurerm_resource_group.management-rg.name
