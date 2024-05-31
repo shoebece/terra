@@ -19,6 +19,7 @@ parameters:
   - governance
   - monitoring
   - permissions
+  - database-servers
 
 variables:
   - group: environment
