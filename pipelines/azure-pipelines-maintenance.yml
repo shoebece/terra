@@ -36,5 +36,5 @@ stages:
           ARM_CLIENT_ID: "4bdad00a-f14e-4129-a845-c2a2f221dfbb"
         inputs:
           command: 'forceunlock'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/cdpz/permissions/'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/projects/cdpz/permissions/'
           lockID: 'db346a56-897a-d109-eea2-c67d6cdbf30b'
