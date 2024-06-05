@@ -1427,7 +1427,7 @@ resource "azurerm_private_endpoint" "AzureSQL_mpowered_endpoint_pep" {
     private_connection_resource_alias = "/subscriptions/ea795dc4-3b8f-4036-a843-90ee683e0d82/resourceGroups/Mpowered-Analytics/providers/Microsoft.Sql/servers/mpowered-analytics-databases"
     subresource_names              = ["sqlServer"]
     is_manual_connection           = false
-    request_message                   = "connectivity from 10.220.224.15"
+    request_message                   = "connectivity from CDP DPWORLD Networks"
   }
 
   ip_configuration {
