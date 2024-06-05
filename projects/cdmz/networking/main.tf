@@ -1417,25 +1417,25 @@ resource "azurerm_private_endpoint" "AzureSQL_mpowered_endpoint_pep" {
 
   custom_network_interface_name = "cdmz-mgmt-fivetran-mpowered-nic"
 
-  private_dns_zone_group {
-    name = "add_to_azure_private_dns_sql"
-    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_sql.id ]
-  }
+  # private_dns_zone_group {
+  #   name = "add_to_azure_private_dns_sql"
+  #   private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_sql.id ]
+  # }
 
   private_service_connection {
     name                           = "cdmz-mgmt-fivetran-pdnsz_sql-psc"
-    private_connection_resource_alias = "/subscriptions/ea795dc4-3b8f-4036-a843-90ee683e0d82/resourceGroups/Mpowered-Analytics/providers/Microsoft.Sql/servers/mpowered-analytics-databases"
+    private_connection_resource_id = "/subscriptions/ea795dc4-3b8f-4036-a843-90ee683e0d82/resourceGroups/Mpowered-Analytics/providers/Microsoft.Sql/servers/mpowered-analytics-databases"
     subresource_names              = ["sqlServer"]
-    is_manual_connection           = false
-    request_message                   = "connectivity from CDP DPWORLD Networks"
+    is_manual_connection           = true
+    request_message                = "connectivity from CDP DPWORLD Networks"
   }
 
-  ip_configuration {
-    name               = "cdmz-mgmt-fivetran-mpowered-ipc"
-    private_ip_address = var.mpowered_fv_ip_address
-    subresource_name   = "sqlServer"
-    member_name        = "sqlServer"
-  }
+  # ip_configuration {
+  #   name               = "cdmz-mgmt-fivetran-mpowered-ipc"
+  #   private_ip_address = var.mpowered_fv_ip_address
+  #   subresource_name   = "sqlServer"
+  #   member_name        = "sqlServer"
+  # }
 
   tags = merge(
     var.resource_tags_spec
