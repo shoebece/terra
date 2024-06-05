@@ -78,359 +78,368 @@ resource "azurerm_route_table" "art" {
   
   disable_bgp_route_propagation = false
 
-  route = [
-    {
+  route {
       name                    = "powerbi"
       address_prefix          = "PowerBI"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Algiers_Fivetran_1"
       address_prefix          = "192.168.10.106/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_batangas_Fivetran_con"
       address_prefix          = "10.2.0.51/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Dakar_Fivetran_1"
       address_prefix          = "10.52.6.99/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Dakar_Fivetran_2"
       address_prefix          = "10.52.6.62/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Jeddah_FiveTran"
       address_prefix          = "192.168.203.0/24"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Berbera_Fivetran"
       address_prefix          = "10.10.100.225/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-
-    {
+    }
+  route {
       name                    = "Route_Posorja_Fivetran"
       address_prefix          = "10.24.1.61/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_UAE_SEC_DLP_ME_VA"
       address_prefix          = "10.254.7.0/24"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_SEC_CheckPoint_EDR"
       address_prefix          = "10.254.4.4/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_AOLAD_Fivetran"
       address_prefix          = "172.22.18.4/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.EUR_Int_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_P81_Lirquin_FiveTran_3"
       address_prefix          = "10.11.23.65/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.uae-cpperimeter81-prod
-    },
-    {
+    }
+  route {
       name                    = "Route_P81_SanAntonio_Connector_1"
       address_prefix          = "10.11.40.177/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.uae-cpperimeter81-prod
-    },
-    {
+    }
+  route {
       name                    = "Route_P81_SanAntonio_FiveTran_1"
       address_prefix          = "10.11.40.31/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.uae-cpperimeter81-prod
-    },
-    {
+    }
+  route {
       name                    = "Route_P81_SanAntonio_FiveTran_3"
       address_prefix          = "10.11.40.35/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.uae-cpperimeter81-prod
-    },
-    {
+    }
+  route {
       name                    = "Route_P81_SanAntonio_FiveTran_4"
       address_prefix          = "10.11.43.31/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.uae-cpperimeter81-prod
-    },
-    {
+    }
+  route {
       name                    = "Route_S2S_VPN_FiveTran_CCT"
       address_prefix          = "10.91.30.64/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Constanta_Fivetran"
       address_prefix          = "192.168.24.44/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Pusan_Fivetran"
       address_prefix          = "10.2.2.105/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_ANZ_Fivetran"
       address_prefix          = "10.0.6.10/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_rotterdam_Fivetran"
       address_prefix          = "10.168.100.22/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_cdpz-dev-processing-vnet"
       address_prefix          = "10.220.200.0/23"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_cdpz-uat-processing-vnet"
       address_prefix          = "10.220.208.0/23"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_cdpz-prod-processing-vnet"
       address_prefix          = "10.220.216.0/23"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_cdpz-prod-access-vnet"
       address_prefix          = "10.220.226.0/23"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_cdpz-global-processing-vnet"
       address_prefix          = "10.220.228.0/23"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Antwerp_Fivetran"
       address_prefix          = "185.47.68.34/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_SCO_Fivetran"
       address_prefix          = "10.91.5.58/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_psql-cargoeslogisticsabbs-prod"
       address_prefix          = "10.2.161.0/25"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.EUR_Int_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_psql-trackingservice-prod"
       address_prefix          = "10.143.68.0/28"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "QICT_Bryteflow_S2S"
       address_prefix          = "10.92.16.85/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Jeddah_SAJED_Fivetran"
       address_prefix          = "192.168.203.169/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Infra_Admin_AVD"
       address_prefix          = "10.237.1.0/24"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_rotterdam_Fivetran2"
       address_prefix          = "10.168.100.21/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_NhavaSheva_fivetranagent_S2S"
       address_prefix          = "10.91.62.120/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Pusan_Fivetrain_2"
       address_prefix          = "10.2.2.30/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_S2S_VPN_MICT"
       address_prefix          = "10.88.228.197/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Rotterdam_fivetran3"
       address_prefix          = "10.168.221.31/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Pusan_Fivetran_3"
       address_prefix          = "10.2.2.31/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Pusan_Fivetran_4"
       address_prefix          = "10.2.2.32/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Pusan_Fivetran_5"
       address_prefix          = "10.2.2.33/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Pusan_Fivetran_6"
       address_prefix          = "10.2.2.34/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Sokhna_TOS_DB"
       address_prefix          = "101.101.100.3/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_mysq_bt_prod_dr"
       address_prefix          = "172.17.12.0/28"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.btdr_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_AEJA3"
       address_prefix          = "172.20.49.154/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_mysql_cns_dr"
       address_prefix          = "172.21.18.4/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.EUR_Int_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_Djen_Fivetran"
       address_prefix          = "192.168.10.7/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_ATI_Manila_VPN"
       address_prefix          = "192.168.2.35/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {  
+    }
+  route { 
       name                    = "Route_mysql-ecommerce-prod-01"
       address_prefix          = "10.165.108.0/25"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_S2S_OCI_YMS1"
       address_prefix          = "10.100.100.11/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_S2S_OCI_YMS2"
       address_prefix          = "10.100.100.29/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_mysql-cargoscanadaprod-dr"
       address_prefix          = "10.163.0.0/21"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.AMR_Int_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_S2S_Rotterdam"
       address_prefix          = "10.168.222.31/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+  route {
       name                    = "Route_IFS__DDW"
       address_prefix          = "10.238.3.41/32"
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.vpn_firewall_ip_address
-    },
-    {
+    }
+    # {
+    #   name                    = "AVD-ServiceTags-AzureKMS"
+    #   address_prefix          = "20.118.99.224/32"
+    #   next_hop_type           = "Internet"
+    #   //next_hop_in_ip_address  = ""
+    # },
+    # {
+    #   name                    = "AVD-ServiceTags-AzureKMS01"
+    #   address_prefix          = "40.83.235.53/32"
+    #   next_hop_type           = "Internet"
+    #   //next_hop_in_ip_address  = ""
+    # },
+    # {
+    #   name                    = "Route_update_endpoints_01"
+    #   address_prefix          = "AzureFrontDoor.FirstParty"
+    #   next_hop_type           = "Internet"
+    #   //next_hop_in_ip_address  = ""
+    # },
+    # {
+    #   name                    = "Route_update_endpoints"
+    #   address_prefix          = "AzureUpdateDelivery"
+    #   next_hop_type           = "Internet"
+    #   //next_hop_in_ip_address  = ""
+    # }
+  # ]
+  route {
       name                    = "AVD-ServiceTags-AzureKMS"
       address_prefix          = "20.118.99.224/32"
       next_hop_type           = "Internet"
-      next_hop_in_ip_address  = ""
-    },
-    {
-      name                    = "AVD-ServiceTags-AzureKMS01"
-      address_prefix          = "40.83.235.53/32"
-      next_hop_type           = "Internet"
-      next_hop_in_ip_address  = ""
-    },
-    {
-      name                    = "Route_update_endpoints_01"
-      address_prefix          = "AzureFrontDoor.FirstParty"
-      next_hop_type           = "Internet"
-      next_hop_in_ip_address  = ""
-    },
-    {
-      name                    = "Route_update_endpoints"
-      address_prefix          = "AzureUpdateDelivery"
-      next_hop_type           = "Internet"
-      next_hop_in_ip_address  = ""
+      //next_hop_in_ip_address  = ""
     }
-  ]
-    
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
+    
+  lifecycle {
+    ignore_changes = [
+      route
+    ]
+  }
 }
 
 resource "azurerm_subnet_route_table_association" "rt-snets-ass" {
@@ -529,9 +538,9 @@ data "azurerm_mysql_flexible_server" "AzureMysql_mysql-global-dr" {
   provider            = azurerm.CCSGlobal
 }
 
-data "azurerm_mysql_server" "AzureMysql_mysql-accounts-prod-dr" {
-  name                = "mysql-accounts-prod-dr"
-  resource_group_name = "rg-accounts-dr"
+data "azurerm_mysql_flexible_server" "AzureMysql_mysql-accounts-prod-dr" {
+  name                = "mysql-accountsprod-dr"
+  resource_group_name = "rg-accountsproduction"
   provider            = azurerm.DTWorld
 }
 
@@ -1274,7 +1283,7 @@ resource "azurerm_private_endpoint" "AzureMysql_accountsdb_mysql_endpoint_pep" {
   
   private_service_connection {
     name                           = "cdmz-mgmt-fivetran-pdnsz_mysql-psc"
-    private_connection_resource_id = data.azurerm_mysql_server.AzureMysql_mysql-accounts-prod-dr.id
+    private_connection_resource_id = data.azurerm_mysql_flexible_server.AzureMysql_mysql-accounts-prod-dr.id
     subresource_names              = ["mysqlServer"]
     is_manual_connection           = false
   }
@@ -1393,6 +1402,55 @@ resource "azurerm_private_endpoint" "AzureSQL_BASQL_endpoint_pep" {
   ]
 }
 
+# ################################################################
+# Mpowered provides DP World with SaaS to track and manage their B-BBEE status. This involves loading procurement, people and CSI data in the Mpowered system. The system runs B-BBEE calculations and provides the business with detailed gap analysis on how to improve their compliance.
+# Mpowered has a staging database that is a clone of all data loaded in the Mpowered system. DP World has been drawing data from this staging database for use in 'BPI-P'.
+# ##########################################################
+
+# # Private end point management for external SQL Server - Mpowered { Managed by <gary@mpowered.co.za>}
+resource "azurerm_private_endpoint" "AzureSQL_mpowered_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-mpowered-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-mpowered-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_sql"
+    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_sql.id ]
+  }
+
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_sql-psc"
+    private_connection_resource_id = "/subscriptions/ea795dc4-3b8f-4036-a843-90ee683e0d82/resourceGroups/Mpowered-Analytics/providers/Microsoft.Sql/servers/mpowered-analytics-databases"
+    subresource_names              = ["sqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-mpowered-ipc"
+    private_ip_address = var.mpowered_fv_ip_address
+    subresource_name   = "sqlServer"
+    member_name        = "sqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    data.azurerm_private_dns_zone.pdnsz
+  ]
+}
 
 # # Private end point management for Zodiac Coud AULAD FT 
 

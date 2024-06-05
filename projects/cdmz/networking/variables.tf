@@ -47,6 +47,7 @@ variable "CCSGlobal_fv_ip_address"           { type = string }
 variable "DTWorld_fv_ip_address"           { type = string }
 variable "POEMSSQL_fv_ip_address"                 { type = string }
 variable "BASQL_fv_ip_address"                 { type = string }
+variable "mpowered_fv_ip_address"                 { type = string }
 variable "sandbox_prefix" {
     type = string 
     default = ""
