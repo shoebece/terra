@@ -23,7 +23,7 @@ resource "azurerm_role_assignment" "data-eng-to-dev-sharing" {
 }
 
 resource "azurerm_role_assignment" "data-eng-to-prod-sharing" {
-  provider             = azurerm.dev
+  provider             = azurerm.prod
   scope                = data.azurerm_resource_group.prod-sharing.id
   role_definition_name = "Reader"
   principal_id         = var.data_engg_aad_group.id
