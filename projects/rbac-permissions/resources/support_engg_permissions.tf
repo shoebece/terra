@@ -77,3 +77,12 @@ resource "azurerm_role_assignment" "support-eng-to-prod-orch-and-ingest" {
 
   depends_on = [ data.azurerm_resource_group.prod-orch-and-ingest-rg ]
 }
+
+resource "azurerm_role_assignment" "support-eng-to-prod-sharing" {
+  provider             = azurerm.prod
+  scope                = data.azurerm_resource_group.prod-sharing.id
+  role_definition_name = "Reader"
+  principal_id         = var.support_engg_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.prod-sharing ]
+}
