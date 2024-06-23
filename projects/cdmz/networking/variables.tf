@@ -54,3 +54,19 @@ variable "sandbox_prefix" {
 }
 
 variable "pdnsz_names"                    {type = list(string)}
+
+
+#pep for MSQL Server
+variable "msql" {
+    type = list(object({
+        pep = list(object({
+            code = string
+            ip   = string
+            name   = string
+            resource_group_name = string
+            provider  = string
+            pepsql = string
+        }))
+
+    }))
+}

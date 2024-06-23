@@ -229,3 +229,19 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias           = "DryDocks"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "7c422b28-6937-4df7-895e-c19e321257cb"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}

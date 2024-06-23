@@ -1,3 +1,28 @@
+locals {
+  networking_resource_group_name = join("-", ["cdmz","networking-rg"])
+  msql_peps = flatten([
+    for msql in var.msql : [
+        for pep in msql.pep : {
+          key       = join("-", [pep.pepsql, pep.code, "pep"])
+          pepsql    = pep.pepsql
+          pep_code  = pep.code
+          pep_ip    = pep.ip
+          name      = pep.name
+          resource_group_name = pep.resource_group_name
+          provider  = pep.provider
+        }
+    ]
+  ])
+}
+
+# locals {
+#   provider_map = {
+#     DryDocks = azurerm.DryDocks
+#     # Dpworld = azurerm.Dpworld
+#   }
+# }
+
+
 data "azurerm_resource_group" "resgrp" {
   name      = "cdmz-networking-rg"
 }
@@ -1424,7 +1449,7 @@ resource "azurerm_private_endpoint" "AzureSQL_mpowered_endpoint_pep" {
 
   private_service_connection {
     name                           = "cdmz-mgmt-fivetran-pdnsz_sql-psc"
-    private_connection_resource_id = "/subscriptions/ea795dc4-3b8f-4036-a843-90ee683e0d82/resourceGroups/Mpowered-Analytics/providers/Microsoft.Sql/servers/mpowered-analytics-databases"
+    private_connection_resource_id = "/subscriptions/ea795dc4-3b8f-4036-a843-90ee683e0d82/resourceGroups/Mpowered-Analytics/providers/Microsoft.Sql/servers/ma-22-dp-world"
     subresource_names              = ["sqlServer"]
     is_manual_connection           = true
     request_message                = "connectivity from CDP DPWORLD Networks"
@@ -1469,6 +1494,41 @@ resource "azurerm_private_endpoint" "azurepep_zodiac_aulad_ft" {
   }
 }
 
+## Private end point connection from Zodiac Coud AULAD FT New {UK South}
+##/subscriptions/e51d1ace-d18c-435d-a207-da55e05edf63/resourceGroups/RG_LADPROD_APP/providers/Microsoft.Network/privateLinkServices/LADPROD_APP_LADZPDTLA-1_PrivateLinkService
+
+resource "azurerm_private_endpoint" "azurepep_zodiac_aulad_ft_ukSouth" {
+  name                = "cdmz-mgmt-fivetran-zodiac-aulad-ft_ukSouth"
+  location            = var.resource_location
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  subnet_id           = data.azurerm_subnet.snet-default.id
+
+  private_service_connection {
+    name                              = "zodiac-aulad-ft-privateserviceconnection-uksouth"
+    private_connection_resource_alias = "ladprod_app_ladzpdtla-1_privatelinkservice.91a11be7-b46e-430b-96ed-d6556af6f2aa.uksouth.azure.privatelinkservice"
+    is_manual_connection              = true
+    request_message                   = "connectivity from 10.220.224.15"
+  }
+}
+
+
+## ## Private end point connection from ILA SAP ECC6 server
+
+resource "azurerm_private_endpoint" "azurepep_ila_SAP_ECC6_server" {
+  name                = "cdmz-mgmt-azurepep_ila_SAP_ECC6_server"
+  location            = var.resource_location
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  subnet_id           = data.azurerm_subnet.snet-default.id
+
+  private_service_connection {
+    name                              = "azurepep_ila_SAP_ECC6_server_privateserviceconnection"
+    private_connection_resource_alias = "pls-eun-repl-sql01.e4716d30-ff1b-41ac-97a3-37187c0b31e8.northeurope.azure.privatelinkservice"
+    is_manual_connection              = true
+    request_message                   = "connectivity from 10.220.224.15"
+  }
+}
+
+#####################################################################
 resource "azurerm_virtual_network_peering" "hub_peer" {
   name                      = "peer-hub-to-cdp-management"
   resource_group_name       = data.azurerm_resource_group.resgrp.name
@@ -1542,4 +1602,60 @@ resource "azurerm_private_endpoint" "syn_plh_endpoint" {
     ,azurerm_synapse_private_link_hub.syn_plh
     ,data.azurerm_private_dns_zone.syn_web_pdnsz
   ]
+}
+
+#####Data Section for Azure SQL Server {PAAS}##############
+
+data "azurerm_mssql_server" "AzureSQL_PEP" {
+  for_each            = { for pep in local.msql_peps: pep.key => pep }
+  name                = each.value.name
+  resource_group_name = each.value.resource_group_name
+  provider  = azurerm.DryDocks
+  }
+
+
+####Private Endpoints for Azure SQL Server {PAAS}##############
+
+resource "azurerm_private_endpoint" "endpoint" {
+    for_each                        = { for pep in local.msql_peps: pep.key => pep }
+    name                            = join("-", ["cdmz", each.value.pepsql, each.value.pep_code, "pep"])  
+    resource_group_name             = local.networking_resource_group_name
+    location                        = var.resource_location
+
+    subnet_id                       = data.azurerm_subnet.snet-default.id
+
+    custom_network_interface_name   = join("-", ["cdmz", each.value.pepsql, each.value.pep_code, "nic"])  
+
+    private_dns_zone_group {
+      name = "add_to_azure_private_dns"
+      private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_sql.id ]
+    }
+
+    private_service_connection {
+        name                            = join("-", ["cdmz", each.value.pepsql, each.value.pep_code, "psc"])
+        private_connection_resource_id  = data.azurerm_mssql_server.AzureSQL_PEP[each.key].id
+        subresource_names               = [each.value.pep_code]
+        is_manual_connection            = false
+        }
+
+    ip_configuration {
+        name                =   join("-", ["cdmz", each.value.pepsql, "dls", each.value.pep_code, "ipc"])
+        private_ip_address  =   each.value.pep_ip
+        subresource_name    =   each.value.pep_code
+        member_name         =   each.value.pep_code
+    }
+
+    tags    = merge(
+      var.resource_tags_spec
+    )
+
+    lifecycle {
+        ignore_changes  = [
+            subnet_id
+        ]
+    }
+
+    depends_on = [
+	  data.azurerm_private_dns_zone.pdnsz_sql
+    ]
 }
