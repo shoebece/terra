@@ -887,6 +887,43 @@ resource "databricks_entitlements" "entitle_external_users_bu" {
   depends_on = [ data.databricks_group.external_users_bu ]
 }
 
+# cdpz_pt_sl_rocnd
+data "databricks_group" "pt_sl_rocnd_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.pt_rocnd_bu.name
+}
+
+resource "databricks_permission_assignment" "add_pt_sl_rocnd_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.pt_sl_rocnd_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.pt_sl_rocnd_bu ]
+}
+
+resource "databricks_entitlements" "entitle_pt_sl_rocnd_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.pt_sl_rocnd_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.pt_sl_rocnd_bu ]
+}
+
+# rocnd-spn
+data "databricks_service_principal" "rocnd_spn" {
+  provider      = databricks.globaldbw
+  application_id  = var.pt_rocnd_spn.app_id
+}
+
+resource "databricks_permission_assignment" "add_rocnd_spn" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_service_principal.rocnd_spn.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_service_principal.rocnd_spn ]
+}
+
 # synceur_spn
 data "databricks_service_principal" "synceur_spn" {
   provider      = databricks.globaldbw
@@ -1519,13 +1556,13 @@ resource "databricks_permissions" "global_clusterrocnd_usage" {
   cluster_id        = data.databricks_cluster.global_rocnd_cluster.id
 
   access_control {
-    group_name       = data.databricks_group.imperial_intl_bu.display_name
+    group_name       = data.databricks_group.pt_sl_rocnd_bu.display_name
     permission_level = "CAN_RESTART"
   }
 
   depends_on = [ 
     data.databricks_cluster.global_rocnd_cluster,
-    data.databricks_group.imperial_intl_bu
+    data.databricks_group.pt_sl_rocnd_bu
   ]
 }
 
@@ -1539,19 +1576,19 @@ resource "databricks_permissions" "global_pbiclusterrocnd_usage" {
   cluster_id        = data.databricks_cluster.global_rocnd_pbicluster.id
 
   access_control {
-    group_name       = data.databricks_group.imperial_intl_bu.display_name
+    group_name       = data.databricks_group.pt_sl_rocnd_bu.display_name
     permission_level = "CAN_RESTART"
   }
 
   access_control {
-    service_principal_name = data.databricks_service_principal.ili_spn.application_id
+    service_principal_name = data.databricks_service_principal.rocnd_spn.application_id
     permission_level       = "CAN_RESTART"
   }
 
   depends_on = [ 
     data.databricks_cluster.global_rocnd_pbicluster,
-    data.databricks_group.imperial_intl_bu,
-    data.databricks_service_principal.ili_spn
+    data.databricks_group.pt_sl_rocnd_bu,
+    data.databricks_service_principal.rocnd_spn
   ]
 }
 
