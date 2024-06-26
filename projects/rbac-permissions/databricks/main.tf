@@ -1508,6 +1508,53 @@ resource "databricks_permissions" "global_pbiclusterili_usage" {
   ]
 }
 
+# Cluster ROCND
+data "databricks_cluster" "global_rocnd_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-rocnd-team-cluster"
+}
+
+resource "databricks_permissions" "global_clusterrocnd_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_rocnd_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.imperial_intl_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_rocnd_cluster,
+    data.databricks_group.imperial_intl_bu
+  ]
+}
+
+data "databricks_cluster" "global_rocnd_pbicluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-rocnd-pbi-cluster"
+}
+
+resource "databricks_permissions" "global_pbiclusterrocnd_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_rocnd_pbicluster.id
+
+  access_control {
+    group_name       = data.databricks_group.imperial_intl_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  access_control {
+    service_principal_name = data.databricks_service_principal.ili_spn.application_id
+    permission_level       = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_rocnd_pbicluster,
+    data.databricks_group.imperial_intl_bu,
+    data.databricks_service_principal.ili_spn
+  ]
+}
+
 # SQL Warehouse ILI
 # data "databricks_sql_warehouse" "global_ili_warehouse" {
 #   provider      = databricks.globaldbw

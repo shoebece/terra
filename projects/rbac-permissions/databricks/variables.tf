@@ -144,6 +144,16 @@ variable "as_spn" { type = object({
   app_id = string
 })}
 
+variable "pt_rocnd_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "pt_rocnd_bu" { type = object({
+  name = string
+  id = string
+})}
+
 variable "landing_ext_loc" {
     type = list(object({
         name    = string
