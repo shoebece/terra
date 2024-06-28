@@ -154,6 +154,26 @@ variable "pt_rocnd_bu" { type = object({
   id = string
 })}
 
+variable "eng_maximo_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "apac_analytics_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "audit_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "ghse_bu" { type = object({
+  name = string
+  id = string
+})}
+
 variable "landing_ext_loc" {
     type = list(object({
         name    = string

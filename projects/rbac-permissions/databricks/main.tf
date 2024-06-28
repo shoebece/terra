@@ -887,6 +887,98 @@ resource "databricks_entitlements" "entitle_external_users_bu" {
   depends_on = [ data.databricks_group.external_users_bu ]
 }
 
+# BA_ENG_MAXIMO
+data "databricks_group" "eng_maximo_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.eng_maximo_bu.name
+}
+
+resource "databricks_permission_assignment" "add_eng_maximo_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.eng_maximo_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.eng_maximo_bu ]
+}
+
+resource "databricks_entitlements" "entitle_eng_maximo_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.eng_maximo_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.eng_maximo_bu ]
+}
+
+# BA_APAC_Analytics
+data "databricks_group" "apac_analytics_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.apac_analytics_bu.name
+}
+
+resource "databricks_permission_assignment" "add_apac_analytics_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.apac_analytics_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.apac_analytics_bu ]
+}
+
+resource "databricks_entitlements" "entitle_apac_analytics_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.apac_analytics_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.apac_analytics_bu ]
+}
+
+# BA_GHSE_HO
+data "databricks_group" "ghse_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.ghse_bu.name
+}
+
+resource "databricks_permission_assignment" "add_ghse_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.ghse_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.ghse_bu ]
+}
+
+resource "databricks_entitlements" "entitle_ghse_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.ghse_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.ghse_bu ]
+}
+
+# BA_AuditTeam
+data "databricks_group" "audit_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.audit_bu.name
+}
+
+resource "databricks_permission_assignment" "add_audit_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.audit_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.audit_bu ]
+}
+
+resource "databricks_entitlements" "entitle_audit_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.audit_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.audit_bu ]
+}
+
 # cdpz_pt_sl_rocnd
 data "databricks_group" "pt_sl_rocnd_bu" {
   provider      = databricks.globaldbw
@@ -1136,6 +1228,90 @@ resource "databricks_permissions" "global_pbiclustersyncamr_usage" {
     data.databricks_cluster.global_syncamr_pbicluster,
     data.databricks_group.contract_logistics_amr_bu,
     data.databricks_service_principal.syncamr_spn
+  ]
+}
+
+# Cluster Maximo
+data "databricks_cluster" "global_maximo_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-maximo-team-cluster"
+}
+
+resource "databricks_permissions" "global_clustermaximo_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_maximo_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.eng_maximo_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_maximo_cluster,
+    data.databricks_group.eng_maximo_bu
+  ]
+}
+
+# Cluster APAC Analytics
+data "databricks_cluster" "global_apac_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-apac-team-cluster"
+}
+
+resource "databricks_permissions" "global_apac_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_apac_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.apac_analytics_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_apac_cluster,
+    data.databricks_group.apac_analytics_bu
+  ]
+}
+
+# Cluster GHSE
+data "databricks_cluster" "global_ghse_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-ghse-team-cluster"
+}
+
+resource "databricks_permissions" "global_ghse_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_ghse_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.ghse_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_ghse_cluster,
+    data.databricks_group.ghse_bu
+  ]
+}
+
+# Cluster Audit Team
+data "databricks_cluster" "global_audit_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-audit-team-cluster"
+}
+
+resource "databricks_permissions" "global_audit_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_audit_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.audit_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_audit_cluster,
+    data.databricks_group.audit_bu
   ]
 }
 
