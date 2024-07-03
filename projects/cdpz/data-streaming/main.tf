@@ -380,7 +380,7 @@ resource "azurerm_eventhub_namespace" "ila-opsi" {
 
   resource_group_name = data.azurerm_resource_group.resgrp.name
   location            = var.resource_location
-  tags                = merge(var.resource_tags_common, var.resource_tags_spec)
+  tags                = merge(var.resource_tags_ila_opsi)
 
   public_network_access_enabled = true
   sku                           = "Standard"
@@ -472,7 +472,7 @@ resource "azurerm_eventhub" "workflow_events" {
       size_limit_in_bytes = 314572800
       skip_empty_archives = true
       destination {
-        archive_name_format = "ila_opsi/mobility/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
+        archive_name_format = "ila_opsi/mobility/{EventHub}/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "ila-data01"
         name                = "EventHubArchive.AzureBlockBlob"
         storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevlogistics01dls"
@@ -494,7 +494,7 @@ resource "azurerm_eventhub" "workflow_states" {
       size_limit_in_bytes = 314572800
       skip_empty_archives = true
       destination {
-        archive_name_format = "ila_opsi/mobility/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
+        archive_name_format = "ila_opsi/mobility/{EventHub}/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "ila-data01"
         name                = "EventHubArchive.AzureBlockBlob"
         storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevlogistics01dls"
@@ -516,7 +516,7 @@ resource "azurerm_eventhub" "test" {
       size_limit_in_bytes = 314572800
       skip_empty_archives = true
       destination {
-        archive_name_format = "ila_opsi/mobility/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
+        archive_name_format = "ila_opsi/mobility/{EventHub}/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "ila-data01"
         name                = "EventHubArchive.AzureBlockBlob"
         storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevlogistics01dls"
