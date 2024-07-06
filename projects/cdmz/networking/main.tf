@@ -10,6 +10,7 @@ locals {
           name      = pep.name
           resource_group_name = pep.resource_group_name
           provider  = pep.provider
+          subscription = pep.subscription
         }
     ]
   ])
@@ -1606,13 +1607,19 @@ resource "azurerm_private_endpoint" "syn_plh_endpoint" {
 
 #####Data Section for Azure SQL Server {PAAS}##############
 
-data "azurerm_mssql_server" "AzureSQL_PEP" {
-  for_each            = { for pep in local.msql_peps: pep.key => pep }
+data "azurerm_mssql_server" "AzureSQL_PEP_Sub1" {
+  for_each            = { for pep in local.msql_peps: pep.key  => pep if pep.subscription == "DryDocks" }
   name                = each.value.name
   resource_group_name = each.value.resource_group_name
   provider  = azurerm.DryDocks
   }
 
+data "azurerm_mssql_server" "AzureSQL_PEP_Sub2" {
+  for_each            = { for pep in local.msql_peps: pep.key  => pep if pep.subscription == "POEMS" }
+  name                = each.value.name
+  resource_group_name = each.value.resource_group_name
+  provider  = azurerm.POEMS
+  }
 
 ####Private Endpoints for Azure SQL Server {PAAS}##############
 
@@ -1633,7 +1640,7 @@ resource "azurerm_private_endpoint" "endpoint" {
 
     private_service_connection {
         name                            = join("-", ["cdmz", each.value.pepsql, each.value.pep_code, "psc"])
-        private_connection_resource_id  = data.azurerm_mssql_server.AzureSQL_PEP[each.key].id
+        private_connection_resource_id  = each.value.subscription == "DryDocks" ? data.azurerm_mssql_server.AzureSQL_PEP_Sub1[each.key].id : data.azurerm_mssql_server.AzureSQL_PEP_Sub2[each.key].id
         subresource_names               = [each.value.pep_code]
         is_manual_connection            = false
         }

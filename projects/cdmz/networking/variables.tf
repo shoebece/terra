@@ -66,6 +66,7 @@ variable "msql" {
             resource_group_name = string
             provider  = string
             pepsql = string
+            subscription = string
         }))
 
     }))
