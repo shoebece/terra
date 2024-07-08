@@ -979,6 +979,29 @@ resource "databricks_entitlements" "entitle_audit_bu" {
   depends_on = [ data.databricks_group.audit_bu ]
 }
 
+# cdpz_ddw
+data "databricks_group" "ddw_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.ddw_bu.name
+}
+
+resource "databricks_permission_assignment" "add_ddw_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.ddw_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.ddw_bu ]
+}
+
+resource "databricks_entitlements" "entitle_ddw_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.ddw_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.ddw_bu ]
+}
+
 # cdpz_pt_sl_rocnd
 data "databricks_group" "pt_sl_rocnd_bu" {
   provider      = databricks.globaldbw
