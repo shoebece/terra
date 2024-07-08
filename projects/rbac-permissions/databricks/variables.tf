@@ -89,6 +89,11 @@ variable "pa_trade_finance_bu" { type = object({
   id = string
 })}
 
+variable "ddw_bu" { type = object({
+  name = string
+  id = string
+})}
+
 variable "adf_dev_umi" { type = object({
   name = string
   app_id = string
