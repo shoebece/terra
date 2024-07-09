@@ -89,11 +89,11 @@ resource "azurerm_role_assignment" "support-eng-to-prod-sharing" {
 
 ## Synapse SQL Contributor to cdp_synapse_admin group.
 
-resource "azurerm_role_assignment" "synapse-admins-to-prod-sharing" {
-  provider             = azurerm.prod
-  scope                = data.azurerm_resource_group.prod-sharing.id
-  role_definition_name = "Synapse SQL Administrator"
-  principal_id         = var.cdp_synapse_admin_group.id
+resource "azurerm_synapse_role_assignment" "synapse-admins-to-prod-sharing" {
+  provider              = azurerm.prod
+  synapse_workspace_id  = data.azurerm_synapse_workspace.prod_synapse_ws.id
+  principal_id          = var.cdp_synapse_admin_group.id
+  role_name             = "Synapse SQL Administrator"
 
-  depends_on = [ data.azurerm_resource_group.prod-sharing ]
+  depends_on = [ data.azurerm_synapse_workspace.prod_synapse_ws ]
 }
