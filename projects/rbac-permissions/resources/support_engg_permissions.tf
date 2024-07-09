@@ -93,7 +93,7 @@ resource "azurerm_synapse_role_assignment" "synapse-admins-to-prod-sharing" {
   provider              = azurerm.prod
   synapse_workspace_id  = data.azurerm_synapse_workspace.prod_synapse_ws.id
   principal_id          = var.cdp_synapse_admin_group.id
-  role_name             = "Synapse SQL Administrator"
+  role_name             = "Synapse SQL Contributor"
 
   depends_on = [ data.azurerm_synapse_workspace.prod_synapse_ws ]
 }
