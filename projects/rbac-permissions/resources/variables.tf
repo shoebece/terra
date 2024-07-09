@@ -38,3 +38,8 @@ variable em_engg_aad_group { type = object({
   name = string
   id = string
 })}
+
+variable "cdp_synapse_admin_group" { type = object({
+  name = string
+  id = string
+})}

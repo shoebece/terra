@@ -86,3 +86,14 @@ resource "azurerm_role_assignment" "support-eng-to-prod-sharing" {
 
   depends_on = [ data.azurerm_resource_group.prod-sharing ]
 }
+
+## Synapse SQL Contributor to cdp_synapse_admin group.
+
+resource "azurerm_role_assignment" "synapse-admins-to-prod-sharing" {
+  provider             = azurerm.prod
+  scope                = data.azurerm_resource_group.prod-sharing.id
+  role_definition_name = "Synapse SQL Administrator"
+  principal_id         = var.cdp_synapse_admin_group.id
+
+  depends_on = [ data.azurerm_resource_group.prod-sharing ]
+}
