@@ -42,19 +42,19 @@ variable "datalakestrprod_dfs_fv_ip_address"  { type = string }
 variable "pgecommipms_fv_ip_address"  { type = string }
 variable "mysql-nau-dr_fv_ip_address"  { type = string }
 variable "btdr_firewall_ip_address"           { type = string }
-variable "CCSMEA_fv_ip_address"           { type = string }
+# variable "CCSMEA_fv_ip_address"           { type = string }
 variable "CCSGlobal_fv_ip_address"           { type = string }
 variable "DTWorld_fv_ip_address"           { type = string }
 variable "POEMSSQL_fv_ip_address"                 { type = string }
 variable "BASQL_fv_ip_address"                 { type = string }
 variable "mpowered_fv_ip_address"                 { type = string }
+variable "AzureSQL_cargoesrunnerprod_fv_ip_address"                 { type = string }
 variable "sandbox_prefix" {
     type = string 
     default = ""
 }
 
 variable "pdnsz_names"                    {type = list(string)}
-
 
 #pep for MSQL Server
 variable "msql" {
