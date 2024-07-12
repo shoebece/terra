@@ -552,11 +552,11 @@ data "azurerm_mysql_flexible_server" "AzureMysql_mysql-naudb-prod-dr" {
   provider            = azurerm.NAU
 }
 
-data "azurerm_mysql_server" "AzureMysql_mysql-mea-dr" {
-  name                = "mysql-mea-dr"
-  resource_group_name = "rg-mea-prod"
-  provider            = azurerm.CCSMEA
-}
+# data "azurerm_mysql_server" "AzureMysql_mysql-mea-dr" {
+#   name                = "mysql-mea-dr"
+#   resource_group_name = "rg-mea-prod"
+#   provider            = azurerm.CCSMEA
+# }
 
 data "azurerm_mysql_flexible_server" "AzureMysql_mysql-global-dr" {
   name                = "mysql-global-dr"
@@ -574,6 +574,12 @@ data "azurerm_mssql_server" "AzureSQL_POEMS" {
   name                = "sqlprdrostimadbserver-dr"
   resource_group_name = "Rg-Rostima-Prod"
   provider            = azurerm.POEMS
+}
+
+data "azurerm_mssql_server" "AzureSQL_cargoesrunnerprod" {
+  name                = "sql-cargoesrunnerprod-uaereplica"
+  resource_group_name = "rg_cargoesRunner_prod"
+  provider            = azurerm.CargoesRunner
 }
 
 data "azurerm_mssql_server" "AzureSQL_BASQL" {
@@ -741,6 +747,53 @@ resource "azurerm_private_endpoint" "AzureSQL_endpoint_pep" {
     data.azurerm_private_dns_zone.pdnsz
   ]
 }
+
+# Private end point management for Azure SQL Cargoes Runner SQL
+
+resource "azurerm_private_endpoint" "AzureSQLRunner_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-CargoesRunnerSQL-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-CargoesRunnerSQL-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_sql"
+    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_sql.id ]
+  }
+
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_sql-psc"
+    private_connection_resource_id = data.azurerm_mssql_server.AzureSQL_cargoesrunnerprod.id
+    subresource_names              = ["sqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-AzureSQL_cargoesrunnerprod-ipc"
+    private_ip_address = var.AzureSQL_cargoesrunnerprod_fv_ip_address
+    subresource_name   = "sqlServer"
+    member_name        = "sqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    data.azurerm_private_dns_zone.pdnsz
+  ]
+}
+
 
 # Private dns creation for postgres and linked to CDP Management VNET
 
@@ -1201,50 +1254,50 @@ resource "azurerm_private_endpoint" "AzureMysql_mysql_endpoint_pep" {
   ]
 }
 
-# # Private end point management for MySQl single server mysql-mea-dr
-resource "azurerm_private_endpoint" "AzureMysql_meadb_mysql_endpoint_pep" {
-  name                = "cdmz-mgmt-fivetran-mysql-meadb-prod-dr-pep"
-  resource_group_name = data.azurerm_resource_group.resgrp.name
-  location            = var.resource_location
+# # # Private end point management for MySQl single server mysql-mea-dr
+# resource "azurerm_private_endpoint" "AzureMysql_meadb_mysql_endpoint_pep" {
+#   name                = "cdmz-mgmt-fivetran-mysql-meadb-prod-dr-pep"
+#   resource_group_name = data.azurerm_resource_group.resgrp.name
+#   location            = var.resource_location
 
-  subnet_id = data.azurerm_subnet.snet-default.id
+#   subnet_id = data.azurerm_subnet.snet-default.id
 
-  custom_network_interface_name = "cdmz-mgmt-fivetran-mysql-meadb-prod-dr-nic"
+#   custom_network_interface_name = "cdmz-mgmt-fivetran-mysql-meadb-prod-dr-nic"
 
-  private_dns_zone_group {
-    name = "add_to_azure_private_dns_psql"
-    private_dns_zone_ids = [ azurerm_private_dns_zone.pdnsz_mysql.id ]
-  }
+#   private_dns_zone_group {
+#     name = "add_to_azure_private_dns_psql"
+#     private_dns_zone_ids = [ azurerm_private_dns_zone.pdnsz_mysql.id ]
+#   }
   
-  private_service_connection {
-    name                           = "cdmz-mgmt-fivetran-pdnsz_mysql-psc"
-    private_connection_resource_id = data.azurerm_mysql_server.AzureMysql_mysql-mea-dr.id
-    subresource_names              = ["mysqlServer"]
-    is_manual_connection           = false
-  }
+#   private_service_connection {
+#     name                           = "cdmz-mgmt-fivetran-pdnsz_mysql-psc"
+#     private_connection_resource_id = data.azurerm_mysql_server.AzureMysql_mysql-mea-dr.id
+#     subresource_names              = ["mysqlServer"]
+#     is_manual_connection           = false
+#   }
 
-  ip_configuration {
-    name               = "cdmz-mgmt-fivetran-mysql-meadb-prod-dr-ipc"
-    private_ip_address = var.CCSMEA_fv_ip_address
-    subresource_name   = "mysqlServer"
-    member_name        = "mysqlServer"
-  }
+#   ip_configuration {
+#     name               = "cdmz-mgmt-fivetran-mysql-meadb-prod-dr-ipc"
+#     private_ip_address = var.CCSMEA_fv_ip_address
+#     subresource_name   = "mysqlServer"
+#     member_name        = "mysqlServer"
+#   }
 
-  tags = merge(
-    var.resource_tags_spec
-  )
+#   tags = merge(
+#     var.resource_tags_spec
+#   )
 
-  lifecycle {
-    ignore_changes = [
-      subnet_id
-    ]
-  }
+#   lifecycle {
+#     ignore_changes = [
+#       subnet_id
+#     ]
+#   }
 
-  depends_on = [
-    data.azurerm_subnet.snet-default,
-    azurerm_private_dns_zone.pdnsz_mysql
-  ]
-}
+#   depends_on = [
+#     data.azurerm_subnet.snet-default,
+#     azurerm_private_dns_zone.pdnsz_mysql
+#   ]
+# }
 
 # # Private end point management for MySQl flex server mysql-global-dr
 
@@ -1620,7 +1673,6 @@ data "azurerm_mssql_server" "AzureSQL_PEP_Sub2" {
   resource_group_name = each.value.resource_group_name
   provider  = azurerm.POEMS
   }
-
 ####Private Endpoints for Azure SQL Server {PAAS}##############
 
 resource "azurerm_private_endpoint" "endpoint" {
