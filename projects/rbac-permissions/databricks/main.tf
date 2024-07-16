@@ -228,6 +228,11 @@ resource "databricks_permissions" "dev_adf_cluster_usage" {
     permission_level = "CAN_RESTART"
   }
 
+  access_control {
+    service_principal_name = data.databricks_group.ba_bi_eng.display_name
+    permission_level = "CAN_RESTART"
+  }  
+
   depends_on = [ 
     data.databricks_cluster.dev_adf_cluster,
     data.databricks_service_principal.adf_dev_umi
@@ -1788,6 +1793,53 @@ resource "databricks_permissions" "global_pbiclusterrocnd_usage" {
     data.databricks_cluster.global_rocnd_pbicluster,
     data.databricks_group.pt_sl_rocnd_bu,
     data.databricks_service_principal.rocnd_spn
+  ]
+}
+
+# Cluster DDW
+data "databricks_cluster" "global_ddw_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-ddw-team-cluster"
+}
+
+resource "databricks_permissions" "global_clusterddw_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_ddw_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.ddw_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_ddw_cluster,
+    data.databricks_group.ddw_bu
+  ]
+}
+
+data "databricks_cluster" "global_ddw_pbicluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-ddw-pbi-cluster"
+}
+
+resource "databricks_permissions" "global_pbiclusterddw_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_ddw_pbicluster.id
+
+  access_control {
+    group_name       = data.databricks_group.ddw_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  # access_control {
+  #   service_principal_name = data.databricks_service_principal.ddw_spn.application_id
+  #   permission_level       = "CAN_RESTART"
+  # }
+
+  depends_on = [ 
+    data.databricks_cluster.global_ddw_pbicluster,
+    data.databricks_group.ddw_bu
+    # ,data.databricks_service_principal.rocnd_spn
   ]
 }
 
