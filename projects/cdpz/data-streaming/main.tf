@@ -150,7 +150,7 @@ resource "azurerm_eventhub" "tiot_delayed" {
         archive_name_format = "pt_docau/{EventHub}/{Year}/{Month}/{Day}/{Namespace}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "iot-data01"
         name                = "EventHubArchive.AzureBlockBlob"
-        storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevportsterms01dls"
+        storage_account_id  = var.strg_tiot_delayed
             }
     }
 }
@@ -171,7 +171,7 @@ resource "azurerm_eventhub" "tiot_error" {
         archive_name_format = "pt_docau/{EventHub}/{Year}/{Month}/{Day}/{Namespace}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "iot-data01"
         name                = "EventHubArchive.AzureBlockBlob"
-        storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevportsterms01dls"
+        storage_account_id  = var.strg_tiot_error
             }
     }
 }
@@ -192,7 +192,7 @@ resource "azurerm_eventhub" "tiot_event" {
         archive_name_format = "pt_docau/{EventHub}/{Year}/{Month}/{Day}/{Namespace}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "iot-data01"
         name                = "EventHubArchive.AzureBlockBlob"
-        storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevportsterms01dls"
+        storage_account_id  = var.strg_tiot_event
             }
     }
 }
@@ -213,7 +213,7 @@ resource "azurerm_eventhub" "tiot_uptime" {
         archive_name_format = "pt_docau/{EventHub}/{Year}/{Month}/{Day}/{Namespace}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "iot-data01"
         name                = "EventHubArchive.AzureBlockBlob"
-        storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevportsterms01dls"
+        storage_account_id  = var.strg_tiot_uptime
             }
     }
 }
@@ -317,7 +317,7 @@ resource "azurerm_eventhub" "events" {
         archive_name_format = "VehicleTelematicsSystems/Mix/Streams/Events/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "ila-data01"
         name                = "EventHubArchive.AzureBlockBlob"
-        storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevlogistics01dls"
+        storage_account_id  = var.strg_events
             }
     }
     lifecycle {
@@ -341,7 +341,7 @@ resource "azurerm_eventhub" "positions" {
         archive_name_format = "VehicleTelematicsSystems/Mix/Streams/Positions/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "ila-data01"
         name                = "EventHubArchive.AzureBlockBlob"
-        storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevlogistics01dls"
+        storage_account_id  = var.strg_positions
             }
      }
     lifecycle {
@@ -365,7 +365,7 @@ resource "azurerm_eventhub" "trips" {
         archive_name_format = "VehicleTelematicsSystems/Mix/Streams/Trips/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "ila-data01"
         name                = "EventHubArchive.AzureBlockBlob"
-        storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevlogistics01dls"
+        storage_account_id  = var.strg_trips
             }
     }
     lifecycle {
@@ -475,7 +475,7 @@ resource "azurerm_eventhub" "workflow_events" {
         archive_name_format = "ila_opsi/mobility/{EventHub}/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "ila-data01"
         name                = "EventHubArchive.AzureBlockBlob"
-        storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevlogistics01dls"
+        storage_account_id  = var.strg_workflow_events
             }
     }
 }
@@ -497,7 +497,7 @@ resource "azurerm_eventhub" "workflow_states" {
         archive_name_format = "ila_opsi/mobility/{EventHub}/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "ila-data01"
         name                = "EventHubArchive.AzureBlockBlob"
-        storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevlogistics01dls"
+        storage_account_id  = var.strg_workflow_states
             }
     }
 }
@@ -519,7 +519,7 @@ resource "azurerm_eventhub" "test" {
         archive_name_format = "ila_opsi/mobility/{EventHub}/{Year}/{Month}/{Day}/{Namespace}-{EventHub}-{PartitionId}{Hour}{Minute}{Second}"
         blob_container_name = "ila-data01"
         name                = "EventHubArchive.AzureBlockBlob"
-        storage_account_id  = "/subscriptions/ef11c9cc-9499-4f00-821a-e9f262f569c0/resourceGroups/cdpz-dev-landing-rg/providers/Microsoft.Storage/storageAccounts/cdpzdevlogistics01dls"
+        storage_account_id  = var.strg_opsi_test
             }
     }
 }

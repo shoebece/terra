@@ -23,3 +23,14 @@ variable cdmz_service_endpoint_snets {type = list(object({
     vnet = string
     snet = string
 }))}
+
+variable "strg_tiot_delayed" { type = string }
+variable "strg_tiot_error" { type = string }
+variable "strg_tiot_event" { type = string }
+variable "strg_tiot_uptime" { type = string }
+variable "strg_events" { type = string }
+variable "strg_positions" { type = string }
+variable "strg_trips" { type = string }
+variable "strg_workflow_events" { type = string }
+variable "strg_workflow_states" { type = string }
+variable "strg_opsi_test" { type = string }
