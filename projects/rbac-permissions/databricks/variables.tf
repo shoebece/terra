@@ -4,6 +4,7 @@ variable "cdpz_dev_subscription_id" { type = string }
 variable "cdpz_uat_subscription_id" { type = string }
 variable "cdpz_prod_subscription_id" { type = string }
 
+# CDP Internal groups
 variable "data_engg_aad_group" { type = object({
   name = string
   id = string
@@ -24,9 +25,36 @@ variable "super_user_aad_group" { type = object({
   id = string
 })}
 
+# CDP Internal SPNS/UAMIs
+variable "adf_dev_umi" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "adf_uat_umi" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "adf_prod_umi" { type = object({
+  name = string
+  app_id = string
+})}
+
+variable "pbi_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
+#CDP BU Groups & SPNs
 variable "contract_logistics_amr_bu" { type = object({
   name = string
   id = string
+})}
+
+variable "syncamr_spn" { type = object({
+  name = string
+  app_id = string
 })}
 
 variable "contract_logistics_eur_bu" { type = object({
@@ -34,9 +62,19 @@ variable "contract_logistics_eur_bu" { type = object({
   id = string
 })}
 
+variable "synceur_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
 variable "applied_science_bu" { type = object({
   name = string
   id = string
+})}
+
+variable "as_spn" { type = object({
+  name = string
+  app_id = string
 })}
 
 variable "crm_ho_bu" { type = object({
@@ -44,14 +82,29 @@ variable "crm_ho_bu" { type = object({
   id = string
 })}
 
+variable "crmho_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
 variable "imperial_africa_bu" { type = object({
   name = string
   id = string
 })}
 
+variable "ila_spn" { type = object({
+  name = string
+  app_id = string
+})}
+
 variable "imperial_intl_bu" { type = object({
   name = string
   id = string
+})}
+
+variable "ili_spn" { type = object({
+  name = string
+  app_id = string
 })}
 
 variable "external_users_bu" { type = object({
@@ -62,6 +115,11 @@ variable "external_users_bu" { type = object({
 variable "pa_global_bu" { type = object({
   name = string
   id = string
+})}
+
+variable "pa_spn" { type = object({
+  name = string
+  app_id = string
 })}
 
 variable "pa_ecomm_bu" { type = object({
@@ -94,59 +152,9 @@ variable "ddw_bu" { type = object({
   id = string
 })}
 
-variable "adf_dev_umi" { type = object({
+variable "pt_rocnd_bu" { type = object({
   name = string
-  app_id = string
-})}
-
-variable "adf_uat_umi" { type = object({
-  name = string
-  app_id = string
-})}
-
-variable "adf_prod_umi" { type = object({
-  name = string
-  app_id = string
-})}
-
-variable "pbi_spn" { type = object({
-  name = string
-  app_id = string
-})}
-
-variable "synceur_spn" { type = object({
-  name = string
-  app_id = string
-})}
-
-variable "syncamr_spn" { type = object({
-  name = string
-  app_id = string
-})}
-
-variable "pa_spn" { type = object({
-  name = string
-  app_id = string
-})}
-
-variable "ili_spn" { type = object({
-  name = string
-  app_id = string
-})}
-
-variable "ila_spn" { type = object({
-  name = string
-  app_id = string
-})}
-
-variable "crmho_spn" { type = object({
-  name = string
-  app_id = string
-})}
-
-variable "as_spn" { type = object({
-  name = string
-  app_id = string
+  id = string
 })}
 
 variable "pt_rocnd_spn" { type = object({
@@ -154,7 +162,7 @@ variable "pt_rocnd_spn" { type = object({
   app_id = string
 })}
 
-variable "pt_rocnd_bu" { type = object({
+variable "pt_cllqn_bu" { type = object({
   name = string
   id = string
 })}
