@@ -128,7 +128,7 @@ resource "azurerm_mssql_elasticpool" "fivetran_config_sql_pool" {
   location            = azurerm_mssql_server.fivetran_config_sql_srv.location
   server_name         = azurerm_mssql_server.fivetran_config_sql_srv.name
   tags                = var.resource_tags_common
-  max_size_gb         = 50
+  max_size_gb         = 200
 
   sku {
     name     = "StandardPool"
