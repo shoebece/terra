@@ -102,28 +102,28 @@ resource "azurerm_synapse_role_assignment" "synapse-admins-to-prod-sharing" {
 
 resource "azurerm_role_assignment" "supportrequest-to-cdp-mgmt-subscription" {
   provider             = azurerm.cdmz
-  scope                = data.azurerm_subscription.cmdz_sub
+  scope                = data.azurerm_subscription.cmdz_sub.id
   role_definition_name = "Support Request Contributor"
   principal_id         = var.support_engg_aad_group.id
 }
 
 resource "azurerm_role_assignment" "supportrequest-to-cdp-dev-subscription" {
   provider             = azurerm.dev
-  scope                = data.azurerm_subscription.dev_cdpz_sub
+  scope                = data.azurerm_subscription.dev_cdpz_sub.id
   role_definition_name = "Support Request Contributor"
   principal_id         = var.support_engg_aad_group.id
 }
 
 resource "azurerm_role_assignment" "supportrequest-to-cdp-uat-subscription" {
   provider             = azurerm.uat
-  scope                = data.azurerm_subscription.uat_cdpz_sub
+  scope                = data.azurerm_subscription.uat_cdpz_sub.id
   role_definition_name = "Support Request Contributor"
   principal_id         = var.support_engg_aad_group.id
 }
 
 resource "azurerm_role_assignment" "supportrequest-to-cdp-prod-subscription" {
   provider             = azurerm.prod
-  scope                = data.azurerm_subscription.prod_cdpz_sub
+  scope                = data.azurerm_subscription.prod_cdpz_sub.id
   role_definition_name = "Support Request Contributor"
   principal_id         = var.support_engg_aad_group.id
 }
