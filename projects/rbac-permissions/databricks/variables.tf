@@ -89,7 +89,7 @@ variable "crmho_spn" { type = object({
 
 variable "gblgp_crm_bu" { type = object({
   name = string
-  app_id = string
+  id = string
 })}
 
 variable "imperial_africa_bu" { type = object({
