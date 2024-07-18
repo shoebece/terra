@@ -571,8 +571,8 @@ data "azurerm_mysql_flexible_server" "AzureMysql_mysql-accounts-prod-dr" {
 }
 
 data "azurerm_mssql_server" "AzureSQL_POEMS" {
-  name                = "sqlprdrostimadbserver-dr"
-  resource_group_name = "Rg-Rostima-Prod"
+  name                = "sqlrostimauae-dr"
+  resource_group_name = "Rg-RostimaUAE-DR"
   provider            = azurerm.POEMS
 }
 
