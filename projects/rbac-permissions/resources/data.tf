@@ -161,3 +161,25 @@ data "azurerm_resource_group" "dev-data-streaming-rg" {
   provider  = azurerm.dev
   name      = "cdpz-dev-data-streaming-rg"
 }
+
+# CDP Subscriptions
+
+data "azurerm_subscription" "CDP-Management" {
+  provider  = azurerm.cdmz
+  subscription_id = "7fafdbc0-65a3-4508-a1da-2bbbdbc2299b"
+}
+
+data "azurerm_subscription" "CDP-Production" {
+  provider  = azurerm.prod
+  subscription_id = "150e946b-38cb-4237-b8d0-2ac92b6174b6"
+}
+
+data "azurerm_subscription" "CDP-Development" {
+  provider  = azurerm.dev
+  subscription_id = "ef11c9cc-9499-4f00-821a-e9f262f569c0"
+}
+
+data "azurerm_subscription" "CDP-UAT" {
+  provider  = azurerm.uat
+  subscription_id = "fdb528b2-0e6b-4fc5-b8a9-acc9a7ba3ff6"
+}
