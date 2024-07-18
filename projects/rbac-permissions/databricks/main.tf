@@ -1057,26 +1057,26 @@ resource "databricks_entitlements" "entitle_apac_analytics_bu" {
 }
 
 # BA_GHSE_HO
-data "databricks_group" "ghse_bu" {
+data "databricks_group" "ghseho_bu" {
   provider      = databricks.globaldbw
-  display_name  = var.ghse_bu.name
+  display_name  = var.ghseho_bu.name
 }
 
-resource "databricks_permission_assignment" "add_ghse_bu" {
+resource "databricks_permission_assignment" "add_ghseho_bu" {
   provider      = databricks.globaldbw
-  principal_id  = data.databricks_group.ghse_bu.id
+  principal_id  = data.databricks_group.ghseho_bu.id
   permissions   = ["USER"]
 
-  depends_on = [ data.databricks_group.ghse_bu ]
+  depends_on = [ data.databricks_group.ghseho_bu ]
 }
 
-resource "databricks_entitlements" "entitle_ghse_bu" {
+resource "databricks_entitlements" "entitle_ghseho_bu" {
   provider                   = databricks.globaldbw
-  group_id                   = data.databricks_group.ghse_bu.id
+  group_id                   = data.databricks_group.ghseho_bu.id
   databricks_sql_access      = true
   workspace_access           = true
 
-  depends_on = [ data.databricks_group.ghse_bu ]
+  depends_on = [ data.databricks_group.ghseho_bu ]
 }
 
 # BA_AuditTeam
@@ -1160,6 +1160,98 @@ resource "databricks_permission_assignment" "add_rocnd_spn" {
   permissions   = ["USER"]
 
   depends_on = [ data.databricks_service_principal.rocnd_spn ]
+}
+
+# cdpz_pt_sl_cllqn
+data "databricks_group" "pt_sl_cllqn_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.pt_cllqn_bu.name
+}
+
+resource "databricks_permission_assignment" "add_pt_sl_cllqn_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.pt_sl_cllqn_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.pt_sl_cllqn_bu ]
+}
+
+resource "databricks_entitlements" "entitle_pt_sl_cllqn_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.pt_sl_cllqn_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.pt_sl_cllqn_bu ]
+}
+
+# cdpz_ghse_amr
+data "databricks_group" "ghse_amr_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.ghse_amr_bu.name
+}
+
+resource "databricks_permission_assignment" "add_ghse_amr_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.ghse_amr_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.ghse_amr_bu ]
+}
+
+resource "databricks_entitlements" "entitle_ghse_amr_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.ghse_amr_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.ghse_amr_bu ]
+}
+
+# cdpz_ghse_sajed
+data "databricks_group" "ghse_sajed_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.ghse_sajed_bu.name
+}
+
+resource "databricks_permission_assignment" "add_ghse_sajed_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.ghse_sajed_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.ghse_sajed_bu ]
+}
+
+resource "databricks_entitlements" "entitle_ghse_sajed_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.ghse_sajed_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.ghse_sajed_bu ]
+}
+
+# cdpz_gblgp_crm
+data "databricks_group" "gblgp_crm_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.gblgp_crm_bu.name
+}
+
+resource "databricks_permission_assignment" "add_gblgp_crm_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.gblgp_crm_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.gblgp_crm_bu ]
+}
+
+resource "databricks_entitlements" "entitle_gblgp_crm_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.gblgp_crm_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.gblgp_crm_bu ]
 }
 
 ## ----------------------------------------------------------
@@ -1332,13 +1424,13 @@ resource "databricks_permissions" "global_ghse_usage" {
   cluster_id        = data.databricks_cluster.global_ghse_cluster.id
 
   access_control {
-    group_name       = data.databricks_group.ghse_bu.display_name
+    group_name       = data.databricks_group.ghseho_bu.display_name
     permission_level = "CAN_RESTART"
   }
 
   depends_on = [ 
     data.databricks_cluster.global_ghse_cluster,
-    data.databricks_group.ghse_bu
+    data.databricks_group.ghseho_bu
   ]
 }
 
@@ -1902,6 +1994,51 @@ resource "databricks_permissions" "global_clusterext_usage" {
   depends_on = [ 
     data.databricks_cluster.global_extusers_cluster,
     data.databricks_group.external_users_bu
+  ]
+}
+
+# SQL Warehouse - Adhoc Querying
+data "databricks_sql_warehouse" "global_edashared_warehouse" {
+  provider      = databricks.globaldbw
+  name          = "cdp-eda-shared-warehouse"
+}
+
+resource "databricks_permissions" "global_edashared_usage" {
+  provider          = databricks.globaldbw
+  sql_endpoint_id   = data.databricks_sql_warehouse.global_edashared_warehouse.id
+
+  access_control {
+    group_name       = data.databricks_group.ddw_bu.display_name
+    permission_level = "CAN_USE"
+  }
+
+  access_control {
+    group_name       = data.databricks_group.pt_sl_cllqn_bu.display_name
+    permission_level = "CAN_USE"
+  }  
+
+  access_control {
+    group_name       = data.databricks_group.ghse_amr_bu.display_name
+    permission_level = "CAN_USE"
+  }  
+
+  access_control {
+    group_name       = data.databricks_group.ghse_sajed_bu.display_name
+    permission_level = "CAN_USE"
+  }    
+  
+  access_control {
+    group_name       = data.databricks_group.gblgp_crm_bu.display_name
+    permission_level = "CAN_USE"
+  }  
+
+  depends_on = [ 
+    data.databricks_sql_warehouse.global_edashared_warehouse,
+    data.databricks_group.ddw_bu,
+    data.databricks_group.pt_sl_cllqn_bu,
+    data.databricks_group.ghse_amr_bu,
+    data.databricks_group.ghse_sajed_bu,
+    data.databricks_group.gblgp_crm_bu
   ]
 }
 

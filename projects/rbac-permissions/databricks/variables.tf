@@ -87,6 +87,11 @@ variable "crmho_spn" { type = object({
   app_id = string
 })}
 
+variable "gblgp_crm_bu" { type = object({
+  name = string
+  app_id = string
+})}
+
 variable "imperial_africa_bu" { type = object({
   name = string
   id = string
@@ -182,7 +187,17 @@ variable "audit_bu" { type = object({
   id = string
 })}
 
-variable "ghse_bu" { type = object({
+variable "ghseho_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "ghse_amr_bu" { type = object({
+  name = string
+  id = string
+})}
+
+variable "ghse_sajed_bu" { type = object({
   name = string
   id = string
 })}
