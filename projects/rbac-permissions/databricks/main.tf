@@ -2042,6 +2042,24 @@ resource "databricks_permissions" "global_edashared_usage" {
   ]
 }
 
+##------------------------------------------------------- PROD-ACCESS WORKSPACE --------------------------------------------------------##
+# ADDING USERS
+# cdpz_pt_amr
+data "databricks_group" "bi_pt_amr_bu" {
+  provider      = databricks.access
+  display_name  = var.bi_pt_amr_bu.name
+}
+
+resource "databricks_permission_assignment" "add_bi_pt_amr_bu" {
+  provider      = databricks.access
+  principal_id  = data.databricks_group.bi_pt_amr_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.bi_pt_amr_bu ]
+}
+
+
+
 ## ----------------------------------------------------------
 ## Artifactory 
 ## Maven
