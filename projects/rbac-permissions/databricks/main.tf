@@ -243,7 +243,7 @@ resource "databricks_permissions" "dev_adf_cluster_usage" {
   }
 
   access_control {
-    service_principal_name = data.databricks_group.ba_bi_eng.display_name
+    group_name = data.databricks_group.ba_bi_eng.display_name
     permission_level = "CAN_RESTART"
   }
 
@@ -255,7 +255,8 @@ resource "databricks_permissions" "dev_adf_cluster_usage" {
   depends_on = [ 
     data.databricks_cluster.dev_adf_cluster,
     data.databricks_service_principal.adf_dev_umi,
-    data.databricks_service_principal.pbi_spn
+    data.databricks_service_principal.pbi_spn,
+    data.databricks_group.ba_bi_eng
   ]
 }
 
