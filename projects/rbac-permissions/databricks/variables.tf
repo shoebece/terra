@@ -202,6 +202,52 @@ variable "ghse_sajed_bu" { type = object({
   id = string
 })}
 
+variable "ghse_aeja_bu" { type = object({
+  name = string
+})}
+
+variable "eur_freightfwd_bu" { type = object({
+  name = string
+})}
+
+variable "sco_prod_bu" { type = object({
+  name = string
+})}
+
+# CDP Prod-Access workspace BU Groups for report users who will not access the workspace.
+variable "bi_pt_amr_bu" { type = object({
+  name = string
+})}
+
+variable "bi_pt_anz_bu" { type = object({
+  name = string
+})}
+
+variable "bi_pt_apac_bu" { type = object({
+  name = string
+})}
+
+variable "bi_pt_mea_bu" { type = object({
+  name = string
+})}
+
+variable "bi_pt_menasco_bu" { type = object({
+  name = string
+})}
+
+variable "bi_pt_sco_bu" { type = object({
+  name = string
+})}
+
+variable "bi_pt_ssa_bu" { type = object({
+  name = string
+})}
+
+variable "bi_gops_bu" { type = object({
+  name = string
+})}
+
+#--------------------------------------------------------------
 variable "landing_ext_loc" {
     type = list(object({
         name    = string

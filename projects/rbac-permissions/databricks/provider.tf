@@ -127,3 +127,16 @@ provider "databricks" {
   azure_workspace_resource_id = data.azurerm_databricks_workspace.global_dbw.id
   account_id                  = "af7f851a-1d3e-425a-97a5-43b295231b90" 
 }
+
+data "azurerm_databricks_workspace" "access" {
+  provider            = azurerm.prod
+  name                = "cdpz-prod-access-dbw"
+  resource_group_name = "cdpz-prod-access-rg"
+}
+
+provider "databricks" {
+  alias                       = "access"
+  host                        = data.azurerm_databricks_workspace.access.workspace_url
+  azure_workspace_resource_id = data.azurerm_databricks_workspace.access.id
+  account_id                  = "af7f851a-1d3e-425a-97a5-43b295231b90" 
+}

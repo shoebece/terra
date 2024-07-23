@@ -243,7 +243,7 @@ resource "databricks_permissions" "dev_adf_cluster_usage" {
   }
 
   access_control {
-    service_principal_name = data.databricks_group.ba_bi_eng.display_name
+    group_name = data.databricks_group.ba_bi_eng.display_name
     permission_level = "CAN_RESTART"
   }
 
@@ -255,7 +255,8 @@ resource "databricks_permissions" "dev_adf_cluster_usage" {
   depends_on = [ 
     data.databricks_cluster.dev_adf_cluster,
     data.databricks_service_principal.adf_dev_umi,
-    data.databricks_service_principal.pbi_spn
+    data.databricks_service_principal.pbi_spn,
+    data.databricks_group.ba_bi_eng
   ]
 }
 
@@ -1254,6 +1255,75 @@ resource "databricks_entitlements" "entitle_gblgp_crm_bu" {
   depends_on = [ data.databricks_group.gblgp_crm_bu ]
 }
 
+# cdpz_ghse_aejea
+data "databricks_group" "ghse_aeja_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.ghse_aeja_bu.name
+}
+
+resource "databricks_permission_assignment" "add_ghse_aeja_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.ghse_aeja_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.ghse_aeja_bu ]
+}
+
+resource "databricks_entitlements" "entitle_ghse_aeja_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.ghse_aeja_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.ghse_aeja_bu ]
+}
+
+# cdpz_eur_freight_fwd
+data "databricks_group" "eur_freightfwd_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.eur_freightfwd_bu.name
+}
+
+resource "databricks_permission_assignment" "add_eur_freightfwd_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.eur_freightfwd_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.eur_freightfwd_bu ]
+}
+
+resource "databricks_entitlements" "entitle_eur_freightfwd_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.eur_freightfwd_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.eur_freightfwd_bu ]
+}
+
+# cdpz_sco_product_team
+data "databricks_group" "sco_prod_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.sco_prod_bu.name
+}
+
+resource "databricks_permission_assignment" "add_sco_prod_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.sco_prod_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.sco_prod_bu ]
+}
+
+resource "databricks_entitlements" "entitle_sco_prod_bu" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.sco_prod_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.sco_prod_bu ]
+}
+
 ## ----------------------------------------------------------
 ## Cluster Sync EUR
 data "databricks_cluster" "global_synceur_cluster" {
@@ -2015,20 +2085,35 @@ resource "databricks_permissions" "global_edashared_usage" {
   access_control {
     group_name       = data.databricks_group.pt_sl_cllqn_bu.display_name
     permission_level = "CAN_USE"
-  }  
+  }
 
   access_control {
     group_name       = data.databricks_group.ghse_amr_bu.display_name
     permission_level = "CAN_USE"
-  }  
+  }
 
   access_control {
     group_name       = data.databricks_group.ghse_sajed_bu.display_name
     permission_level = "CAN_USE"
-  }    
+  }
   
   access_control {
     group_name       = data.databricks_group.gblgp_crm_bu.display_name
+    permission_level = "CAN_USE"
+  }
+  
+  access_control {
+    group_name       = data.databricks_group.ghse_aeja_bu.display_name
+    permission_level = "CAN_USE"
+  }  
+  
+  access_control {
+    group_name       = data.databricks_group.eur_freightfwd_bu.display_name
+    permission_level = "CAN_USE"
+  }  
+  
+  access_control {
+    group_name       = data.databricks_group.sco_prod_bu.display_name
     permission_level = "CAN_USE"
   }  
 
@@ -2038,7 +2123,188 @@ resource "databricks_permissions" "global_edashared_usage" {
     data.databricks_group.pt_sl_cllqn_bu,
     data.databricks_group.ghse_amr_bu,
     data.databricks_group.ghse_sajed_bu,
-    data.databricks_group.gblgp_crm_bu
+    data.databricks_group.gblgp_crm_bu,
+    data.databricks_group.ghse_aeja_bu,
+    data.databricks_group.eur_freightfwd_bu,
+    data.databricks_group.sco_prod_bu
+  ]
+}
+
+##------------------------------------------------------- PROD-ACCESS WORKSPACE --------------------------------------------------------##
+# ADDING USERS
+# cdpz_pt_amr
+data "databricks_group" "bi_pt_amr_bu" {
+  provider      = databricks.access
+  display_name  = var.bi_pt_amr_bu.name
+}
+
+resource "databricks_permission_assignment" "add_bi_pt_amr_bu" {
+  provider      = databricks.access
+  principal_id  = data.databricks_group.bi_pt_amr_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.bi_pt_amr_bu ]
+}
+
+# cdpz_pt_anz
+data "databricks_group" "bi_pt_anz_bu" {
+  provider      = databricks.access
+  display_name  = var.bi_pt_anz_bu.name
+}
+
+resource "databricks_permission_assignment" "add_bi_pt_anz_bu" {
+  provider      = databricks.access
+  principal_id  = data.databricks_group.bi_pt_anz_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.bi_pt_anz_bu ]
+}
+
+# cdpz_pt_apac
+data "databricks_group" "bi_pt_apac_bu" {
+  provider      = databricks.access
+  display_name  = var.bi_pt_apac_bu.name
+}
+
+resource "databricks_permission_assignment" "add_bi_pt_apac_bu" {
+  provider      = databricks.access
+  principal_id  = data.databricks_group.bi_pt_apac_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.bi_pt_apac_bu ]
+}
+
+# cdpz_pt_mea
+data "databricks_group" "bi_pt_mea_bu" {
+  provider      = databricks.access
+  display_name  = var.bi_pt_mea_bu.name
+}
+
+resource "databricks_permission_assignment" "add_bi_pt_mea_bu" {
+  provider      = databricks.access
+  principal_id  = data.databricks_group.bi_pt_mea_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.bi_pt_mea_bu ]
+}
+
+# cdpz_pt_menasco
+data "databricks_group" "bi_pt_menasco_bu" {
+  provider      = databricks.access
+  display_name  = var.bi_pt_menasco_bu.name
+}
+
+resource "databricks_permission_assignment" "add_bi_pt_menasco_bu" {
+  provider      = databricks.access
+  principal_id  = data.databricks_group.bi_pt_menasco_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.bi_pt_menasco_bu ]
+}
+
+# cdpz_pt_sco
+data "databricks_group" "bi_pt_sco_bu" {
+  provider      = databricks.access
+  display_name  = var.bi_pt_sco_bu.name
+}
+
+resource "databricks_permission_assignment" "add_bi_pt_sco_bu" {
+  provider      = databricks.access
+  principal_id  = data.databricks_group.bi_pt_sco_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.bi_pt_sco_bu ]
+}
+
+# cdpz_pt_ssa
+data "databricks_group" "bi_pt_ssa_bu" {
+  provider      = databricks.access
+  display_name  = var.bi_pt_ssa_bu.name
+}
+
+resource "databricks_permission_assignment" "add_bi_pt_ssa_bu" {
+  provider      = databricks.access
+  principal_id  = data.databricks_group.bi_pt_ssa_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.bi_pt_ssa_bu ]
+}
+
+# cdpz_gops_dashboard_users
+data "databricks_group" "bi_gops_bu" {
+  provider      = databricks.access
+  display_name  = var.bi_gops_bu.name
+}
+
+resource "databricks_permission_assignment" "add_bi_gops_bu" {
+  provider      = databricks.access
+  principal_id  = data.databricks_group.bi_gops_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.bi_gops_bu ]
+}
+
+
+# Prod-Access - PBI reporting Warehouse
+data "databricks_sql_warehouse" "access_rpt_warehouse" {
+  provider      = databricks.access
+  name          = "cdp-de-team-warehouse"
+}
+
+resource "databricks_permissions" "access_rpt_warehouse_usage" {
+  provider          = databricks.access
+  sql_endpoint_id   = data.databricks_sql_warehouse.access_rpt_warehouse.id
+
+  access_control {
+    group_name       = data.databricks_group.bi_pt_amr_bu.display_name
+    permission_level = "CAN_USE"
+  }
+
+  access_control {
+    group_name       = data.databricks_group.bi_pt_anz_bu.display_name
+    permission_level = "CAN_USE"
+  }
+  
+  access_control {
+    group_name       = data.databricks_group.bi_pt_apac_bu.display_name
+    permission_level = "CAN_USE"
+  }
+  
+  access_control {
+    group_name       = data.databricks_group.bi_pt_mea_bu.display_name
+    permission_level = "CAN_USE"
+  }
+  
+  access_control {
+    group_name       = data.databricks_group.bi_pt_menasco_bu.display_name
+    permission_level = "CAN_USE"
+  }
+  
+  access_control {
+    group_name       = data.databricks_group.bi_pt_sco_bu.display_name
+    permission_level = "CAN_USE"
+  }
+  
+  access_control {
+    group_name       = data.databricks_group.bi_pt_ssa_bu.display_name
+    permission_level = "CAN_USE"
+  }
+  
+  access_control {
+    group_name       = data.databricks_group.bi_gops_bu.display_name
+    permission_level = "CAN_USE"
+  }
+
+  depends_on = [ 
+    data.databricks_sql_warehouse.access_rpt_warehouse,
+    data.databricks_group.bi_pt_amr_bu,
+    data.databricks_group.bi_pt_anz_bu,
+    data.databricks_group.bi_pt_apac_bu,
+    data.databricks_group.bi_pt_mea_bu,
+    data.databricks_group.bi_pt_menasco_bu,
+    data.databricks_group.bi_pt_sco_bu,
+    data.databricks_group.bi_pt_ssa_bu,
+    data.databricks_group.bi_gops_bu
   ]
 }
 
