@@ -2256,6 +2256,16 @@ resource "databricks_permissions" "access_rpt_warehouse_usage" {
   sql_endpoint_id   = data.databricks_sql_warehouse.access_rpt_warehouse.id
 
   access_control {
+    service_principal_name = data.databricks_service_principal.pbi_spn.application_id
+    permission_level = "CAN_USE"
+  }
+
+  access_control {
+    group_name       = data.databricks_group.ba_bi_eng.display_name
+    permission_level = "CAN_USE"
+  }
+
+  access_control {
     group_name       = data.databricks_group.bi_pt_amr_bu.display_name
     permission_level = "CAN_USE"
   }
