@@ -202,6 +202,18 @@ variable "ghse_sajed_bu" { type = object({
   id = string
 })}
 
+variable "ghse_aeja_bu" { type = object({
+  name = string
+})}
+
+variable "eur_freightfwd_bu" { type = object({
+  name = string
+})}
+
+variable "sco_prod_bu" { type = object({
+  name = string
+})}
+
 # CDP Prod-Access workspace BU Groups for report users who will not access the workspace.
 variable "bi_pt_amr_bu" { type = object({
   name = string
