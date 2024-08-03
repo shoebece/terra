@@ -534,9 +534,9 @@ data "azurerm_postgresql_server" "AzurePSQL_TradeFinance" {
   provider            = azurerm.TradeFinance
 }
 
-data "azurerm_postgresql_server" "AzurePSQL_CargoesLogistics" {
-  name                = "psql-cargoeslogistics-prod-dr"
-  resource_group_name = "rg-cargoeslogistics-prod-dr"
+data "azurerm_postgresql_flexible_server" "AzurePSQL_CargoesLogistics" {
+  name                = "psql-cargoeslogistics-flex-dr-03"
+  resource_group_name = "rg-cargoeslogistics-prod"
   provider            = azurerm.CargoesLogistics
 }
 
@@ -1027,7 +1027,7 @@ resource "azurerm_private_endpoint" "AzurePSQL_TradeFinance_endpoint_pep" {
   ]
 }
 
-# # Private end point management for PostgreSQL single server psql-cargoeslogistics-prod-dr
+# # Private end point management for PostgreSQL flex server psql-cargoeslogistics-flex-dr-03
 resource "azurerm_private_endpoint" "AzurePSQL_CargoesLogistics_endpoint_pep" {
   name                = "cdmz-mgmt-fivetran-CargoesLogistics-pep"
   resource_group_name = data.azurerm_resource_group.resgrp.name
@@ -1044,7 +1044,7 @@ resource "azurerm_private_endpoint" "AzurePSQL_CargoesLogistics_endpoint_pep" {
   
   private_service_connection {
     name                           = "cdmz-mgmt-fivetran-pdnsz_psql-psc"
-    private_connection_resource_id = data.azurerm_postgresql_server.AzurePSQL_CargoesLogistics.id
+    private_connection_resource_id = data.azurerm_postgresql_flexible_server.AzurePSQL_CargoesLogistics.id
     subresource_names              = ["postgresqlServer"]
     is_manual_connection           = false
   }
