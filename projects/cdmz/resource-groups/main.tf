@@ -147,3 +147,15 @@ resource "azurerm_resource_group" "artifactory-rg" {
   location = var.resource_location
   tags     = var.resource_tags_common
 }
+
+resource "azurerm_resource_group" "shared-uae-avd" {
+  name     = "cdmz-shared-uae-avd-rg"
+  location = var.resource_location
+  tags     = var.resource_tags_common
+}
+
+resource "azurerm_resource_group" "shared-amr-avd" {
+  name     = "cdmz-shared-amr-avd-rg"
+  location = var.resource_location
+  tags     = var.resource_tags_common
+}
