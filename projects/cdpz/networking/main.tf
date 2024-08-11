@@ -142,10 +142,10 @@ resource "azurerm_route_table" "art" {
     #   next_hop_in_ip_address  = var.uae-smart-vpn-firewall_ip_address
     # },
     {
-      name                    = "Route_P81_Syncreon_FiveTran_3"
-      address_prefix          = "10.1.6.52/32"
+      name                    = "Route_P81_LV_FiveTran_2"
+      address_prefix          = "10.1.6.0/24"
       next_hop_type           = "VirtualAppliance"
-      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod-02
     },
     {
       name                    = "Route_P81_Dublin_qlik_1"
