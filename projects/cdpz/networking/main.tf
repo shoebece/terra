@@ -264,6 +264,11 @@ resource "azurerm_route_table" "art" {
   ]
 
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
+  lifecycle {
+    ignore_changes = [
+      route
+    ]
+  }
 }
 
 resource "azurerm_subnet_route_table_association" "rt-snets-ass" {
