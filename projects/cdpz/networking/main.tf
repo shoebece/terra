@@ -135,11 +135,131 @@ resource "azurerm_route_table" "art" {
       next_hop_type           = "VirtualAppliance"
       next_hop_in_ip_address  = var.uae-cpperimeter81-prod
     },
+    # {
+    #   name                    = "Route_P81_Caucedo_portsterms_evh01"
+    #   address_prefix          = "10.193.1.47/32"
+    #   next_hop_type           = "VirtualAppliance"
+    #   next_hop_in_ip_address  = var.uae-smart-vpn-firewall_ip_address
+    # },
     {
-      name                    = "Route_P81_Caucedo_portsterms_evh01"
-      address_prefix          = "10.193.1.47/32"
+      name                    = "Route_P81_Syncreon_FiveTran_3"
+      address_prefix          = "10.1.6.52/32"
       next_hop_type           = "VirtualAppliance"
-      next_hop_in_ip_address  = var.uae-smart-vpn-firewall_ip_address
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Dublin_qlik_1"
+      address_prefix          = "10.16.248.177/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Dublin_qlik_2"
+      address_prefix          = "10.16.248.180/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Dublin_qlik_3"
+      address_prefix          = "10.16.249.102/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Syncreon_FiveTran_9"
+      address_prefix          = "172.22.0.165/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "ADLS_Canon_Dublin_2"
+      address_prefix          = "172.22.0.58/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "ADLS_Canon_Dublin_1"
+      address_prefix          = "172.22.0.59/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Syncreon_FiveTran_10"
+      address_prefix          = "172.22.1.121/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Syncreon_FiveTran_4"
+      address_prefix          = "172.22.1.16/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Syncreon_FiveTran_6"
+      address_prefix          = "172.22.2.14/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Syncreon_FiveTran_5"
+      address_prefix          = "172.22.2.75/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Syncreon_FiveTran_8"
+      address_prefix          = "172.22.3.104/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Syncreon_FiveTran_11"
+      address_prefix          = "172.22.3.119/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_Syncreon_FiveTran_12"
+      address_prefix          = "172.22.3.129/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod
+    },
+    {
+      name                    = "Route_P81_LV_FiveTran_3"
+      address_prefix          = "10.1.0.0/25"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod-02
+    },
+    {
+      name                    = "Route_P81_LV_FiveTran_4"
+      address_prefix          = "10.1.1.8/29"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod-02
+    },
+    {
+      name                    = "Route_P81_LV_FiveTran_1"
+      address_prefix          = "10.1.4.0/25"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod-02
+    },
+    {
+      name                    = "Route_P81_Syncreon_FiveTran_3"
+      address_prefix          = "10.1.6.52/32"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.uae-cpperimeter81-prod-02
+    },
+    {
+      name                    = "Route_vnet-avd-amr-prod"
+      address_prefix          = "10.12.0.0/27"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.eur-checkpoint-intfw
+    },
+    {
+      name                    = "Route_BIGID"
+      address_prefix          = "10.48.16.0/23"
+      next_hop_type           = "VirtualAppliance"
+      next_hop_in_ip_address  = var.firewall_ip_address
     }
   ]
 
