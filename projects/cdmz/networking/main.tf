@@ -552,6 +552,12 @@ data "azurerm_mysql_flexible_server" "AzureMysql_mysql-naudb-prod-dr" {
   provider            = azurerm.NAU
 }
 
+data "azurerm_cosmosdb_account" "cosmongo_cargoeslogistics" {
+  name                = "cosmos-cargoeslogisitcs-production"
+  resource_group_name = "rg-cargoeslogistics-prod"
+  provider            = azurerm.CargoesLogistics
+}
+
 # data "azurerm_mysql_server" "AzureMysql_mysql-mea-dr" {
 #   name                = "mysql-mea-dr"
 #   resource_group_name = "rg-mea-prod"
@@ -794,6 +800,19 @@ resource "azurerm_private_endpoint" "AzureSQLRunner_endpoint_pep" {
   ]
 }
 
+# Private dns creation for mongo and linked to CDP Management VNET
+
+resource "azurerm_private_dns_zone" "pdnsz_mongo" {
+  name                = "privatelink.mongo.cosmos.azure.com"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "mongodnss-vnet-link" {
+  name                  = "pdnsz_mongo-link"
+  resource_group_name   = data.azurerm_resource_group.resgrp.name
+  private_dns_zone_name = azurerm_private_dns_zone.pdnsz_mongo.name
+  virtual_network_id    = data.azurerm_virtual_network.vnet.id
+}
 
 # Private dns creation for postgres and linked to CDP Management VNET
 
@@ -1478,6 +1497,53 @@ resource "azurerm_private_endpoint" "AzureSQL_BASQL_endpoint_pep" {
   depends_on = [
     data.azurerm_subnet.snet-default,
     data.azurerm_private_dns_zone.pdnsz
+  ]
+}
+
+# Private end point management for Azure Cosmos DB for MongoDB account cosmos-cargoeslogisitcs-production
+
+resource "azurerm_private_endpoint" "AzureCosmongo_cargoeslogistics_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-cosmongo-cargoeslogistics-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-cosmongo-cargoeslogistics-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_psql"
+    private_dns_zone_ids = [ azurerm_private_dns_zone.pdnsz_mongo.id ]
+  }
+  
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_mongo-psc"
+    private_connection_resource_id = data.azurerm_cosmosdb_account.cosmongo_cargoeslogistics.id
+    subresource_names              = ["MongoDB"]
+    is_manual_connection           = false
+  }
+
+  # ip_configuration {
+  #   name               = "cdmz-mgmt-fivetran-cargoeslogistics-ipc"
+  #   private_ip_address = var.casmosmongo_fv_ip_address
+  #   subresource_name   = "MongoDB"
+  #   member_name        = "MongoDB"
+    
+  # }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    azurerm_private_dns_zone.pdnsz_psql
   ]
 }
 

@@ -49,6 +49,7 @@ variable "POEMSSQL_fv_ip_address"                 { type = string }
 variable "BASQL_fv_ip_address"                 { type = string }
 variable "mpowered_fv_ip_address"                 { type = string }
 variable "AzureSQL_cargoesrunnerprod_fv_ip_address"                 { type = string }
+variable "casmosmongo_fv_ip_address"                 { type = string }
 variable "sandbox_prefix" {
     type = string 
     default = ""
