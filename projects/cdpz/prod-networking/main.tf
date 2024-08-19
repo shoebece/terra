@@ -62,6 +62,12 @@ resource "azurerm_subnet_route_table_association" "rt-snets-ass" {
 
   subnet_id       = data.azurerm_subnet.route-table-snet[count.index].id
   route_table_id  = data.azurerm_route_table.art.id
+  lifecycle {
+    ignore_changes = [
+      subnet_id,
+      route_table_id
+    ]
+  }
 }
 
 data "azurerm_subnet" "snet-default" {
