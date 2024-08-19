@@ -79,11 +79,12 @@ module "proc_vnet" {
 }
 
 data "azurerm_subnet" "route-table-snet" {
-  count                 = length(var.route_table_snets)
+  for_each = { for route in var.route_table_snets: route.snet => route }
+  # count                 = length(var.route_table_snets)
 
-  resource_group_name   = var.route_table_snets[count.index].rgname
-  virtual_network_name  = var.route_table_snets[count.index].vnet
-  name                  = var.route_table_snets[count.index].snet
+  resource_group_name   = each.value.rgname
+  virtual_network_name  = each.value.vnet
+  name                  = each.value.snet
 
   depends_on = [
     module.acc_vnet,
@@ -272,15 +273,22 @@ resource "azurerm_route_table" "art" {
 }
 
 resource "azurerm_subnet_route_table_association" "rt-snets-ass" {
-  count           = length(data.azurerm_subnet.route-table-snet)
+  for_each = { for route in var.route_table_snets: route.snet => route }
+  # count           = length(data.azurerm_subnet.route-table-snet)
 
-  subnet_id      = data.azurerm_subnet.route-table-snet[count.index].id
+  subnet_id      = data.azurerm_subnet.route-table-snet[each.value.snet].id
   route_table_id  = azurerm_route_table.art.id
 
   depends_on = [ 
     azurerm_route_table.art
     ,data.azurerm_subnet.route-table-snet
-  ]  
+  ]
+  lifecycle {
+    ignore_changes = [
+      subnet_id,
+      route_table_id
+    ]
+ } 
 }
 
 data "azurerm_subnet" "snet-default" {
@@ -376,10 +384,10 @@ resource "azurerm_virtual_network_peering" "eur_hub_peer" {
   allow_forwarded_traffic = "true"
 }
 
-resource "azurerm_virtual_network_peering" "uae_smart_hub_peer" {
-  name = join("-", ["peer-uae-smart-hub-to-cdp", var.environment, "processing"])
-  resource_group_name = data.azurerm_resource_group.resgrp.name
-  virtual_network_name = module.proc_vnet.vnet_name
-  remote_virtual_network_id = "/subscriptions/113fbeb3-ce3b-4e2a-b3fd-f9176ff893f3/resourceGroups/rg-dpw-uae-smart-ssh/providers/Microsoft.Network/virtualNetworks/vnet-dpw-uae-smart-ssh"     
-  allow_forwarded_traffic = "true"
-}
+# resource "azurerm_virtual_network_peering" "uae_smart_hub_peer" {
+#   name = join("-", ["peer-uae-smart-hub-to-cdp", var.environment, "processing"])
+#   resource_group_name = data.azurerm_resource_group.resgrp.name
+#   virtual_network_name = module.proc_vnet.vnet_name
+#   remote_virtual_network_id = "/subscriptions/113fbeb3-ce3b-4e2a-b3fd-f9176ff893f3/resourceGroups/rg-dpw-uae-smart-ssh/providers/Microsoft.Network/virtualNetworks/vnet-dpw-uae-smart-ssh"     
+#   allow_forwarded_traffic = "true"
+# }
