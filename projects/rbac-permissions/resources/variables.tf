@@ -43,3 +43,8 @@ variable "cdp_synapse_admin_group" { type = object({
   name = string
   id = string
 })}
+
+variable "cdpz_internal_audit_team_group" { type = object({
+  name = string
+  id = string
+})}
