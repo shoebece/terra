@@ -516,8 +516,8 @@ data "azurerm_postgresql_server" "AzurePSQL_BerthPlanningApplication" {
   provider            = azurerm.BerthPlanningApplication
 }
 
-data "azurerm_postgresql_server" "AzurePSQL_DPWFoundationalServicesProd" {
-  name                = "cargoes-platform-prod-postgresql-server-dr"
+data "azurerm_postgresql_flexible_server" "AzurePSQL_DPWFoundationalServicesProd" {
+  name                = "cargoes-platform-prod-postgres-flexible-dr"
   resource_group_name = "cargoes-prod"
   provider            = azurerm.DPWFoundationalServicesProd
 }
@@ -927,7 +927,7 @@ resource "azurerm_private_endpoint" "AzurePSQL_cpp_endpoint_pep" {
   
   private_service_connection {
     name                           = "cdmz-mgmt-fivetran-pdnsz_psql-psc"
-    private_connection_resource_id = data.azurerm_postgresql_server.AzurePSQL_DPWFoundationalServicesProd.id
+    private_connection_resource_id = data.azurerm_postgresql_flexible_server.AzurePSQL_DPWFoundationalServicesProd.id
     subresource_names              = ["postgresqlServer"]
     is_manual_connection           = false
   }
