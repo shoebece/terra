@@ -571,7 +571,7 @@ data "azurerm_mysql_flexible_server" "AzureMysql_mysql-global-dr" {
 }
 
 data "azurerm_mysql_flexible_server" "AzureMysql_mysql-accounts-prod-dr" {
-  name                = "mysql-accountsprod-dr"
+  name                = "mysql-accountsprod"
   resource_group_name = "rg-accountsproduction"
   provider            = azurerm.DTWorld
 }
