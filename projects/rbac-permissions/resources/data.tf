@@ -152,6 +152,13 @@ data "azurerm_resource_group" "prod-data-streaming-rg" {
   name      = "cdpz-prod-data-streaming-rg"
 }
 
+# Monitoring
+data "azurerm_resource_group" "prod-monitoring-rg" {
+  provider  = azurerm.prod
+  name      = "cdpz-prod-monitoring-rg"
+}
+
+
 data "azurerm_resource_group" "uat-data-streaming-rg" {
   provider  = azurerm.uat
   name      = "cdpz-uat-data-streaming-rg"

@@ -35,3 +35,13 @@ resource "azurerm_role_assignment" "internal-auditor-user-to-prod" {
 
   depends_on = [data.azurerm_subscription.prod_cdpz_sub ]
 }
+
+######### Log Analytics Reader ##########
+
+resource "azurerm_role_assignment" "internal-auditor-user-to-prod-monitoring" {
+  provider             = azurerm.prod
+  scope                = data.azurerm_resource_group.prod-monitoring-rg.id
+  role_definition_name = "Log Analytics Reader"
+  principal_id         = var.cdpz_internal_audit_team_group.id
+  depends_on = [data.azurerm_subscription.prod_cdpz_sub ]
+}
