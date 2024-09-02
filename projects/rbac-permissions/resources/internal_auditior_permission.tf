@@ -36,7 +36,7 @@ resource "azurerm_role_assignment" "internal-auditor-user-to-prod" {
   depends_on = [data.azurerm_subscription.prod_cdpz_sub ]
 }
 
-######### Log Analytics Reader ##########
+######### Log Analytics Reader for prod ##########
 
 resource "azurerm_role_assignment" "internal-auditor-user-to-prod-monitoring" {
   provider             = azurerm.prod
@@ -45,3 +45,14 @@ resource "azurerm_role_assignment" "internal-auditor-user-to-prod-monitoring" {
   principal_id         = var.cdpz_internal_audit_team_group.id
   depends_on = [data.azurerm_subscription.prod_cdpz_sub ]
 }
+
+############### Data Factory Contributor for DEV ADF ###############
+
+resource "azurerm_role_assignment" "internal-auditor-to-dev-adf" {
+  provider             = azurerm.dev
+  scope                = data.azurerm_resource_group.dev-orch-and-ingest-rg.id
+  role_definition_name = "Data Factory Contributor"
+  principal_id         = var.cdpz_internal_audit_team_group.id
+  depends_on = [data.azurerm_subscription.prod_cdpz_sub ]
+}
+
