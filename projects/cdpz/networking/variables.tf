@@ -45,3 +45,17 @@ variable "key_vault_pep" { type = list(object({
 })) }
 
 variable "pdnsz_names"                    {type = list(string)}
+
+variable "routes" {
+  type = map(object({
+    address_prefix         = string
+    next_hop_type          = string
+    next_hop_in_ip_address = optional(string)
+  }))
+}
+
+variable "disable_bgp_route_propagation" {
+  description = "Azure resource group name"
+  type        = bool
+  default     = false
+}
