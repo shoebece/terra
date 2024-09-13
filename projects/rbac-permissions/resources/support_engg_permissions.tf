@@ -72,7 +72,7 @@ resource "azurerm_role_assignment" "support-eng-to-uat-orch-and-ingest" {
 resource "azurerm_role_assignment" "support-eng-to-prod-orch-and-ingest" {
   provider             = azurerm.prod
   scope                = data.azurerm_resource_group.prod-orch-and-ingest-rg.id
-  role_definition_name = "Reader"
+  role_definition_name = "customrbac-cdp-suppengg"
   principal_id         = var.support_engg_aad_group.id
 
   depends_on = [ data.azurerm_resource_group.prod-orch-and-ingest-rg ]
