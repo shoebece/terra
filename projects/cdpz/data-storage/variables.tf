@@ -18,6 +18,8 @@ variable "staccs" {
         # stconts = list(string)
         specyfic_service_endpoint_snets = list(string)
         is_hns_enabled = bool
+        enable_soft_delete = bool
+        soft_delete_retention_days = number
     }))
 }
 
