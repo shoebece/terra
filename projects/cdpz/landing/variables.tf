@@ -16,6 +16,8 @@ variable "staccs" {
         sftp_enabled = optional(bool, "false")
         stconts = list(string)
         specyfic_service_endpoint_snets = list(string)
+        enable_soft_delete = bool
+        soft_delete_retention_days = number
     }))
 }
 

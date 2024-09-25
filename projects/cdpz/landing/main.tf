@@ -78,6 +78,14 @@ resource "azurerm_storage_account" "landing_staccs" {
     virtual_network_subnet_ids  = concat(var.common_service_endpoint_snets, each.value.specyfic_service_endpoint_snets)
   }
   
+  dynamic "blob_properties" {
+    for_each = each.value.enable_soft_delete ? [1] : []
+    content {
+      container_delete_retention_policy {
+        days = each.value.soft_delete_retention_days
+      }
+    }
+  }
   tags = merge(
     var.resource_tags_common, var.resource_tags_spec
   )
