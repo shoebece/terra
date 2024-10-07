@@ -688,6 +688,51 @@ resource "databricks_permission_assignment" "add_synceur_spn" {
   depends_on = [ data.databricks_service_principal.synceur_spn ]
 }
 
+# data_science
+data "databricks_group" "data_science_bu" {
+  provider      = databricks.globaldbw
+  display_name  = var.data_science_bu.name
+}
+
+resource "databricks_permission_assignment" "add_data_science_bu" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.data_science_bu.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.data_science_bu ]
+}
+
+resource "databricks_entitlements" "entitle_data_science" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.data_science_bu.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.data_science_bu ]
+}
+
+data "databricks_group" "data_science_bu_without_avd" {
+  provider      = databricks.globaldbw
+  display_name  = var.data_science_bu_without_avd.name
+}
+
+resource "databricks_permission_assignment" "add_data_science_bu_without_avd" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.data_science_bu_without_avd.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.data_science_bu_without_avd ]
+}
+
+resource "databricks_entitlements" "entitle_data_science_without_avd" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.data_science_bu_without_avd.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.data_science_bu_without_avd ]
+}
+
 # applied_science
 data "databricks_group" "applied_science_bu" {
   provider      = databricks.globaldbw
@@ -1680,6 +1725,33 @@ resource "databricks_permissions" "global_pbiclusterpa_usage" {
 #   ]
 # }
 
+# Cluster Data Science
+data "databricks_cluster" "global_ds_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-ds-team-cluster"
+}
+
+resource "databricks_permissions" "global_clusterds_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_ds_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.data_science_bu.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  access_control {
+    group_name       = data.databricks_group.data_science_bu_without_avd.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_ds_cluster,
+    data.databricks_group.data_science_bu,
+    data.databricks_group.data_science_bu_without_avd
+  ]
+}
+
 # Cluster Applied Science
 data "databricks_cluster" "global_as_cluster" {
   provider      = databricks.globaldbw
@@ -2404,6 +2476,16 @@ resource "databricks_grants" "artifactory_ext_loc_maven" {
     privileges = ["READ_FILES"]
   }
 
+  grant {
+    principal  = data.databricks_group.data_science_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.data_science_bu_without_avd.display_name
+    privileges = ["READ_FILES"]
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
@@ -2420,7 +2502,9 @@ resource "databricks_grants" "artifactory_ext_loc_maven" {
     data.databricks_group.crm_ho_bu,
     data.databricks_group.imperial_africa_bu,
     data.databricks_group.imperial_intl_bu,
-    data.databricks_group.external_users_bu
+    data.databricks_group.external_users_bu,
+    data.databricks_group.data_science_bu_without_avd,
+    data.databricks_group.data_science_bu
   ]
 }
 
@@ -2508,6 +2592,16 @@ resource "databricks_grants" "artifactory_ext_loc_pypi" {
     privileges = ["READ_FILES"]
   }
 
+  grant {
+    principal  = data.databricks_group.data_science_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.data_science_bu_without_avd.display_name
+    privileges = ["READ_FILES"]
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
@@ -2524,7 +2618,9 @@ resource "databricks_grants" "artifactory_ext_loc_pypi" {
     data.databricks_group.crm_ho_bu,
     data.databricks_group.imperial_africa_bu,
     data.databricks_group.imperial_intl_bu,
-    data.databricks_group.external_users_bu
+    data.databricks_group.external_users_bu,
+    data.databricks_group.data_science_bu_without_avd,
+    data.databricks_group.data_science_bu
   ]
 }
 
@@ -2612,6 +2708,16 @@ resource "databricks_grants" "artifactory_ext_loc_scripts" {
     privileges = ["READ_FILES"]
   }
 
+  grant {
+    principal  = data.databricks_group.data_science_bu.display_name
+    privileges = ["READ_FILES"]
+  }
+
+  grant {
+    principal  = data.databricks_group.data_science_bu_without_avd.display_name
+    privileges = ["READ_FILES"]
+  }
+
   depends_on = [
     data.databricks_group.data_engg,
     data.databricks_group.support_engg,
@@ -2628,6 +2734,8 @@ resource "databricks_grants" "artifactory_ext_loc_scripts" {
     data.databricks_group.crm_ho_bu,
     data.databricks_group.imperial_africa_bu,
     data.databricks_group.imperial_intl_bu,
-    data.databricks_group.external_users_bu
+    data.databricks_group.external_users_bu,
+    data.databricks_group.data_science_bu_without_avd,
+    data.databricks_group.data_science_bu
   ]
 }

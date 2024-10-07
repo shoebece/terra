@@ -72,6 +72,14 @@ variable "applied_science_bu" { type = object({
   id = string
 })}
 
+variable "data_science_bu" { type = object({
+  name = string
+})}
+
+variable "data_science_bu_without_avd" { type = object({
+  name = string
+})}
+
 variable "as_spn" { type = object({
   name = string
   app_id = string
