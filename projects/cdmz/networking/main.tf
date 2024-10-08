@@ -116,6 +116,7 @@ resource "azurerm_route_table" "art" {
   tags = merge(var.resource_tags_common, var.resource_tags_spec)
   lifecycle {
     ignore_changes = [
+      route
     ]
   }
 }
@@ -162,8 +163,8 @@ data "azurerm_postgresql_server" "AzurePSQL_Ecomm" {
   provider            = azurerm.Ecommerce
 }
 
-data "azurerm_postgresql_server" "AzurePSQL_BerthPlanningApplication" {
-  name                = "psql-bpa-prod"
+data "azurerm_postgresql_flexible_server" "AzurePSQL_BerthPlanningApplication" {
+  name                = "pg-bpa-prod"
   resource_group_name = "rg-bpa-prod"
   provider            = azurerm.BerthPlanningApplication
 }
@@ -534,7 +535,7 @@ resource "azurerm_private_endpoint" "AzurePSQL_BP_endpoint_pep" {
   
   private_service_connection {
     name                           = "cdmz-mgmt-fivetran-pdnsz_psql-psc"
-    private_connection_resource_id = data.azurerm_postgresql_server.AzurePSQL_BerthPlanningApplication.id
+    private_connection_resource_id = data.azurerm_postgresql_flexible_server.AzurePSQL_BerthPlanningApplication.id
     subresource_names              = ["postgresqlServer"]
     is_manual_connection           = false
   }
