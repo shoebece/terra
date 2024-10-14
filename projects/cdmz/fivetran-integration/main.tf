@@ -221,3 +221,55 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vnetlinkcdpuat" {
   private_dns_zone_name = data.azurerm_private_dns_zone.pdnsz_sql.name
   virtual_network_id    = "/subscriptions/fdb528b2-0e6b-4fc5-b8a9-acc9a7ba3ff6/resourceGroups/cdpz-uat-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-uat-processing-vnet"
 }
+
+resource "azurerm_linux_virtual_machine" "fivetran-linux-vm" {
+  for_each            = { for i, vm in var.linuxvms: vm.vm => vm }
+  name                = join("-", ["cdmz", each.value.vm])
+  resource_group_name = data.azurerm_resource_group.fivetran-integration-rg.name
+  location            = var.resource_location
+  size                = each.value.size
+  computer_name       = each.value.computer_name
+  admin_username      = each.value.admin_username
+  admin_password      = var.vm_admin_password
+  disable_password_authentication = false
+  patch_assessment_mode = "AutomaticByPlatform"
+  patch_mode          = "AutomaticByPlatform"
+  bypass_platform_safety_checks_on_user_schedule_enabled  = true
+  #encryption_at_host_enabled = ?
+
+  network_interface_ids = [
+    azurerm_network_interface.ado-shir-nic[each.value.vm].id
+  ]
+
+  os_disk {
+    name                  = join("-", [each.value.vm, "osdisk"])
+    caching               = "ReadWrite"
+    storage_account_type  = each.value.disk_sku
+    disk_size_gb          = each.value.disk_size_gb
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+
+  tags = merge(var.resource_tags_common, var.resource_tags_spec,  var.resource_ospatching_tags_spec)
+
+  lifecycle {
+    ignore_changes = [
+      admin_password,
+      tags
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_resource_group.fivetran-integration-rg
+    ,azurerm_network_interface.fivetran-nic
+  ]
+}
