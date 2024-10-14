@@ -261,3 +261,19 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias           = "orms"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "c1ed99db-01ec-4593-92d3-cf4a26a19555"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}

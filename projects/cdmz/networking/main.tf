@@ -235,6 +235,12 @@ data "azurerm_mssql_server" "AzureSQL_POEMS" {
   provider            = azurerm.POEMS
 }
 
+data "azurerm_mssql_server" "AzureSQL_ormsprod" {
+  name                = "orms"
+  resource_group_name = "orms"
+  provider            = azurerm.orms
+}
+
 data "azurerm_mssql_server" "AzureSQL_cargoesrunnerprod" {
   name                = "sql-cargoesrunnerprod-uaereplica"
   resource_group_name = "rg_cargoesRunner_prod"
@@ -1107,6 +1113,52 @@ resource "azurerm_private_endpoint" "AzureSQL_POEMS_endpoint_pep" {
     data.azurerm_private_dns_zone.pdnsz
   ]
 }
+# # Private end point management for SQL Server - orms
+
+resource "azurerm_private_endpoint" "AzureSQL_Orms_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-ORMSSQL-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-ORMSSQL-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_sql"
+    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_sql.id ]
+  }
+
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz_sql-psc"
+    private_connection_resource_id = data.azurerm_mssql_server.AzureSQL_ormsprod.id
+    subresource_names              = ["sqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-ormsSQL-ipc"
+    private_ip_address = var.ORMSSQL_fv_ip_address
+    subresource_name   = "sqlServer"
+    member_name        = "sqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    data.azurerm_private_dns_zone.pdnsz
+  ]
+}
+
 
 # # Private end point management for SQL Server - ba-sqlprod
 resource "azurerm_private_endpoint" "AzureSQL_BASQL_endpoint_pep" {
