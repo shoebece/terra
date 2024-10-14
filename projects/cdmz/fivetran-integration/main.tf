@@ -221,7 +221,28 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vnetlinkcdpuat" {
   private_dns_zone_name = data.azurerm_private_dns_zone.pdnsz_sql.name
   virtual_network_id    = "/subscriptions/fdb528b2-0e6b-4fc5-b8a9-acc9a7ba3ff6/resourceGroups/cdpz-uat-networking-rg/providers/Microsoft.Network/virtualNetworks/cdpz-uat-processing-vnet"
 }
+####################### Fivetran Linux VM ####################
 
+resource "azurerm_network_interface" "fivetran-linux-nic" {
+  for_each            = { for i, vm in var.linuxvms: vm.vm => vm }
+  name                = join("-", [each.value.vm, "nic"])
+  resource_group_name = local.networking_resource_group_name
+  location            = var.resource_location
+
+  ip_configuration {
+    name                          = join("-", [each.value.vm, "ipc"])
+    subnet_id                     = data.azurerm_subnet.snet-management-default.id
+    private_ip_address_allocation = "Static"
+    private_ip_address            = each.value.ip
+  }
+
+  tags = merge( data.azurerm_resource_group.network-rg.tags, var.resource_tags_spec )
+
+  depends_on = [ 
+    data.azurerm_subnet.snet-management-default
+   ]
+  
+}
 resource "azurerm_linux_virtual_machine" "fivetran-linux-vm" {
   for_each            = { for i, vm in var.linuxvms: vm.vm => vm }
   name                = join("-", ["cdmz", each.value.vm])
@@ -238,7 +259,7 @@ resource "azurerm_linux_virtual_machine" "fivetran-linux-vm" {
   #encryption_at_host_enabled = ?
 
   network_interface_ids = [
-    azurerm_network_interface.ado-shir-nic[each.value.vm].id
+    azurerm_network_interface.fivetran-linux-nic[each.value.vm].id
   ]
 
   os_disk {
