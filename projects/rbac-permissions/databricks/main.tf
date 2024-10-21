@@ -1533,14 +1533,14 @@ data "databricks_cluster" "global_maximo_cluster" {
 
 
 # Cluster PA SQL Warehouse PBI Cluster
-data "databricks_cluster" "global_pa_sqlwarehouse_cluster" {
+data "databricks_sql_warehouse" "global_pa_sqlwarehouse_cluster" {
   provider      = databricks.globaldbw
-  cluster_name  = "cdp-pa-pbi-warehouse"
+  name  = "cdp-pa-pbi-warehouse"
 }
 
 resource "databricks_permissions" "global_cluster_pa_sqlwarehouse_usage" {
   provider          = databricks.globaldbw
-  cluster_id        = data.databricks_cluster.global_pa_sqlwarehouse_cluster.id
+  cluster_id        = data.databricks_sql_warehouse.global_pa_sqlwarehouse_cluster.id
 
   access_control {
     group_name       = data.databricks_group.grp_pa_pt.display_name
@@ -1548,7 +1548,7 @@ resource "databricks_permissions" "global_cluster_pa_sqlwarehouse_usage" {
   }
 
   depends_on = [ 
-    data.databricks_cluster.global_pa_sqlwarehouse_cluster,
+    data.databricks_sql_warehouse.global_pa_sqlwarehouse_cluster,
     data.databricks_group.grp_pa_pt
   ]
 }
