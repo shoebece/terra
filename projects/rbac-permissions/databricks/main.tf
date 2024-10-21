@@ -1080,7 +1080,7 @@ resource "databricks_entitlements" "entitle_eng_maximo_bu" {
 }
 
 # cdpz-pa-pt
-data "databricks_group" "grp_pa_pt " {
+data "databricks_group" "grp_pa_pt" {
   provider      = databricks.globaldbw
   display_name  = var.pa_pt.name
 }
