@@ -185,6 +185,11 @@ variable "eng_maximo_bu" { type = object({
   id = string
 })}
 
+variable "pa_pt" { type = object({
+  name = string
+  id = string
+})}
+
 variable "apac_analytics_bu" { type = object({
   name = string
   id = string

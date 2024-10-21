@@ -1079,6 +1079,30 @@ resource "databricks_entitlements" "entitle_eng_maximo_bu" {
   depends_on = [ data.databricks_group.eng_maximo_bu ]
 }
 
+# cdpz-pa-pt
+data "databricks_group" "grp_pa_pt " {
+  provider      = databricks.globaldbw
+  display_name  = var.pa_pt.name
+}
+
+resource "databricks_permission_assignment" "add_grp_pa_pt" {
+  provider      = databricks.globaldbw
+  principal_id  = data.databricks_group.grp_pa_pt.id
+  permissions   = ["USER"]
+
+  depends_on = [ data.databricks_group.grp_pa_pt ]
+}
+
+resource "databricks_entitlements" "entitle_grp_pa_pt" {
+  provider                   = databricks.globaldbw
+  group_id                   = data.databricks_group.grp_pa_pt.id
+  databricks_sql_access      = true
+  workspace_access           = true
+
+  depends_on = [ data.databricks_group.grp_pa_pt ]
+}
+
+
 # cdpz_apac_analytics
 data "databricks_group" "apac_analytics_bu" {
   provider      = databricks.globaldbw
@@ -1503,6 +1527,28 @@ resource "databricks_permissions" "global_clustermaximo_usage" {
 
   depends_on = [ 
     data.databricks_cluster.global_maximo_cluster,
+    data.databricks_group.eng_maximo_bu
+  ]
+}
+
+
+# Cluster PA SQL Warehouse PBI Cluster
+data "databricks_cluster" "global_pa_sqlwarehouse_cluster" {
+  provider      = databricks.globaldbw
+  cluster_name  = "cdp-pa-pbi-warehouse"
+}
+
+resource "databricks_permissions" "global_cluster_pa_sqlwarehouse_usage" {
+  provider          = databricks.globaldbw
+  cluster_id        = data.databricks_cluster.global_pa_sqlwarehouse_cluster.id
+
+  access_control {
+    group_name       = data.databricks_group.grp_pa_pt.display_name
+    permission_level = "CAN_RESTART"
+  }
+
+  depends_on = [ 
+    data.databricks_cluster.global_pa_sqlwarehouse_cluster,
     data.databricks_group.eng_maximo_bu
   ]
 }
