@@ -771,27 +771,27 @@ resource "databricks_permission_assignment" "add_as_spn" {
 }
 
 # crm_ho
-data "databricks_group" "crm_ho_bu" {
-  provider      = databricks.globaldbw
-  display_name  = var.crm_ho_bu.name
-}
+# data "databricks_group" "crm_ho_bu" {
+#   provider      = databricks.globaldbw
+#   display_name  = var.crm_ho_bu.name
+# }
 
-resource "databricks_permission_assignment" "add_crm_ho_bu" {
-  provider      = databricks.globaldbw
-  principal_id  = data.databricks_group.crm_ho_bu.id
-  permissions   = ["USER"]
+# resource "databricks_permission_assignment" "add_crm_ho_bu" {
+#   provider      = databricks.globaldbw
+#   principal_id  = data.databricks_group.crm_ho_bu.id
+#   permissions   = ["USER"]
 
-  depends_on = [ data.databricks_group.crm_ho_bu ]
-}
+#   depends_on = [ data.databricks_group.crm_ho_bu ]
+# }
 
-resource "databricks_entitlements" "entitle_crm_ho" {
-  provider                   = databricks.globaldbw
-  group_id                   = data.databricks_group.crm_ho_bu.id
-  databricks_sql_access      = true
-  workspace_access           = true
+# resource "databricks_entitlements" "entitle_crm_ho" {
+#   provider                   = databricks.globaldbw
+#   group_id                   = data.databricks_group.crm_ho_bu.id
+#   databricks_sql_access      = true
+#   workspace_access           = true
 
-  depends_on = [ data.databricks_group.crm_ho_bu ]
-}
+#   depends_on = [ data.databricks_group.crm_ho_bu ]
+# }
 
 # crmho_spn
 data "databricks_service_principal" "crmho_spn" {
@@ -988,27 +988,27 @@ resource "databricks_entitlements" "entitle_pa_sco_bu" {
 }
 
 # cdpz-pa-searates
-data "databricks_group" "pa_searates_bu" {
-  provider      = databricks.globaldbw
-  display_name  = var.pa_searates_bu.name
-}
+# data "databricks_group" "pa_searates_bu" {
+#   provider      = databricks.globaldbw
+#   display_name  = var.pa_searates_bu.name
+# }
 
-resource "databricks_permission_assignment" "add_pa_searates_bu" {
-  provider      = databricks.globaldbw
-  principal_id  = data.databricks_group.pa_searates_bu.id
-  permissions   = ["USER"]
+# resource "databricks_permission_assignment" "add_pa_searates_bu" {
+#   provider      = databricks.globaldbw
+#   principal_id  = data.databricks_group.pa_searates_bu.id
+#   permissions   = ["USER"]
 
-  depends_on = [ data.databricks_group.pa_searates_bu ]
-}
+#   depends_on = [ data.databricks_group.pa_searates_bu ]
+# }
 
-resource "databricks_entitlements" "entitle_pa_searates_bu" {
-  provider                   = databricks.globaldbw
-  group_id                   = data.databricks_group.pa_searates_bu.id
-  databricks_sql_access      = true
-  workspace_access           = true
+# resource "databricks_entitlements" "entitle_pa_searates_bu" {
+#   provider                   = databricks.globaldbw
+#   group_id                   = data.databricks_group.pa_searates_bu.id
+#   databricks_sql_access      = true
+#   workspace_access           = true
 
-  depends_on = [ data.databricks_group.pa_searates_bu ]
-}
+#   depends_on = [ data.databricks_group.pa_searates_bu ]
+# }
 
 # cdpz-pa-trade-finance
 data "databricks_group" "pa_trade_finance_bu" {
@@ -1057,27 +1057,27 @@ resource "databricks_entitlements" "entitle_external_users_bu" {
 }
 
 # BA_ENG_MAXIMO
-data "databricks_group" "eng_maximo_bu" {
-  provider      = databricks.globaldbw
-  display_name  = var.eng_maximo_bu.name
-}
+# data "databricks_group" "eng_maximo_bu" {
+#   provider      = databricks.globaldbw
+#   display_name  = var.eng_maximo_bu.name
+# }
 
-resource "databricks_permission_assignment" "add_eng_maximo_bu" {
-  provider      = databricks.globaldbw
-  principal_id  = data.databricks_group.eng_maximo_bu.id
-  permissions   = ["USER"]
+# resource "databricks_permission_assignment" "add_eng_maximo_bu" {
+#   provider      = databricks.globaldbw
+#   principal_id  = data.databricks_group.eng_maximo_bu.id
+#   permissions   = ["USER"]
 
-  depends_on = [ data.databricks_group.eng_maximo_bu ]
-}
+#   depends_on = [ data.databricks_group.eng_maximo_bu ]
+# }
 
-resource "databricks_entitlements" "entitle_eng_maximo_bu" {
-  provider                   = databricks.globaldbw
-  group_id                   = data.databricks_group.eng_maximo_bu.id
-  databricks_sql_access      = true
-  workspace_access           = true
+# resource "databricks_entitlements" "entitle_eng_maximo_bu" {
+#   provider                   = databricks.globaldbw
+#   group_id                   = data.databricks_group.eng_maximo_bu.id
+#   databricks_sql_access      = true
+#   workspace_access           = true
 
-  depends_on = [ data.databricks_group.eng_maximo_bu ]
-}
+#   depends_on = [ data.databricks_group.eng_maximo_bu ]
+# }
 
 # cdpz-pa-pt
 data "databricks_group" "grp_pa_pt" {
@@ -1127,50 +1127,50 @@ resource "databricks_entitlements" "entitle_apac_analytics_bu" {
 }
 
 # BA_GHSE_HO
-data "databricks_group" "ghseho_bu" {
-  provider      = databricks.globaldbw
-  display_name  = var.ghseho_bu.name
-}
+# data "databricks_group" "ghseho_bu" {
+#   provider      = databricks.globaldbw
+#   display_name  = var.ghseho_bu.name
+# }
 
-resource "databricks_permission_assignment" "add_ghseho_bu" {
-  provider      = databricks.globaldbw
-  principal_id  = data.databricks_group.ghseho_bu.id
-  permissions   = ["USER"]
+# resource "databricks_permission_assignment" "add_ghseho_bu" {
+#   provider      = databricks.globaldbw
+#   principal_id  = data.databricks_group.ghseho_bu.id
+#   permissions   = ["USER"]
 
-  depends_on = [ data.databricks_group.ghseho_bu ]
-}
+#   depends_on = [ data.databricks_group.ghseho_bu ]
+# }
 
-resource "databricks_entitlements" "entitle_ghseho_bu" {
-  provider                   = databricks.globaldbw
-  group_id                   = data.databricks_group.ghseho_bu.id
-  databricks_sql_access      = true
-  workspace_access           = true
+# resource "databricks_entitlements" "entitle_ghseho_bu" {
+#   provider                   = databricks.globaldbw
+#   group_id                   = data.databricks_group.ghseho_bu.id
+#   databricks_sql_access      = true
+#   workspace_access           = true
 
-  depends_on = [ data.databricks_group.ghseho_bu ]
-}
+#   depends_on = [ data.databricks_group.ghseho_bu ]
+# }
 
 # BA_AuditTeam
-data "databricks_group" "audit_bu" {
-  provider      = databricks.globaldbw
-  display_name  = var.audit_bu.name
-}
+# data "databricks_group" "audit_bu" {
+#   provider      = databricks.globaldbw
+#   display_name  = var.audit_bu.name
+# }
 
-resource "databricks_permission_assignment" "add_audit_bu" {
-  provider      = databricks.globaldbw
-  principal_id  = data.databricks_group.audit_bu.id
-  permissions   = ["USER"]
+# resource "databricks_permission_assignment" "add_audit_bu" {
+#   provider      = databricks.globaldbw
+#   principal_id  = data.databricks_group.audit_bu.id
+#   permissions   = ["USER"]
 
-  depends_on = [ data.databricks_group.audit_bu ]
-}
+#   depends_on = [ data.databricks_group.audit_bu ]
+# }
 
-resource "databricks_entitlements" "entitle_audit_bu" {
-  provider                   = databricks.globaldbw
-  group_id                   = data.databricks_group.audit_bu.id
-  databricks_sql_access      = true
-  workspace_access           = true
+# resource "databricks_entitlements" "entitle_audit_bu" {
+#   provider                   = databricks.globaldbw
+#   group_id                   = data.databricks_group.audit_bu.id
+#   databricks_sql_access      = true
+#   workspace_access           = true
 
-  depends_on = [ data.databricks_group.audit_bu ]
-}
+#   depends_on = [ data.databricks_group.audit_bu ]
+# }
 
 # cdpz_ddw
 data "databricks_group" "ddw_bu" {
@@ -1516,20 +1516,20 @@ data "databricks_cluster" "global_maximo_cluster" {
   cluster_name  = "cdp-maximo-team-cluster"
 }
 
-resource "databricks_permissions" "global_clustermaximo_usage" {
-  provider          = databricks.globaldbw
-  cluster_id        = data.databricks_cluster.global_maximo_cluster.id
+# resource "databricks_permissions" "global_clustermaximo_usage" {
+#   provider          = databricks.globaldbw
+#   cluster_id        = data.databricks_cluster.global_maximo_cluster.id
 
-  access_control {
-    group_name       = data.databricks_group.eng_maximo_bu.display_name
-    permission_level = "CAN_RESTART"
-  }
+#   access_control {
+#     group_name       = data.databricks_group.eng_maximo_bu.display_name
+#     permission_level = "CAN_RESTART"
+#   }
 
-  depends_on = [ 
-    data.databricks_cluster.global_maximo_cluster,
-    data.databricks_group.eng_maximo_bu
-  ]
-}
+#   depends_on = [ 
+#     data.databricks_cluster.global_maximo_cluster,
+#     data.databricks_group.eng_maximo_bu
+#   ]
+# }
 
 
 # Cluster PA SQL Warehouse PBI Cluster
@@ -1549,7 +1549,7 @@ resource "databricks_permissions" "global_cluster_pa_sqlwarehouse_usage" {
 
   depends_on = [ 
     data.databricks_cluster.global_pa_sqlwarehouse_cluster,
-    data.databricks_group.eng_maximo_bu
+    data.databricks_group.grp_pa_pt
   ]
 }
 
@@ -1580,41 +1580,41 @@ data "databricks_cluster" "global_ghse_cluster" {
   cluster_name  = "cdp-ghse-team-cluster"
 }
 
-resource "databricks_permissions" "global_ghse_usage" {
-  provider          = databricks.globaldbw
-  cluster_id        = data.databricks_cluster.global_ghse_cluster.id
+# resource "databricks_permissions" "global_ghse_usage" {
+#   provider          = databricks.globaldbw
+#   cluster_id        = data.databricks_cluster.global_ghse_cluster.id
 
-  access_control {
-    group_name       = data.databricks_group.ghseho_bu.display_name
-    permission_level = "CAN_RESTART"
-  }
+#   access_control {
+#     group_name       = data.databricks_group.ghseho_bu.display_name
+#     permission_level = "CAN_RESTART"
+#   }
 
-  depends_on = [ 
-    data.databricks_cluster.global_ghse_cluster,
-    data.databricks_group.ghseho_bu
-  ]
-}
+#   depends_on = [ 
+#     data.databricks_cluster.global_ghse_cluster,
+#     data.databricks_group.ghseho_bu
+#   ]
+# }
 
-# Cluster Audit Team
-data "databricks_cluster" "global_audit_cluster" {
-  provider      = databricks.globaldbw
-  cluster_name  = "cdp-audit-team-cluster"
-}
+# # Cluster Audit Team
+# data "databricks_cluster" "global_audit_cluster" {
+#   provider      = databricks.globaldbw
+#   cluster_name  = "cdp-audit-team-cluster"
+# }
 
-resource "databricks_permissions" "global_audit_usage" {
-  provider          = databricks.globaldbw
-  cluster_id        = data.databricks_cluster.global_audit_cluster.id
+# resource "databricks_permissions" "global_audit_usage" {
+#   provider          = databricks.globaldbw
+#   cluster_id        = data.databricks_cluster.global_audit_cluster.id
 
-  access_control {
-    group_name       = data.databricks_group.audit_bu.display_name
-    permission_level = "CAN_RESTART"
-  }
+#   access_control {
+#     group_name       = data.databricks_group.audit_bu.display_name
+#     permission_level = "CAN_RESTART"
+#   }
 
-  depends_on = [ 
-    data.databricks_cluster.global_audit_cluster,
-    data.databricks_group.audit_bu
-  ]
-}
+#   depends_on = [ 
+#     data.databricks_cluster.global_audit_cluster,
+#     data.databricks_group.audit_bu
+#   ]
+# }
 
 # # SQL Warehouse Sync AMR
 # data "databricks_sql_warehouse" "global_syncamr_warehouse" {
@@ -1667,10 +1667,10 @@ resource "databricks_permissions" "global_clusterpa_usage" {
     permission_level = "CAN_RESTART"
   }
 
-  access_control {
-    group_name       = data.databricks_group.pa_searates_bu.display_name
-    permission_level = "CAN_RESTART"
-  }
+  # access_control {
+  #   group_name       = data.databricks_group.pa_searates_bu.display_name
+  #   permission_level = "CAN_RESTART"
+  # }
 
   access_control {
     group_name       = data.databricks_group.pa_trade_finance_bu.display_name
@@ -1683,7 +1683,7 @@ resource "databricks_permissions" "global_clusterpa_usage" {
     data.databricks_group.pa_ecomm_bu,
     data.databricks_group.pa_freight_forwarding_bu,
     data.databricks_group.pa_sco_bu,
-    data.databricks_group.pa_searates_bu,
+    # data.databricks_group.pa_searates_bu,
     data.databricks_group.pa_trade_finance_bu
   ]
 }
@@ -1717,10 +1717,10 @@ resource "databricks_permissions" "global_pbiclusterpa_usage" {
     permission_level = "CAN_RESTART"
   }
 
-  access_control {
-    group_name       = data.databricks_group.pa_searates_bu.display_name
-    permission_level = "CAN_RESTART"
-  }
+  # access_control {
+  #   group_name       = data.databricks_group.pa_searates_bu.display_name
+  #   permission_level = "CAN_RESTART"
+  # }
 
   access_control {
     group_name       = data.databricks_group.pa_trade_finance_bu.display_name
@@ -1738,7 +1738,7 @@ resource "databricks_permissions" "global_pbiclusterpa_usage" {
     data.databricks_group.pa_ecomm_bu,
     data.databricks_group.pa_freight_forwarding_bu,
     data.databricks_group.pa_sco_bu,
-    data.databricks_group.pa_searates_bu,
+    # data.databricks_group.pa_searates_bu,
     data.databricks_group.pa_trade_finance_bu,
     data.databricks_service_principal.pa_spn
   ]
@@ -1872,46 +1872,46 @@ data "databricks_cluster" "global_crmho_cluster" {
   cluster_name  = "cdp-crmho-team-cluster"
 }
 
-resource "databricks_permissions" "global_clustercrmho_usage" {
-  provider          = databricks.globaldbw
-  cluster_id        = data.databricks_cluster.global_crmho_cluster.id
+# resource "databricks_permissions" "global_clustercrmho_usage" {
+#   provider          = databricks.globaldbw
+#   cluster_id        = data.databricks_cluster.global_crmho_cluster.id
 
-  access_control {
-    group_name       = data.databricks_group.crm_ho_bu.display_name
-    permission_level = "CAN_RESTART"
-  }
+#   access_control {
+#     group_name       = data.databricks_group.crm_ho_bu.display_name
+#     permission_level = "CAN_RESTART"
+#   }
 
-  depends_on = [ 
-    data.databricks_cluster.global_crmho_cluster,
-    data.databricks_group.crm_ho_bu
-  ]
-}
+#   depends_on = [ 
+#     data.databricks_cluster.global_crmho_cluster,
+#     data.databricks_group.crm_ho_bu
+#   ]
+# }
 
 data "databricks_cluster" "global_crmho_pbicluster" {
   provider      = databricks.globaldbw
   cluster_name  = "cdp-crmho-pbi-cluster"
 }
 
-resource "databricks_permissions" "global_pbiclustercrmho_usage" {
-  provider          = databricks.globaldbw
-  cluster_id        = data.databricks_cluster.global_crmho_pbicluster.id
+# resource "databricks_permissions" "global_pbiclustercrmho_usage" {
+#   provider          = databricks.globaldbw
+#   cluster_id        = data.databricks_cluster.global_crmho_pbicluster.id
 
-  access_control {
-    group_name       = data.databricks_group.crm_ho_bu.display_name
-    permission_level = "CAN_RESTART"
-  }
+#   access_control {
+#     group_name       = data.databricks_group.crm_ho_bu.display_name
+#     permission_level = "CAN_RESTART"
+#   }
 
-  access_control {
-    service_principal_name = data.databricks_service_principal.crmho_spn.application_id
-    permission_level       = "CAN_RESTART"
-  }
+#   access_control {
+#     service_principal_name = data.databricks_service_principal.crmho_spn.application_id
+#     permission_level       = "CAN_RESTART"
+#   }
 
-  depends_on = [ 
-    data.databricks_cluster.global_crmho_pbicluster,
-    data.databricks_group.crm_ho_bu,
-    data.databricks_service_principal.crmho_spn
-  ]
-}
+#   depends_on = [ 
+#     data.databricks_cluster.global_crmho_pbicluster,
+#     data.databricks_group.crm_ho_bu,
+#     data.databricks_service_principal.crmho_spn
+#   ]
+# }
 
 # SQL Warehouse CRM HO
 # data "databricks_sql_warehouse" "global_crmho_warehouse" {
@@ -2117,14 +2117,14 @@ resource "databricks_permissions" "global_clusterddw_usage" {
   ]
 }
 
-data "databricks_cluster" "global_ddw_pbicluster" {
+data "databricks_sql_warehouse" "global_ddw_pbicluster" {
   provider      = databricks.globaldbw
-  cluster_name  = "cdp-ddw-pbi-cluster"
+  name  = "cdp-ddw-pbi-cluster"
 }
 
 resource "databricks_permissions" "global_pbiclusterddw_usage" {
   provider          = databricks.globaldbw
-  cluster_id        = data.databricks_cluster.global_ddw_pbicluster.id
+  cluster_id        = data.databricks_sql_warehouse.global_ddw_pbicluster.id
 
   access_control {
     group_name       = data.databricks_group.ddw_bu.display_name
@@ -2137,7 +2137,7 @@ resource "databricks_permissions" "global_pbiclusterddw_usage" {
   # }
 
   depends_on = [ 
-    data.databricks_cluster.global_ddw_pbicluster,
+    data.databricks_sql_warehouse.global_ddw_pbicluster,
     data.databricks_group.ddw_bu
     # ,data.databricks_service_principal.rocnd_spn
   ]
@@ -2188,7 +2188,7 @@ resource "databricks_permissions" "global_clusterext_usage" {
 # SQL Warehouse - Adhoc Querying
 data "databricks_sql_warehouse" "global_edashared_warehouse" {
   provider      = databricks.globaldbw
-  name          = "cdp-eda-shared-warehouse"
+  name          = "cdp-shared-eda-warehouse"
 }
 
 resource "databricks_permissions" "global_edashared_usage" {
@@ -2487,10 +2487,10 @@ resource "databricks_grants" "artifactory_ext_loc_maven" {
     privileges = ["READ_FILES"]
   }
 
-  grant {
-    principal  = data.databricks_group.pa_searates_bu.display_name
-    privileges = ["READ_FILES"]
-  }
+  # grant {
+  #   principal  = data.databricks_group.pa_searates_bu.display_name
+  #   privileges = ["READ_FILES"]
+  # }
 
   grant {
     principal  = data.databricks_group.pa_trade_finance_bu.display_name
@@ -2502,10 +2502,10 @@ resource "databricks_grants" "artifactory_ext_loc_maven" {
     privileges = ["READ_FILES"]
   }
 
-  grant {
-    principal  = data.databricks_group.crm_ho_bu.display_name
-    privileges = ["READ_FILES"]
-  }
+  # grant {
+  #   principal  = data.databricks_group.crm_ho_bu.display_name
+  #   privileges = ["READ_FILES"]
+  # }
 
   grant {
     principal  = data.databricks_group.imperial_africa_bu.display_name
@@ -2542,10 +2542,10 @@ resource "databricks_grants" "artifactory_ext_loc_maven" {
     data.databricks_group.pa_ecomm_bu,
     data.databricks_group.pa_freight_forwarding_bu,
     data.databricks_group.pa_sco_bu,
-    data.databricks_group.pa_searates_bu,
+    # data.databricks_group.pa_searates_bu,
     data.databricks_group.pa_trade_finance_bu,
     data.databricks_group.applied_science_bu,
-    data.databricks_group.crm_ho_bu,
+    # data.databricks_group.crm_ho_bu,
     data.databricks_group.imperial_africa_bu,
     data.databricks_group.imperial_intl_bu,
     data.databricks_group.external_users_bu,
@@ -2603,10 +2603,10 @@ resource "databricks_grants" "artifactory_ext_loc_pypi" {
     privileges = ["READ_FILES"]
   }
 
-  grant {
-    principal  = data.databricks_group.pa_searates_bu.display_name
-    privileges = ["READ_FILES"]
-  }
+  # grant {
+  #   principal  = data.databricks_group.pa_searates_bu.display_name
+  #   privileges = ["READ_FILES"]
+  # }
 
   grant {
     principal  = data.databricks_group.pa_trade_finance_bu.display_name
@@ -2618,10 +2618,10 @@ resource "databricks_grants" "artifactory_ext_loc_pypi" {
     privileges = ["READ_FILES"]
   }
 
-  grant {
-    principal  = data.databricks_group.crm_ho_bu.display_name
-    privileges = ["READ_FILES"]
-  }
+  # grant {
+  #   principal  = data.databricks_group.crm_ho_bu.display_name
+  #   privileges = ["READ_FILES"]
+  # }
 
   grant {
     principal  = data.databricks_group.imperial_africa_bu.display_name
@@ -2658,10 +2658,10 @@ resource "databricks_grants" "artifactory_ext_loc_pypi" {
     data.databricks_group.pa_ecomm_bu,
     data.databricks_group.pa_freight_forwarding_bu,
     data.databricks_group.pa_sco_bu,
-    data.databricks_group.pa_searates_bu,
+    # data.databricks_group.pa_searates_bu,
     data.databricks_group.pa_trade_finance_bu,
     data.databricks_group.applied_science_bu,
-    data.databricks_group.crm_ho_bu,
+    # data.databricks_group.crm_ho_bu,
     data.databricks_group.imperial_africa_bu,
     data.databricks_group.imperial_intl_bu,
     data.databricks_group.external_users_bu,
@@ -2719,10 +2719,10 @@ resource "databricks_grants" "artifactory_ext_loc_scripts" {
     privileges = ["READ_FILES"]
   }
 
-  grant {
-    principal  = data.databricks_group.pa_searates_bu.display_name
-    privileges = ["READ_FILES"]
-  }
+  # grant {
+  #   principal  = data.databricks_group.pa_searates_bu.display_name
+  #   privileges = ["READ_FILES"]
+  # }
 
   grant {
     principal  = data.databricks_group.pa_trade_finance_bu.display_name
@@ -2734,10 +2734,10 @@ resource "databricks_grants" "artifactory_ext_loc_scripts" {
     privileges = ["READ_FILES"]
   }
 
-  grant {
-    principal  = data.databricks_group.crm_ho_bu.display_name
-    privileges = ["READ_FILES"]
-  }
+  # grant {
+  #   principal  = data.databricks_group.crm_ho_bu.display_name
+  #   privileges = ["READ_FILES"]
+  # }
 
   grant {
     principal  = data.databricks_group.imperial_africa_bu.display_name
@@ -2774,10 +2774,10 @@ resource "databricks_grants" "artifactory_ext_loc_scripts" {
     data.databricks_group.pa_ecomm_bu,
     data.databricks_group.pa_freight_forwarding_bu,
     data.databricks_group.pa_sco_bu,
-    data.databricks_group.pa_searates_bu,
+    # data.databricks_group.pa_searates_bu,
     data.databricks_group.pa_trade_finance_bu,
     data.databricks_group.applied_science_bu,
-    data.databricks_group.crm_ho_bu,
+    # data.databricks_group.crm_ho_bu,
     data.databricks_group.imperial_africa_bu,
     data.databricks_group.imperial_intl_bu,
     data.databricks_group.external_users_bu,
