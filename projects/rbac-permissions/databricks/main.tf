@@ -2119,7 +2119,7 @@ resource "databricks_permissions" "global_clusterddw_usage" {
 
 data "databricks_sql_warehouse" "global_ddw_pbicluster" {
   provider      = databricks.globaldbw
-  name  = "cdp-ddw-pbi-cluster"
+  name  = "cdp-ddw-pbi-warehouse"
 }
 
 resource "databricks_permissions" "global_pbiclusterddw_usage" {
