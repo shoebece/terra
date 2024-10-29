@@ -61,7 +61,7 @@ resource "azurerm_storage_account" "data_staccs" {
   location                  = var.resource_location
   account_tier              = "Standard"
   account_replication_type  = "LRS"
-  enable_https_traffic_only = true
+  https_traffic_only_enabled = true
   public_network_access_enabled       = var.public_access_enabled
   allow_nested_items_to_be_public     = false
   min_tls_version           = "TLS1_2"
