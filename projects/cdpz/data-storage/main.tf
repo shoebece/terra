@@ -30,6 +30,7 @@ resource "azurerm_management_lock" "delete-lock" {
   name       = "resource-group-deletion-lock"
   scope      = data.azurerm_resource_group.resgrp.id
   lock_level = "CanNotDelete"
+  notes      = "resource-group-deletion-lock"
 }
 
 data "azurerm_key_vault" "kv" {
@@ -61,9 +62,10 @@ resource "azurerm_storage_account" "data_staccs" {
   location                  = var.resource_location
   account_tier              = "Standard"
   account_replication_type  = "LRS"
-  enable_https_traffic_only = true
+  https_traffic_only_enabled = true
   public_network_access_enabled       = var.public_access_enabled
   allow_nested_items_to_be_public     = false
+  cross_tenant_replication_enabled   = true
   min_tls_version           = "TLS1_2"
   is_hns_enabled            = each.value.is_hns_enabled
   account_kind              = "StorageV2"

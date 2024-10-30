@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>3.71.0"
+      version = "~>4.6.0"
     }
   }
   backend "azurerm" {}
@@ -13,7 +13,7 @@ provider "azurerm" {
   subscription_id = var.subscription_id
 
   storage_use_azuread        = true
-  skip_provider_registration = true
+  resource_provider_registrations = "none"
 
   features {
     resource_group {
@@ -29,7 +29,7 @@ provider "azurerm" {
   subscription_id = var.cdmz_subscription_id
   
   storage_use_azuread = true
-  skip_provider_registration = true
+  resource_provider_registrations = "none"
 
   features {
     resource_group {
@@ -45,7 +45,7 @@ provider "azurerm" {
   subscription_id = var.dev_subscription_id
   
   storage_use_azuread = true
-  skip_provider_registration = true
+  resource_provider_registrations = "none"
 
   features {
     resource_group {
