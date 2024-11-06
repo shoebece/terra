@@ -140,6 +140,12 @@ resource "azurerm_resource_group" "pbi-gateway-rg" {
   tags     = var.resource_tags_common
 }
 
+resource "azurerm_resource_group" "metallic-gateway-rg" {
+  name     = "cdmz-metallic-gateway-rg"
+  location = var.resource_location
+  tags     = var.resource_tags_common
+}
+
 
 #--------------------------------------Artifactory Resource Group ---------------------
 resource "azurerm_resource_group" "artifactory-rg" {
