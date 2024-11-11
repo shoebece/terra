@@ -1347,7 +1347,7 @@ resource "azurerm_private_endpoint" "azurepep_ila_SAP_ECC6_server" {
 
   private_service_connection {
     name                              = "azurepep_ila_SAP_ECC6_server_privateserviceconnection"
-    private_connection_resource_alias = "pls-eun-repl-sql01.e4716d30-ff1b-41ac-97a3-37187c0b31e8.northeurope.azure.privatelinkservice"
+    private_connection_resource_alias = "pls-eun-repl-sql01.008af31a-595b-4df3-aa53-3e3b0b742f17.northeurope.azure.privatelinkservice"
     is_manual_connection              = true
     request_message                   = "connectivity from 10.220.224.15"
   }
