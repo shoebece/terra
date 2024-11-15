@@ -277,3 +277,19 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azurerm" {
+  alias           = "DPWorldGlobal"
+
+  tenant_id       = var.tenant_id
+  subscription_id = "1691759c-bec8-41b8-a5eb-03c57476ffdb"
+  
+  storage_use_azuread = true
+  skip_provider_registration = true
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}
