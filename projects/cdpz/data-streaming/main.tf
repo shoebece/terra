@@ -392,7 +392,7 @@ resource "azurerm_eventhub_namespace" "ila-opsi" {
   network_rulesets {
     default_action                 = "Deny"
     ip_rule {
-      ip_mask = "4.168.197.210"
+      ip_mask = "4.221.198.16"
       action  = "Allow"
     }
     trusted_service_access_enabled = true
