@@ -127,3 +127,38 @@ resource "azurerm_role_assignment" "supportrequest-to-cdp-prod-subscription" {
   role_definition_name = "Support Request Contributor"
   principal_id         = var.support_engg_aad_group.id
 }
+
+## CDP ADF Keyvault read access to support engineers
+
+#DEV
+
+resource "azurerm_role_assignment" "kv-support-eng-to-dev-orch-and-ingest" {
+  provider             = azurerm.dev
+  scope                = data.azurerm_resource_group.dev-orch-and-ingest-rg.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = var.support_engg_aad_group.id
+
+  depends_on = [data.azurerm_resource_group.dev-orch-and-ingest-rg  ]
+}
+
+#UAT
+
+resource "azurerm_role_assignment" "kv-support-eng-to-uat-orch-and-ingest" {
+  provider             = azurerm.uat
+  scope                = data.azurerm_resource_group.uat-orch-and-ingest-rg.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = var.support_engg_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.uat-orch-and-ingest-rg ]
+}
+
+#PROD
+
+resource "azurerm_role_assignment" "kv-support-eng-to-prod-orch-and-ingest" {
+  provider             = azurerm.prod
+  scope                = data.azurerm_resource_group.prod-orch-and-ingest-rg.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = var.support_engg_aad_group.id
+
+  depends_on = [ data.azurerm_resource_group.prod-orch-and-ingest-rg ]
+}
