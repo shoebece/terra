@@ -22,6 +22,16 @@ resource "azurerm_role_assignment" "support-eng-to-dev-sharing" {
   depends_on = [ data.azurerm_resource_group.dev-sharing ]
 }
 
+resource "azurerm_role_assignment" "support-eng-to-dev-orch-and-ingest-reader" {
+  provider             = azurerm.dev
+  scope                = data.azurerm_resource_group.dev-orch-and-ingest-rg.id
+  role_definition_name = "Reader"
+  principal_id         = var.support_engg_aad_group.id
+
+  depends_on = [data.azurerm_resource_group.dev-orch-and-ingest-rg  ]
+}
+
+
 resource "azurerm_role_assignment" "support-eng-to-dev-orch-and-ingest" {
   provider             = azurerm.dev
   scope                = data.azurerm_resource_group.dev-orch-and-ingest-rg.id
