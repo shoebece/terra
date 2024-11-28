@@ -247,11 +247,11 @@ data "azurerm_mssql_server" "AzureSQL_cargoesrunnerprod" {
   provider            = azurerm.CargoesRunner
 }
 
-data "azurerm_mssql_server" "AzureSQL_BASQL" {
-  name                = "ba-sqlprod"
-  resource_group_name = "Rg-sqlbamanagedprod"
-  provider            = azurerm.BusinessAnalytics
-}
+# data "azurerm_mssql_server" "AzureSQL_BASQL" {
+#   name                = "ba-sqlprod"
+#   resource_group_name = "Rg-sqlbamanagedprod"
+#   provider            = azurerm.BusinessAnalytics
+# }
 
 data "azurerm_private_dns_zone" "pdnsz" {
   name                = "privatelink.vaultcore.azure.net"
@@ -1161,49 +1161,49 @@ resource "azurerm_private_endpoint" "AzureSQL_Orms_endpoint_pep" {
 
 
 # # Private end point management for SQL Server - ba-sqlprod
-resource "azurerm_private_endpoint" "AzureSQL_BASQL_endpoint_pep" {
-  name                = "cdmz-mgmt-fivetran-BaSQL-pep"
-  resource_group_name = data.azurerm_resource_group.resgrp.name
-  location            = var.resource_location
+# resource "azurerm_private_endpoint" "AzureSQL_BASQL_endpoint_pep" {
+#   name                = "cdmz-mgmt-fivetran-BaSQL-pep"
+#   resource_group_name = data.azurerm_resource_group.resgrp.name
+#   location            = var.resource_location
 
-  subnet_id = data.azurerm_subnet.snet-default.id
+#   subnet_id = data.azurerm_subnet.snet-default.id
 
-  custom_network_interface_name = "cdmz-mgmt-fivetran-BaSQL-nic"
+#   custom_network_interface_name = "cdmz-mgmt-fivetran-BaSQL-nic"
 
-  private_dns_zone_group {
-    name = "add_to_azure_private_dns_sql"
-    private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_sql.id ]
-  }
+#   private_dns_zone_group {
+#     name = "add_to_azure_private_dns_sql"
+#     private_dns_zone_ids = [ data.azurerm_private_dns_zone.pdnsz_sql.id ]
+#   }
 
-  private_service_connection {
-    name                           = "cdmz-mgmt-fivetran-pdnsz_sql-psc"
-    private_connection_resource_id = data.azurerm_mssql_server.AzureSQL_BASQL.id
-    subresource_names              = ["sqlServer"]
-    is_manual_connection           = false
-  }
+#   private_service_connection {
+#     name                           = "cdmz-mgmt-fivetran-pdnsz_sql-psc"
+#     private_connection_resource_id = data.azurerm_mssql_server.AzureSQL_BASQL.id
+#     subresource_names              = ["sqlServer"]
+#     is_manual_connection           = false
+#   }
 
-  ip_configuration {
-    name               = "cdmz-mgmt-fivetran-BaSQL-ipc"
-    private_ip_address = var.BASQL_fv_ip_address
-    subresource_name   = "sqlServer"
-    member_name        = "sqlServer"
-  }
+#   ip_configuration {
+#     name               = "cdmz-mgmt-fivetran-BaSQL-ipc"
+#     private_ip_address = var.BASQL_fv_ip_address
+#     subresource_name   = "sqlServer"
+#     member_name        = "sqlServer"
+#   }
 
-  tags = merge(
-    var.resource_tags_spec
-  )
+#   tags = merge(
+#     var.resource_tags_spec
+#   )
 
-  lifecycle {
-    ignore_changes = [
-      subnet_id
-    ]
-  }
+#   lifecycle {
+#     ignore_changes = [
+#       subnet_id
+#     ]
+#   }
 
-  depends_on = [
-    data.azurerm_subnet.snet-default,
-    data.azurerm_private_dns_zone.pdnsz
-  ]
-}
+#   depends_on = [
+#     data.azurerm_subnet.snet-default,
+#     data.azurerm_private_dns_zone.pdnsz
+#   ]
+# }
 
 # Private end point management for Azure Cosmos DB for MongoDB account cosmos-cargoeslogisitcs-production
 
@@ -1407,6 +1407,61 @@ resource "azurerm_private_endpoint" "AzurePSQL_Azure_hoappnew_dr_endpoint_pep" {
     azurerm_private_dns_zone.pdnsz_psql
   ]
 }
+
+# # Private end point management for PostgreSQL single server Argus prod server
+
+data "azurerm_postgresql_server" "Azure_argussingle_prod" {
+  name                = "pgsqliaapprod"
+  resource_group_name = "Rggiaapprod"
+  provider            = azurerm.DPWorldGlobal
+}
+
+
+
+resource "azurerm_private_endpoint" "AzurePSQL_argussingle_prod_endpoint_pep" {
+  name                = "cdmz-mgmt-fivetran-argussingle-prod-pep"
+  resource_group_name = data.azurerm_resource_group.resgrp.name
+  location            = var.resource_location
+
+  subnet_id = data.azurerm_subnet.snet-default.id
+
+  custom_network_interface_name = "cdmz-mgmt-fivetran-argussingle-prod-nic"
+
+  private_dns_zone_group {
+    name = "add_to_azure_private_dns_psql"
+    private_dns_zone_ids = [ azurerm_private_dns_zone.pdnsz_psql.id ]
+  }
+  
+  private_service_connection {
+    name                           = "cdmz-mgmt-fivetran-pdnsz-psql-psc"
+    private_connection_resource_id = data.azurerm_postgresql_server.Azure_argussingle_prod.id
+    subresource_names              = ["postgresqlServer"]
+    is_manual_connection           = false
+  }
+
+  ip_configuration {
+    name               = "cdmz-mgmt-fivetran-argussingle-prod-ipc"
+    private_ip_address = var.argussingle_prod_fv_ip_address
+    subresource_name   = "postgresqlServer"
+    member_name        = "postgresqlServer"
+  }
+
+  tags = merge(
+    var.resource_tags_spec
+  )
+
+  lifecycle {
+    ignore_changes = [
+      subnet_id
+    ]
+  }
+
+  depends_on = [
+    data.azurerm_subnet.snet-default,
+    azurerm_private_dns_zone.pdnsz_psql
+  ]
+}
+
 
 
 #####################################################################

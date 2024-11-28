@@ -165,3 +165,9 @@ resource "azurerm_resource_group" "shared-amr-avd" {
   location = var.resource_location
   tags     = var.resource_tags_common
 }
+
+resource "azurerm_resource_group" "adf-vnet-ir" {
+  name     = "cdmz-adf-vnet-ir-pls-rg"
+  location = var.resource_location
+  tags     = var.resource_tags_common
+}
