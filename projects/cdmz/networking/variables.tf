@@ -52,6 +52,7 @@ variable "AzureSQL_cargoesrunnerprod_fv_ip_address"                 { type = str
 variable "casmosmongo_fv_ip_address"                 { type = string }
 variable "ORMSSQL_fv_ip_address" { type = string }
 variable "hoappnew_dr_fv_ip_address" { type = string }
+variable "argussingle_prod_fv_ip_address" { type = string }
 variable "sandbox_prefix" {
     type = string 
     default = ""
